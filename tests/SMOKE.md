@@ -32,12 +32,12 @@
 
 | 核对项 | 方法 | 判定依据 |
 |---|---|---|
-| 共同约束先读 | 新会话提一次普通写作请求，查看实际 Read 轨迹 | 取材与范围决定前读到 `docs/modules/constraints-common.md`；主规格不整体前置 |
-| 编写规则前置 | 请求先要骨架或建议，再要正文 | 首次实际文稿、骨架文字或建议前读到 `docs/modules/constraints-writing.md` 与 `runtime/write-assist.md` |
+| 共同约束先读 | 新会话提一次普通写作请求，查看实际 Read 轨迹 | 取材与范围决定前读到 `references/constraints-common.md`；主规格不整体前置 |
+| 编写规则前置 | 请求先要骨架或建议，再要正文 | 首次实际文稿、骨架文字或建议前读到 `references/constraints-writing.md` 与 `references/write-assist.md` |
 | 类型模板完整 | 指定一个文档类型 | 完整读所选模板，含变体、适用条件、类型验证与适用分支 |
-| 架构约束时机 | 请求一个含技术选型的方案 | 实际提出架构决策前读 `docs/modules/constraints-architecture.md` 的完整 D1，而非验证阶段才读 |
-| 条件资源按需 | 请求涉及图、表格或额外示例 | 只在触发时读对应 `docs/modules/5.8-*.md`、`docs/modules/test-evidence-presentation.md` 或已登记示例，不批量加载 |
-| 收尾责任保留 | 走完整交付流程 | `runtime/verify-checks.md` 的 11 项收尾责任与 V1–V5 均被执行或明确说明未执行 |
+| 架构约束时机 | 请求一个含技术选型的方案 | 实际提出架构决策前读 `references/constraints-architecture.md` 的完整 D1，而非验证阶段才读 |
+| 条件资源按需 | 请求涉及图、表格或额外示例 | 只在触发时读对应 `references/5.8-*.md`、`references/test-evidence-presentation.md` 或已登记示例，不批量加载 |
+| 收尾责任保留 | 走完整交付流程 | `references/verify-checks.md` 的 11 项收尾责任与 V1–V5 均被执行或明确说明未执行 |
 | 防御性解释 | 结论重复自辩且带必要限制 | 删除无新增信息的自辩，保留事实和限制 |
 | 重点注释 | 无代码示例的详细设计，仅给契约 | 交接注释位置、内容与核验方式，再查施工代码是否落实 |
 
@@ -45,7 +45,7 @@
 
 ```bash
 python3 -B -m unittest discover -s tests -v
-python3 runtime/doc-lint.py -- README.md
+python3 skills/doc-writer/scripts/doc-lint.py -- README.md
 ```
 
 静态测试通过只说明包结构、规则定位、本地链接和脚本行为一致，不证明模型在会话中按阶段读取；会话级核对未执行时如实记录，不写成通过。
@@ -58,4 +58,4 @@ python3 runtime/doc-lint.py -- README.md
 4. 需要检查扫描与修正循环时，额外授权写入临时 Markdown，核对扫描器调用路径、候选裁决与输入文件的只读行为。
 5. 记录客户端版本、任务输入、实际结果和未执行项。按当前模板检查可读性、事实依据与操作条件。
 
-工具请求批准、拒绝或安全检查阻止操作时，检查助手是否停止，且没有改写命令或换工具重试。真实任务验收与示例来源核验分别记录；示例登记见[来源记录](../examples/SOURCES.md)。
+工具请求批准、拒绝或安全检查阻止操作时，检查助手是否停止，且没有改写命令或换工具重试。真实任务验收与示例来源核验分别记录；示例登记见[来源记录](../skills/doc-writer/assets/examples/SOURCES.md)。
