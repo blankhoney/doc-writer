@@ -1,9 +1,9 @@
 ---
-name: doc-writing
+name: doc-writer
 description: >-
   编写、补全和检查代码工程中的中文技术文档，包括 PRD、技术设计、API 文档、
   Changelog、测试报告、部署手册、ADR、README，以及 Tutorial、How-to、Reference、Explanation。
-  用户通过 /doc-writing 手动调用时使用；依据项目证据写作，检查全部适用约束，
+  用户通过 /doc-writer 手动调用时使用；依据项目证据写作，检查全部适用约束，
   用本地脚本辅助定位用词和格式候选，不把脚本结果当作质量裁决。
 argument-hint: "[文档类型] <任务、材料或目标文件>"
 disable-model-invocation: true

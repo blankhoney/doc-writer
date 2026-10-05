@@ -1,8 +1,8 @@
 <p>
-  <img src="assets/doc-writing-logo.png" alt="doc-writing black-and-white notebook and pen logo" width="64" height="64">
+  <img src="assets/doc-writer-logo.png" alt="doc-writer black-and-white notebook and pen logo" width="64" height="64">
 </p>
 
-# doc-writing
+# doc-writer
 
 **English** | [简体中文](README.zh-CN.md)
 
@@ -10,7 +10,7 @@
 
 An Agent Skill that writes and checks Chinese technical documents from project evidence, covering 12 types including PRDs, designs, APIs, ADRs, and READMEs.
 
-You provide material and a goal. The assistant picks a document type and variant, reads the matching rules, checks facts against code, configuration, and execution logs, drafts the text, and then reviews structure, evidence, and wording item by item. It runs only when you type `/doc-writing`; it never triggers on its own in ordinary conversation. Saving files, running operations described in a document, and committing code each need your separate permission. The installation and invocation examples use Claude Code; other frameworks that support Agent Skills need an adapted entry and tool mappings, and compatibility has not been verified. The skill's rules, templates, and guides are written in Chinese.
+You provide material and a goal. The assistant picks a document type and variant, reads the matching rules, checks facts against code, configuration, and execution logs, drafts the text, and then reviews structure, evidence, and wording item by item. It runs only when you type `/doc-writer`; it never triggers on its own in ordinary conversation. Saving files, running operations described in a document, and committing code each need your separate permission. The installation and invocation examples use Claude Code; other frameworks that support Agent Skills need an adapted entry and tool mappings, and compatibility has not been verified. The skill's rules, templates, and guides are written in Chinese.
 
 <a id="安装"></a>
 
@@ -20,12 +20,12 @@ You need a version of Claude Code that supports skills. From your target project
 
 ```bash
 mkdir -p .claude/skills
-git clone https://github.com/blankhoney/doc-writing.git .claude/skills/doc-writing
+git clone https://github.com/blankhoney/doc-writer.git .claude/skills/doc-writer
 ```
 
-Type `/skills` in a project session; `doc-writing` should appear in the list. If it does not, reopen the session.
+Type `/skills` in a project session; `doc-writer` should appear in the list. If it does not, reopen the session.
 
-To use it in all your projects, clone it into `~/.claude/skills/doc-writing/` instead. If that directory already exists, compare versions before updating and keep your local customizations.
+To use it in all your projects, clone it into `~/.claude/skills/doc-writer/` instead. If that directory already exists, compare versions before updating and keep your local customizations.
 
 The candidate scanner needs Python 3.9 or later and uses only the standard library. Without Python, the assistant still writes and checks the document, and notes in its delivery summary that the scan did not run.
 
@@ -34,7 +34,7 @@ The candidate scanner needs Python 3.9 or later and uses only the standard libra
 In a session opened in your target project, type:
 
 ```text
-/doc-writing Using the following material, write a Chinese code contribution guide for project contributors. Return the text in chat only: developers create a feature branch and submit a pull request; each pull request must explain the purpose of the changes; a maintainer merges it after automated tests pass and one maintainer approves.
+/doc-writer Using the following material, write a Chinese code contribution guide for project contributors. Return the text in chat only: developers create a feature branch and submit a pull request; each pull request must explain the purpose of the changes; a maintainer merges it after automated tests pass and one maintainer approves.
 ```
 
 You get an operational guide organized around branching, submitting a pull request, testing, and review, ending with a line stating that no file was saved and the scanner did not run.
@@ -42,13 +42,13 @@ You get an operational guide organized around branching, submitting a pull reque
 To save the result, name a path in the request:
 
 ```text
-/doc-writing Based on this project's README.md, write a Chinese quick-start guide for engineers joining the project. Save it to docs/quickstart.md.
+/doc-writer Based on this project's README.md, write a Chinese quick-start guide for engineers joining the project. Save it to docs/quickstart.md.
 ```
 
 To review without rewriting:
 
 ```text
-/doc-writing Review docs/architecture.md for structure, terminology, and accuracy against the implementation. List specific locations and suggested changes. Do not modify any files.
+/doc-writer Review docs/architecture.md for structure, terminology, and accuracy against the implementation. List specific locations and suggested changes. Do not modify any files.
 ```
 
 ## What it writes
@@ -66,7 +66,7 @@ To review without rewriting:
 | Look up a contract or understand a mechanism | Reference, Explanation |
 | Write a repository front page | README |
 
-Describe the task in plain language, or put the type name right after `/doc-writing`. See the [template index](templates/_index.md) (Chinese) for each type's variants and style requirements.
+Describe the task in plain language, or put the type name right after `/doc-writer`. See the [template index](templates/_index.md) (Chinese) for each type's variants and style requirements.
 
 ## How it keeps quality up
 
@@ -101,11 +101,11 @@ Issues and pull requests are welcome. Before changing rules, templates, or the s
 
 ## Star history
 
-<a href="https://www.star-history.com/#blankhoney/doc-writing&Date">
+<a href="https://www.star-history.com/#blankhoney/doc-writer&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=blankhoney/doc-writing&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=blankhoney/doc-writing&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=blankhoney/doc-writing&type=Date" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=blankhoney/doc-writer&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=blankhoney/doc-writer&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=blankhoney/doc-writer&type=Date" />
   </picture>
 </a>
 

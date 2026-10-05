@@ -45,7 +45,7 @@ class PackageTests(unittest.TestCase):
         text = data.decode("utf-8")
         front = text.split("---", 2)[1]
         fields = dict(re.findall(r"^([a-z-]+):[ \t]*(.*)$", front, re.MULTILINE))
-        self.assertEqual(fields["name"], "doc-writing")
+        self.assertEqual(fields["name"], "doc-writer")
         self.assertEqual(fields["disable-model-invocation"], "true")
         self.assertEqual(fields["user-invocable"], "true")
         self.assertIn("description", fields)
