@@ -6,146 +6,109 @@
 
 **English** | [简体中文](README.zh-CN.md)
 
-A skill for writing, completing, and checking technical and review documentation, intended for models and frameworks that support the Agent Skills standard. Provide source material and a goal, and the assistant selects a document structure, checks facts, drafts the content, and reviews its wording and organization.
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Use it to write requirements, pre-implementation architecture proposals, technical designs, API documentation, deployment manuals, usage guides, and architecture explanations, as well as review materials such as test reports and decision records. It also supports reviewing and updating existing documents. The skill's rules, templates, and detailed guides are currently in Chinese; this README provides an English introduction.
+An Agent Skill that writes and checks Chinese technical documents from project evidence, covering 12 types including PRDs, designs, APIs, ADRs, and READMEs.
 
-The installation and invocation examples below use Claude Code. The packaged entry currently uses Claude-specific path variables and tool conventions; other frameworks require an adapted entry, skill discovery, and tool mappings. Support for the standard alone does not establish out-of-the-box compatibility, and compatibility with every framework has not been verified.
-
-## Quick start
-
-Once installed in Claude Code, enter the following in a session opened in your target project:
-
-```text
-/doc-writing Using the following material, write a Chinese code contribution guide for project contributors. Return the text in chat only: developers create a feature branch and submit a pull request; each pull request must explain the purpose of the changes; a maintainer merges it after automated tests pass and one maintainer approves.
-```
-
-You should receive an operational guide organized around branching, submitting a pull request, testing, and review. Replace the example material with your project's actual information. The assistant selects the template and variant to match your goal.
-
-To save the result, specify a destination:
-
-```text
-/doc-writing Based on this project's README.md, write a Chinese quick-start guide for engineers joining the project. Save it to docs/quickstart.md.
-```
-
-This request uses the existing `README.md` as source material and authorizes writing to the specified path. To review the draft first, ask for the text in chat only instead. Writing a document does not authorize executing deployments, payments, or other operations described in it, or committing and publishing the result; those actions require separate authorization.
+You provide material and a goal. The assistant picks a document type and variant, reads the matching rules, checks facts against code, configuration, and execution logs, drafts the text, and then reviews structure, evidence, and wording item by item. It runs only when you type `/doc-writing`; it never triggers on its own in ordinary conversation. Saving files, running operations described in a document, and committing code each need your separate permission. The installation and invocation examples use Claude Code; other frameworks that support Agent Skills need an adapted entry and tool mappings, and compatibility has not been verified. The skill's rules, templates, and guides are written in Chinese.
 
 <a id="安装"></a>
 
 ## Installation
 
-You need a version of Claude Code that supports skills. Open your target project's root directory. If the destination directory does not already exist, run:
+You need a version of Claude Code that supports skills. From your target project's root directory, run:
 
 ```bash
 mkdir -p .claude/skills
 git clone https://github.com/blankhoney/doc-writing.git .claude/skills/doc-writing
 ```
 
-Use `/skills` in the project session to check that `doc-writing` is available, then invoke `/doc-writing` manually. If the current session does not discover the new directory, reopen the session and check again.
+Type `/skills` in a project session; `doc-writing` should appear in the list. If it does not, reopen the session.
 
-For use across all your projects, clone the repository into `~/.claude/skills/doc-writing/` instead. If the installation directory already exists, compare versions before updating and preserve any local customizations.
+To use it in all your projects, clone it into `~/.claude/skills/doc-writing/` instead. If that directory already exists, compare versions before updating and keep your local customizations.
 
-Keep the relative locations of `SKILL.md`, `LICENSE`, `runtime/`, `templates/`, `docs/design-spec.md`, `docs/modules/`, and `examples/` intact. The candidate scanner requires Python 3.9 or later and uses only the standard library—no pip installation is needed. Without Python, the assistant can still draft and perform model-based checks, while reporting that the scanner was not run.
+The candidate scanner needs Python 3.9 or later and uses only the standard library. Without Python, the assistant still writes and checks the document, and notes in its delivery summary that the scan did not run.
 
-See the [documentation entry point](docs/guide/README.md) (Chinese) for the installation layout.
+## Quick start
 
-## What you can create
+In a session opened in your target project, type:
 
-| Task | Document type | Main output |
-|---|---|---|
-| Define feature goals and acceptance criteria | PRD | Problem, goals, non-goals, and acceptance conditions |
-| Propose a design and explain trade-offs | Technical design | Approach, rationale, component responsibilities, and costs |
-| Describe API usage | API documentation | Authentication, endpoints, parameters, and error handling |
-| Explain the impact of a release | Changelog | Changes, impact, and migration steps where needed |
-| Report test results or plan testing | Test report | Scope, results, evidence, or a test plan |
-| Document deployment and on-call operations | Deployment guide / Runbook | Prerequisites, steps, verification, and recovery |
-| Record an existing decision | ADR | Decision, rationale, and consequences |
-| Teach a task or help readers complete one | Tutorial / How-to | A tutorial or actionable task guide |
-| Look up a contract or understand a mechanism | Reference / Explanation | Parameter reference, conceptual explanation, or architecture overview |
+```text
+/doc-writing Using the following material, write a Chinese code contribution guide for project contributors. Return the text in chat only: developers create a feature branch and submit a pull request; each pull request must explain the purpose of the changes; a maintainer merges it after automated tests pass and one maintainer approves.
+```
 
-Describe your task in natural language, or specify a document type explicitly. See the [template index](templates/_index.md) (Chinese) for all types and variants.
+You get an operational guide organized around branching, submitting a pull request, testing, and review, ending with a line stating that no file was saved and the scanner did not run.
 
-To review an existing document without changing it:
+To save the result, name a path in the request:
+
+```text
+/doc-writing Based on this project's README.md, write a Chinese quick-start guide for engineers joining the project. Save it to docs/quickstart.md.
+```
+
+To review without rewriting:
 
 ```text
 /doc-writing Review docs/architecture.md for structure, terminology, and accuracy against the implementation. List specific locations and suggested changes. Do not modify any files.
 ```
 
-## How it works
+## What it writes
 
-- **Structure follows the reader's task.** Select a document type, variant, and relevant modules; retain required sections and choose the depth the task needs. Technical designs distinguish architecture proposals from implementation designs; implementation designs cover interfaces, failure handling, dependencies, and package layout as needed.
-- **Rules are loaded before the work that needs them.** Read common constraints first, then the original preparation, research, writing, and verification instructions at their respective stages. Read the complete selected template; load table, code-block, diagram, and example guidance when applicable. Wording rules precede the first draft or outline, and architecture constraints precede architecture decisions.
-- **Project material supplies the facts.** Code, configuration, recorded decisions, and execution logs support their respective claims.
-- **Format follows the information.** Use steps for actions, field tables for parameters, diagrams for component dependencies, and prose for reasoning.
-- **The model makes the judgments.** It checks scope, evidence, terminology, and usability; the script adds locations of wording and formatting candidates.
-- **Feedback guides revision.** Check versions, remove repetition within each reading unit, and use an independent reader to check comprehension and usability for important documents.
+| Task | Document type |
+|---|---|
+| Define feature goals and acceptance conditions | PRD |
+| Propose a design and explain trade-offs | Technical design (architecture proposal or implementation design) |
+| Describe API usage | API documentation |
+| Explain what a release changes for users | Changelog |
+| Report test results or plan testing | Test report |
+| Document deployment and on-call operations | Deployment guide / Runbook |
+| Record an existing decision | ADR |
+| Teach a skill or walk through a task | Tutorial, How-to |
+| Look up a contract or understand a mechanism | Reference, Explanation |
+| Write a repository front page | README |
 
-See [architecture and writing methods](docs/guide/architecture.md) (Chinese) for the full process and two relationship diagrams.
+Describe the task in plain language, or put the type name right after `/doc-writing`. See the [template index](templates/_index.md) (Chinese) for each type's variants and style requirements.
+
+## How it keeps quality up
+
+- **Rules before writing.** Each stage (preparation, research, writing, verification) reads its rules in full, and the selected template is read completely.
+- **Facts from the project.** Code, configuration, recorded decisions, and execution logs back their respective claims; missing information is reported as a gap, not invented.
+- **Conclusion first.** Decision documents open with the conclusion, and sections follow a pyramid structure.
+- **The model judges, the script locates.** The model checks scope, evidence, terminology, and usability; the scanner only marks candidate boilerplate, vague modifiers, and Chinese formatting issues.
+- **Examples with provenance.** The 8 external examples bundled with the templates are pinned to source commits with their licenses, and serve only as writing models.
+
+See [architecture and writing methods](docs/guide/architecture.md) (Chinese) for the full mechanism.
+
+## When not to use it
+
+- You are writing English documents. The rules, word lists, and scanner target Chinese.
+- You work outside Claude Code and do not plan to adapt the entry and tool mappings.
+- You want it to trigger automatically, or to commit and publish on its own. It responds only to manual invocation; committing and publishing stay your decision.
 
 ## Documentation
 
-The detailed guides below are in Chinese.
+The guides below are in Chinese.
 
-| Document | Purpose |
+| Document | Contents |
 |---|---|
-| [Documentation entry point](docs/guide/README.md) | Installation, first use, and further reading |
-| [Usage guide](docs/guide/usage.md) | Supply material, save documents, revise content, or review without editing |
-| [Architecture and writing methods](docs/guide/architecture.md) | Understand the roles of rules, templates, the model, and the scanner |
-| [Extending templates](docs/guide/templates.md) | Add types, variants, or modules; register examples and verify extensions |
-| [Contributing](CONTRIBUTING.md) | Maintain rules and tests, and contribute changes |
+| [Documentation entry point](docs/guide/README.md) | Installation layout, first use, and navigation |
+| [Usage guide](docs/guide/usage.md) | Supplying material, saving, revising, reviewing only, running the scanner standalone |
+| [Architecture and writing methods](docs/guide/architecture.md) | How rules, templates, the model, and the scanner divide the work |
+| [Extending templates](docs/guide/templates.md) | Adding types, variants, or modules |
 
-<a id="候选扫描器"></a>
+## Contributing
 
-## Candidate scanner
+Issues and pull requests are welcome. Before changing rules, templates, or the scanner, read the [contributing guide](CONTRIBUTING.md) (Chinese), which covers the test command and example registration.
 
-To inspect wording and formatting candidates independently, run this from the repository root:
+## Star history
 
-```bash
-python3 runtime/doc-lint.py -- README.md
-```
-
-The scanner reads files and reports candidate locations. The user or assistant decides whether to change the text. Its wording and formatting rules target Chinese text; scanning the English README does not amount to an English style review.
-
-| Item | Behavior |
-|---|---|
-| Input | One or more UTF-8 files; supports BOM, CRLF, and paths containing spaces |
-| Rule source | Reads the G1 disallowed-pattern list directly from `docs/modules/constraints-writing.md` |
-| Formatting checks | Chinese punctuation, spacing, and parentheses; warnings by default |
-| Output | `file:line:warning/category:matched text`, followed by completion statistics |
-| Exit codes | `0`: scan completed; `2`: an argument, input, or rule-loading error occurred |
-| File access | Read-only; no network access and no execution of code or commands found in documents |
-
-You can repeat `--skip-format` to select `punctuation`, `spacing`, or `parentheses`. For example, if your project has its own Chinese–English spacing convention:
-
-```bash
-python3 runtime/doc-lint.py --skip-format spacing -- README.md
-```
-
-When calling the scanner from another directory, use the actual absolute path to the script. Relative document paths resolve from your terminal's current working directory. The script locates its rules relative to itself. `${CLAUDE_SKILL_DIR}` is a skill-entry variable, not a predefined shell variable.
-
-Candidates require contextual judgment: wording inside a quotation may need to stay unchanged. A completed scan reports execution status, not document quality; the model still reviews the full text.
-
-### Per-line suppression
-
-To preserve an original quotation, add a reason on the preceding physical line:
-
-```markdown
-<!-- doc-lint: ignore-next-line Preserve the original quotation. -->
-> Original quoted text that must remain unchanged.
-```
-
-The comment suppresses script candidates only on the next physical line. A blank line also consumes the suppression. The output records the reason and count; the model must still check the quotation's authenticity and other applicable writing requirements.
-
-## Maintenance and tests
-
-Run from the repository root:
-
-```bash
-python3 -B -m unittest discover -s tests -v
-```
-
-Tests cover candidate scanning, the command-line interface, package structure, and preservation of registered examples. See [manual invocation checks](tests/SMOKE.md) for real writing-task validation and [extending templates](docs/guide/templates.md) for the complete extension procedure; both are in Chinese.
+<a href="https://www.star-history.com/#blankhoney/doc-writing&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=blankhoney/doc-writing&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=blankhoney/doc-writing&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=blankhoney/doc-writing&type=Date" />
+  </picture>
+</a>
 
 ## License
 
-Original project code, rules, and documentation are licensed under the [MIT License](LICENSE). Example excerpts from Requests, Backstage, Django, and Kubernetes enhancements retain their respective project licenses and attribution. The PEP 380 excerpt retains Gregory Ewing's public-domain dedication. See the [source registry](examples/SOURCES.md) and [examples/licenses/](examples/licenses/).
+The project's code, rules, and documentation are licensed under the [MIT License](LICENSE). Example excerpts from Requests, Backstage, Django, Kubernetes enhancements, ripgrep, and uv keep their respective licenses and attribution; the PEP 380 excerpt keeps Gregory Ewing's public-domain dedication. See the [source registry](examples/SOURCES.md) and [examples/licenses/](examples/licenses/).
