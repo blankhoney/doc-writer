@@ -18,6 +18,8 @@ class ExampleSourceTests(unittest.TestCase):
             "requests-NOTICE.txt": "f5110972dedad2b4e9d314518daf3b7d72d6e02e499acd802181de6f74571dcc",
             "django-LICENSE.txt": "b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669",
             "kubernetes-enhancements-LICENSE.txt": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+            "ripgrep-LICENSE-MIT.txt": "0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f",
+            "uv-LICENSE-MIT.txt": "860e3d7a86b84e6a7012c7a635fc64df475cebc6cce34dfeb73a5982ec58176c",
             "pep-380-public-domain.txt": "f1404063dddc2060d0ea89611bf06d1f87e112324479e46a8d86010301e43273",
         }
         for name, digest in expected.items():
@@ -36,6 +38,34 @@ class ExampleSourceTests(unittest.TestCase):
             with self.subTest(file=name):
                 data = (ROOT / "examples" / "tech-design" / name).read_bytes()
                 self.assertEqual(hashlib.sha256(data).hexdigest(), digest)
+
+    def test_readme_samples_are_registered_and_unchanged(self):
+        # README 示例：译文锁定摘要，来源登记固定提交，许可证副本随包保留。
+        registry = (ROOT / "examples" / "SOURCES.md").read_text(encoding="utf-8")
+        samples = {
+            "ripgrep.md": (
+                "d93d51acb4ff32c8e266460caa7b77bc37befe1fdc616ad808111e6c3692d32d",
+                "BurntSushi/ripgrep/blob/3fce3b5bb0236da2df6d99672afb8a719642eca7/README.md",
+                "ripgrep-LICENSE-MIT.txt",
+            ),
+            "uv-install.md": (
+                "50477639c478300a398dbe56ab3f0d5f5161f71517c2d29c01f5114fe9074770",
+                "astral-sh/uv/blob/46b84fd0bfec23b72f29e8e2185ba68a65052f48/README.md",
+                "uv-LICENSE-MIT.txt",
+            ),
+        }
+        for name, (digest, source, license_copy) in samples.items():
+            with self.subTest(example=name):
+                path = ROOT / "examples" / "readme" / name
+                self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), digest)
+                self.assertIn(source, path.read_text(encoding="utf-8"))
+                self.assertIn(source, registry)
+                self.assertIn(
+                    "MIT License",
+                    (ROOT / "examples" / "licenses" / license_copy).read_text(
+                        encoding="utf-8"
+                    ),
+                )
 
     def test_verified_samples_keep_fixed_sources_and_partial_scope(self):
         registry = (ROOT / "examples" / "SOURCES.md").read_text(encoding="utf-8")
@@ -78,6 +108,7 @@ class ExampleSourceTests(unittest.TestCase):
                 "### 示例（已核验局部：Django 5.2 CSV 输出）",
             ],
             "reference": ["构造示意：假想配置仅含下列两键"],
+            "readme": ["### 示例（已核验局部：ripgrep 与 uv）"],
             "tech-design": [
                 "来源：[doc-lint.py]",
                 "来源同上，按源码解释当前实现",
@@ -99,7 +130,9 @@ class ExampleSourceTests(unittest.TestCase):
                     self.assertIn(marker, section)
                 self.assertNotRegex(text, r"示例来源待核验|未核验草稿|其余草稿")
                 if not markers:
-                    self.assertIn("通过变体结构、锚定节、模块与类型验证标准使用", text)
+                    self.assertIn(
+                        "通过变体结构、必需内容、模块与类型验证标准使用", text
+                    )
                     self.assertNotRegex(text, r"(?m)^`{3,}markdown$")
 
     def test_registry_describes_public_license_and_local_adaptations(self):

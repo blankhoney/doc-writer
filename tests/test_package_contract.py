@@ -18,6 +18,7 @@ TYPES = {
     "how-to",
     "reference",
     "explanation",
+    "readme",
 }
 
 
@@ -114,6 +115,19 @@ class PackageTests(unittest.TestCase):
         self.assertIn("docs/modules/constraints-writing.md", howto)
         self.assertNotIn("`docs/design-spec.md`", howto)
 
+    def test_runtime_files_use_plain_terms(self):
+        # 运行时读取的文件不用自造术语和失效编号，首次读取的 agent 才能直接看懂。
+        paths = [
+            ROOT / "SKILL.md",
+            *sorted((ROOT / "runtime").glob("*.md")),
+            *sorted((ROOT / "templates").rglob("*.md")),
+        ]
+        for path in paths:
+            with self.subTest(path=path.name):
+                body = path.read_text(encoding="utf-8")
+                self.assertNotRegex(body, r"锚定节|锚问|可插模块|有效性检验")
+                self.assertNotRegex(body, r"Phase 4|收尾检查（3\.5）|§3\.4")
+
     def test_index_default_variant_exists_in_template(self):
         index = (ROOT / "templates" / "_index.md").read_text(encoding="utf-8")
         rows = re.findall(
@@ -132,6 +146,7 @@ class PackageTests(unittest.TestCase):
             "how-to": "task-recipe",
             "reference": "key-card",
             "explanation": "concept-explanation",
+            "readme": "tool-library",
         }
         for name, default in rows:
             with self.subTest(template=name):
@@ -186,7 +201,7 @@ class PackageTests(unittest.TestCase):
                 "C6",
                 "G2",
             ),
-            "docs/modules/constraints-writing.md": ("G1", "G3"),
+            "docs/modules/constraints-writing.md": ("G1", "G3", "G4"),
             "docs/modules/constraints-architecture.md": ("D1",),
         }
         for path, names in modules.items():
