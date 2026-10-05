@@ -25,7 +25,10 @@ RULES_PATH = (
 FORMATS = ("punctuation", "spacing", "parentheses")
 HAN = r"[㐀-䶿一-鿿豈-﫿]"
 FORMAT_PATTERNS = {
-    "punctuation": re.compile(HAN + r"+(?:\*\*|__)?[ \t]*[,:;.!?]"),
+    # Anchor at the start of a Han run so long lines stay linear.
+    "punctuation": re.compile(
+        r"(?<!" + HAN + ")" + HAN + r"+(?:\*\*|__)?[ \t]*[,:;.!?]"
+    ),
     "spacing": re.compile(r"(?=(" + HAN + r"[A-Za-z0-9]|[A-Za-z0-9]" + HAN + r"))"),
     "parentheses": re.compile(r"\([^()\n]*" + HAN + r"[^()\n]*\)"),
 }
@@ -133,7 +136,7 @@ def mask_markdown(lines):
     metadata = (
         lines[0].strip() if lines and lines[0].strip() in ("---", "+++") else None
     )
-    fence = None
+    fence, odd_metadata, seen_key = None, False, False
     for index, line in enumerate(lines):
         if metadata:
             masked[index] = blank(line)
@@ -141,9 +144,21 @@ def mask_markdown(lines):
                 ("---", "...") if metadata == "---" else ("+++",)
             ):
                 metadata = None
+                if not seen_key and index > 1:
+                    odd_metadata = True  # A closed block with no key is ambiguous.
+            elif re.match(r"^[\w.\"'-]+\s*[:=]", line):
+                seen_key = True
+            elif index and not (
+                re.match(r"^(?:$|#|<!--)", line.strip())
+                or (seen_key and re.match(r"^(?:\s|- )", line))
+                or (metadata == "+++" and line.startswith("["))
+            ):
+                odd_metadata = True
             continue
         # Quote prose is scanned. Container fences get a conservative fallback.
         body = re.sub(r"^(?:[ \t]*>[ \t]?)+", "", line)
+        if fence and fence[4] > len(re.findall(r">", line[: len(line) - len(body)])):
+            fence = None  # A fence opened inside a quote ends with the quote.
         opening_body = (
             re.sub(r"^[ \t]*(?:[-+*]|\d+[.)])[ \t]+", "", body) if not fence else body
         )
@@ -165,10 +180,13 @@ def mask_markdown(lines):
                         "列表或深缩进围栏按定界符保守排除，不解析容器边界",
                     )
                 )
-            fence = (opening[1][0], len(opening[1]), index + 1, relaxed)
+            depth = len(re.findall(r">", line[: len(line) - len(body)]))
+            fence = (opening[1][0], len(opening[1]), index + 1, relaxed, depth)
             masked[index] = blank(line)
     if metadata:
         notices.append((1, "范围", "元数据未闭合；其后内容按元数据排除，可能漏扫正文"))
+    elif odd_metadata:
+        notices.append((1, "范围", "首行元数据块含非键值行，已整块排除，可能漏扫正文"))
     if fence:
         notices.append(
             (fence[2], "范围", "围栏未闭合；其后内容按代码排除，可能漏扫正文")
@@ -182,12 +200,16 @@ def mask_markdown(lines):
                 (
                     joined.count("\n", 0, match.start()) + 1,
                     "范围",
-                    "跨行反引号按匹配定界符排除；未判断段落边界，可能多排除",
+                    "跨行反引号按匹配定界符排除，遇空行截止",
                 )
             )
         return blank(match[0])
 
-    joined = re.sub(r"(?<![\\`])(?:\\\\)*(`+)(?!`)[\s\S]*?(?<!`)\1(?!`)", code, joined)
+    joined = re.sub(
+        r"(?<![\\`])(?:\\\\)*(`+)(?!`)(?:(?!\n[ \t>]*\n)[\s\S])*?(?<!`)\1(?!`)",
+        code,
+        joined,
+    )
     masked = joined.split("\n") if lines else []
     for index, line in enumerate(masked):
         if "`" in line:

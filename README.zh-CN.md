@@ -43,7 +43,7 @@ git clone https://github.com/blankhoney/doc-writing.git .claude/skills/doc-writi
 
 如果需要在个人所有项目中使用，可将仓库克隆到 `~/.claude/skills/doc-writing/`。安装目录已存在时，先比较版本再更新，保留已有定制。
 
-完整包中的 `SKILL.md`、`runtime/`、`templates/`、`docs/design-spec.md`、`docs/modules/` 和 `examples/` 应保持相对位置。候选扫描功能使用 Python 3.9 或更高版本，仅依赖标准库；不需要 pip 安装。Python 不可用时，助手仍可编写并完成模型检查，另行说明扫描未执行。
+完整包中的 `SKILL.md`、`LICENSE`、`runtime/`、`templates/`、`docs/design-spec.md`、`docs/modules/` 和 `examples/` 应保持相对位置。候选扫描功能使用 Python 3.9 或更高版本，仅依赖标准库；不需要 pip 安装。Python 不可用时，助手仍可编写并完成模型检查，另行说明扫描未执行。
 
 详细安装结构见[使用文档入口](docs/guide/README.md)。
 

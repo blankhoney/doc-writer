@@ -67,7 +67,7 @@ default_variant: task-recipe
 
 ## 前置条件
 - 在本仓库根目录执行，`python3 --version` 为 3.9 或更高。
-- 当前账号可读取 `runtime/doc-lint.py`、`docs/design-spec.md` 和 `README.md`。
+- 当前账号可读取 `runtime/doc-lint.py`、`docs/modules/constraints-writing.md` 和 `README.md`。
 
 ## 步骤
 1. 运行只读扫描：
@@ -84,7 +84,7 @@ default_variant: task-recipe
 
 > **非官方中文节译与格式转换，2026-09-06**：节选自 Django 5.2 的 [How to create CSV output 第 9–33 行](https://github.com/django/django/blob/9e7cc2b628fe8fd3895986af9b7fc9525034c1b0/docs/howto/outputting-csv.txt#L9-L33)。翻译标题和说明，将 reStructuredText 转为 Markdown；函数、注释和示例数据原样保留，仅移除文档代码块的外层缩进。Copyright (c) Django Software Foundation and individual contributors. All rights reserved. [BSD-3-Clause 全文](../examples/licenses/django-LICENSE.txt)随包保留。见[核验记录](../examples/SOURCES.md#django-csv)。
 
-只模仿“当前任务所需前提 → 完整实现片段”的写法，不把它当作完整任务食谱。实际项目仍需给出环境与权限等前置条件、接入位置和关键验证信号。本次未安装或运行 Django，函数输出不作为本次实测结果；原文示例行也不是实际业务数据。
+可模仿的是"当前任务所需前提 → 完整实现片段"的写法；完整任务食谱还要写环境与权限等前置条件、接入位置和验证信号。本次未安装或运行 Django，示例数据来自原文。
 
 ````markdown
 # 使用 Python 的 CSV 库输出 CSV

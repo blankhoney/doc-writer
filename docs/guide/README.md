@@ -38,6 +38,7 @@ doc-writing 面向支持 Agent Skills 标准的模型与框架，用于技术文
    ```text
    doc-writing/
    ├── SKILL.md
+   ├── LICENSE
    ├── runtime/
    ├── templates/
    ├── docs/
@@ -49,7 +50,7 @@ doc-writing 面向支持 Agent Skills 标准的模型与框架，用于技术文
        └── licenses/
    ```
 
-   `SKILL.md` 是入口，其他资源提供规则、模板、扫描器及来源记录。`docs/modules/constraints-*.md` 保存共同、编写和架构约束；`runtime/` 中的入口按准备、取材、编写和验证阶段引用原文。不要只复制主规格或入口文件。安装时保留 `examples/licenses/` 中的许可证与 NOTICE。维护用的 `tests/` 和本套使用文档可以随包保留。
+   `SKILL.md` 是入口，其他资源提供规则、模板、扫描器及来源记录。`docs/modules/constraints-*.md` 保存共同、编写和架构约束；`runtime/` 中的入口按准备、取材、编写和验证阶段引用原文。不要只复制主规格或入口文件。安装时保留根目录 `LICENSE` 以及 `examples/licenses/` 中的许可证与 NOTICE。维护用的 `tests/` 和本套使用文档可以随包保留。
 
 2. **在目标项目会话中确认发现状态。** 输入 `/skills`，确认列表中出现 `doc-writing`。入口未出现时，检查包目录名，以及 `SKILL.md` 是否位于上表对应层级；更新目录后重新打开会话再确认。
 

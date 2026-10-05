@@ -25,6 +25,18 @@ class ExampleSourceTests(unittest.TestCase):
                 data = (ROOT / "examples" / "licenses" / name).read_bytes()
                 self.assertEqual(hashlib.sha256(data).hexdigest(), digest)
 
+    def test_verified_translations_are_unchanged(self):
+        # 已核验译文改动后须重新核验并更新登记，再更新这里的摘要。
+        expected = {
+            "kep-753.md": "607c2575c74f0d4cd0fb5c98af5ffbdc7efca76d5a0f0a454fd443293dd9a949",
+            "kep-1287-cri.md": "f772ca4137291b574f7e3ab5a17b0db26c873f8c8c80a4f8acd49375dabcca2c",
+            "pep-380.md": "24ccc7c2bbb283782c5c250dd93eab90c3a04d050dc3e752ebe1ec35b2f3fca1",
+        }
+        for name, digest in expected.items():
+            with self.subTest(file=name):
+                data = (ROOT / "examples" / "tech-design" / name).read_bytes()
+                self.assertEqual(hashlib.sha256(data).hexdigest(), digest)
+
     def test_verified_samples_keep_fixed_sources_and_partial_scope(self):
         registry = (ROOT / "examples" / "SOURCES.md").read_text(encoding="utf-8")
         samples = {

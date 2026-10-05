@@ -92,6 +92,59 @@ class PackageTests(unittest.TestCase):
             self.assertNotIn("/Users/", body)
             self.assertNotIn("/home/", body)
 
+    def test_runtime_reads_are_listed_in_entry(self):
+        # 运行时入口要求完整读取的文件必须出现在 SKILL.md，不能藏在设计稿里。
+        entry = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("docs/modules/5.3-verification-pipeline.md", entry)
+        staged = [
+            *sorted((ROOT / "runtime").glob("*.md")),
+            ROOT / "docs" / "modules" / "5.3-verification-pipeline.md",
+        ]
+        for path in staged:
+            with self.subTest(stage=path.name):
+                body = path.read_text(encoding="utf-8")
+                self.assertNotIn("5.1-progressive-disclosure.md", body)
+                self.assertNotIn("5.1.4", body)
+                self.assertNotRegex(body, r"H1[–-]H9|启发式 ?H\d")
+                self.assertNotIn("docs/research/", body)
+        # 示例里写的扫描器依赖必须与脚本实际读取的词源一致。
+        lint = (ROOT / "runtime" / "doc-lint.py").read_text(encoding="utf-8")
+        self.assertIn('"constraints-writing.md"', lint)
+        howto = (ROOT / "templates" / "how-to.md").read_text(encoding="utf-8")
+        self.assertIn("docs/modules/constraints-writing.md", howto)
+        self.assertNotIn("`docs/design-spec.md`", howto)
+
+    def test_index_default_variant_exists_in_template(self):
+        index = (ROOT / "templates" / "_index.md").read_text(encoding="utf-8")
+        rows = re.findall(
+            r"^\|[^|]+\| \[([a-z-]+)\.md\]\([^)]+\) \| ([^|]+?) \|", index, re.MULTILINE
+        )
+        self.assertEqual({name for name, _ in rows}, TYPES)
+        slugs = {
+            "prd": "lean",
+            "tech-design": "lean",
+            "api-doc": "endpoint-reference",
+            "changelog": "keep-a-changelog",
+            "test-report": "ci-report",
+            "deploy-runbook": "deploy-guide",
+            "adr": "nygard",
+            "tutorial": "shortest-path",
+            "how-to": "task-recipe",
+            "reference": "key-card",
+            "explanation": "concept-explanation",
+        }
+        for name, default in rows:
+            with self.subTest(template=name):
+                text = (ROOT / "templates" / (name + ".md")).read_text(encoding="utf-8")
+                # frontmatter 的 default_variant 须与索引所列默认变体一致。
+                self.assertIn(
+                    "default_variant: " + slugs[name] + "\n", text.split("---", 2)[1]
+                )
+                self.assertRegex(
+                    text,
+                    r"(?m)^## 变体 [A-Z]: " + re.escape(default),
+                )
+
     def test_template_index_and_metadata(self):
         index = (ROOT / "templates" / "_index.md").read_text(encoding="utf-8")
         links = set(re.findall(r"\]\(([a-z-]+)\.md\)", index))

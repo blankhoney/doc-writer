@@ -45,7 +45,7 @@ Use `/skills` in the project session to check that `doc-writing` is available, t
 
 For use across all your projects, clone the repository into `~/.claude/skills/doc-writing/` instead. If the installation directory already exists, compare versions before updating and preserve any local customizations.
 
-Keep the relative locations of `SKILL.md`, `runtime/`, `templates/`, `docs/design-spec.md`, `docs/modules/`, and `examples/` intact. The candidate scanner requires Python 3.9 or later and uses only the standard library—no pip installation is needed. Without Python, the assistant can still draft and perform model-based checks, while reporting that the scanner was not run.
+Keep the relative locations of `SKILL.md`, `LICENSE`, `runtime/`, `templates/`, `docs/design-spec.md`, `docs/modules/`, and `examples/` intact. The candidate scanner requires Python 3.9 or later and uses only the standard library—no pip installation is needed. Without Python, the assistant can still draft and perform model-based checks, while reporting that the scanner was not run.
 
 See the [documentation entry point](docs/guide/README.md) (Chinese) for the installation layout.
 
