@@ -18,6 +18,7 @@ TYPES = {
     "how-to",
     "reference",
     "explanation",
+    "readme",
 }
 
 
@@ -92,6 +93,73 @@ class PackageTests(unittest.TestCase):
             self.assertNotIn("/Users/", body)
             self.assertNotIn("/home/", body)
 
+    def test_runtime_reads_are_listed_in_entry(self):
+        # 运行时入口要求完整读取的文件必须出现在 SKILL.md，不能藏在设计稿里。
+        entry = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("docs/modules/5.3-verification-pipeline.md", entry)
+        staged = [
+            *sorted((ROOT / "runtime").glob("*.md")),
+            ROOT / "docs" / "modules" / "5.3-verification-pipeline.md",
+        ]
+        for path in staged:
+            with self.subTest(stage=path.name):
+                body = path.read_text(encoding="utf-8")
+                self.assertNotIn("5.1-progressive-disclosure.md", body)
+                self.assertNotIn("5.1.4", body)
+                self.assertNotRegex(body, r"H1[–-]H9|启发式 ?H\d")
+                self.assertNotIn("docs/research/", body)
+        # 示例里写的扫描器依赖必须与脚本实际读取的词源一致。
+        lint = (ROOT / "runtime" / "doc-lint.py").read_text(encoding="utf-8")
+        self.assertIn('"constraints-writing.md"', lint)
+        howto = (ROOT / "templates" / "how-to.md").read_text(encoding="utf-8")
+        self.assertIn("docs/modules/constraints-writing.md", howto)
+        self.assertNotIn("`docs/design-spec.md`", howto)
+
+    def test_runtime_files_use_plain_terms(self):
+        # 运行时读取的文件不用自造术语和失效编号，首次读取的 agent 才能直接看懂。
+        paths = [
+            ROOT / "SKILL.md",
+            *sorted((ROOT / "runtime").glob("*.md")),
+            *sorted((ROOT / "templates").rglob("*.md")),
+        ]
+        for path in paths:
+            with self.subTest(path=path.name):
+                body = path.read_text(encoding="utf-8")
+                self.assertNotRegex(body, r"锚定节|锚问|可插模块|有效性检验")
+                self.assertNotRegex(body, r"Phase 4|收尾检查（3\.5）|§3\.4")
+
+    def test_index_default_variant_exists_in_template(self):
+        index = (ROOT / "templates" / "_index.md").read_text(encoding="utf-8")
+        rows = re.findall(
+            r"^\|[^|]+\| \[([a-z-]+)\.md\]\([^)]+\) \| ([^|]+?) \|", index, re.MULTILINE
+        )
+        self.assertEqual({name for name, _ in rows}, TYPES)
+        slugs = {
+            "prd": "lean",
+            "tech-design": "lean",
+            "api-doc": "endpoint-reference",
+            "changelog": "keep-a-changelog",
+            "test-report": "ci-report",
+            "deploy-runbook": "deploy-guide",
+            "adr": "nygard",
+            "tutorial": "shortest-path",
+            "how-to": "task-recipe",
+            "reference": "key-card",
+            "explanation": "concept-explanation",
+            "readme": "tool-library",
+        }
+        for name, default in rows:
+            with self.subTest(template=name):
+                text = (ROOT / "templates" / (name + ".md")).read_text(encoding="utf-8")
+                # frontmatter 的 default_variant 须与索引所列默认变体一致。
+                self.assertIn(
+                    "default_variant: " + slugs[name] + "\n", text.split("---", 2)[1]
+                )
+                self.assertRegex(
+                    text,
+                    r"(?m)^## 变体 [A-Z]: " + re.escape(default),
+                )
+
     def test_template_index_and_metadata(self):
         index = (ROOT / "templates" / "_index.md").read_text(encoding="utf-8")
         links = set(re.findall(r"\]\(([a-z-]+)\.md\)", index))
@@ -133,7 +201,7 @@ class PackageTests(unittest.TestCase):
                 "C6",
                 "G2",
             ),
-            "docs/modules/constraints-writing.md": ("G1", "G3"),
+            "docs/modules/constraints-writing.md": ("G1", "G3", "G4"),
             "docs/modules/constraints-architecture.md": ("D1",),
         }
         for path, names in modules.items():

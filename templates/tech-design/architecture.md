@@ -1,6 +1,6 @@
 # 架构方案指导
 
-从[技术设计](../tech-design.md)进入，沿用所选变体锚定节；实际提出架构决策前读[完整 D1](../../docs/modules/constraints-architecture.md)，不等验证时才补读。本文补写法，不复制模板；备忘只在原节回答当前决策。
+从[技术设计](../tech-design.md)进入，沿用所选变体必需内容；实际提出架构决策前读[完整 D1](../../docs/modules/constraints-architecture.md)，不等验证时才补读。本文补写法，不复制模板；备忘只在原节回答当前决策。
 
 ## 写到可评审
 

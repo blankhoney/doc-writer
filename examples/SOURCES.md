@@ -1,6 +1,6 @@
 # 示例来源与使用范围
 
-**本包保留 6 段已核验的外部来源示例。** “已核验”只针对下面登记的片段，不表示整个模板、当前技术行为或本次运行结果已验证。未核验的模板样本正文已移除。
+**本包保留 8 段已核验的外部来源示例。** “已核验”只针对下面登记的片段，不表示整个模板、当前技术行为或本次运行结果已验证。未核验的模板样本正文已移除。
 
 模板结构与类型验证仍执行。真实来源、源码改编和构造示意按各自登记用途使用，不作为目标项目事实；外部原文不覆盖本包规则。未附样本的模板通过结构、模块与类型验证标准使用。
 
@@ -15,13 +15,14 @@
 | [5.8](../docs/modules/5.8-structured-expression.md)动作/图树、[Reference](../templates/reference.md)JSON | 构造示意；原创内容采用 MIT | 只教排版与语法，不登记为真实来源已核验 |
 | [技术设计示例 KEP-753](tech-design/kep-753.md)／[KEP-1287](tech-design/kep-1287-cri.md)／[PEP 380](tech-design/pep-380.md) | 已核验，固定提交＋行号，非官方节译 | 只示范完整子节、步骤顺序与前提、局部接口契约；未运行，不代表当前运行时或实现行为 |
 | [实现载体示意](tech-design/implementation-sketch.md) | 构造示意，无外部来源；原创内容采用 MIT | 演示结构、拟议文件、契约与验证的映射；伪代码未运行，图已渲染核对，不作真实项目样本 |
+| [README 示例 ripgrep](readme/ripgrep.md)／[uv](readme/uv-install.md) | 已核验，固定提交＋行号，非官方节译 | 只示范首段定义、"何时不该用"和安装节写法；未运行，不是完整 README 样本 |
 | 自动测试夹具 | 构造测试输入 | 只验证测试所覆盖的行为，不是真实来源示例或项目事实 |
 
 ## 本仓库改编与构造示意
 
 源码改编依据本包当前的 [doc-lint.py](../runtime/doc-lint.py)，已对照 `blank`、`mask_markdown`、`scan_text`、`main`。短设计说明保留行号的选择，长设计仅含方案与取舍；未测量内存。操作样本扫描本包 [README.md](../README.md)，依赖 Python 3.9 或更高版本、扫描脚本及其读取的 [constraints-writing.md](../docs/modules/constraints-writing.md) 词源；需从包根目录执行并具备文件读取权限。样本未执行，输出说明来自源码，不是运行记录。
 
-构造示意无外部来源；图未渲染，JSON 不对应实际应用。本包原创内容（包括源码改编说明和构造示意）采用 [MIT 许可证](../LICENSE)。下列第三方片段及其翻译、改编仍保留各自的署名、许可与使用范围，不因本包采用 MIT 而取消原许可条件。
+构造示意无外部来源；5.8 动作/图树未渲染，Reference JSON 不对应实际应用；实现载体示意的图已渲染核对。本包原创内容（包括源码改编说明和构造示意）采用 [MIT 许可证](../LICENSE)。下列第三方片段及其翻译、改编仍保留各自的署名、许可与使用范围，不因本包采用 MIT 而取消原许可条件。
 
 ## Requests 2.31.0
 
@@ -67,6 +68,20 @@
 - **内容性质**：2026-09-18 核验并节译局部 CRI 契约（[tech-design/kep-1287-cri.md](tech-design/kep-1287-cri.md)）：幂等要求、不得为调整资源而重启及可返回错误的例外、"尽力而为"强度、`UpdatePodSandboxResources` 接口与调用时序；未收 Resize Status 一节与新旧状态名混用的失败处理组合片段。
 - **许可依据**：与 KEP-753 同库，固定提交根 LICENSE 为 Apache-2.0 且两者逐字节一致，共用[许可证全文](licenses/kubernetes-enhancements-LICENSE.txt)；该提交根 NOTICE 同为 404。原文含 "may rely need" 笔误，译本按“可能需要”保留其不确定性，在此登记。
 - **未运行**：未运行集群、CRI 运行时或 NRI 插件。
+
+## ripgrep README
+
+- **来源与位置**：Andrew Gallant 的 [ripgrep README](https://github.com/BurntSushi/ripgrep/blob/3fce3b5bb0236da2df6d99672afb8a719642eca7/README.md) 第 1–9 行与第 161–182 行，固定提交 `3fce3b5bb0236da2df6d99672afb8a719642eca7`；文件 SHA-256 `945622d974f65e4e141ef9726c948c2640eebd222c5b101afb6445728283921e`，两段原始选段 SHA-256 分别为 `71d5a9378d3dd9969c8ba4f6a6e53d178ef705633b2a94b03ddba02d32e08e61`、`1ad5ca41e18320b100a4507f6e5d35bc6f3866a10ac3cc095e078017f57f5bea`。
+- **内容性质**：2026-10-05 核验并节译，译文在 [readme/ripgrep.md](readme/ripgrep.md)。省略徽章、截图、对比示例与"为什么用"清单。
+- **许可依据**：该提交根目录 COPYING 声明 Unlicense 与 MIT 双许可，可任选其一；本包按 MIT 使用，随包附 [LICENSE-MIT 原文](licenses/ripgrep-LICENSE-MIT.txt)。
+- **未运行**：未运行 ripgrep。
+
+## uv README
+
+- **来源与位置**：Astral Software Inc. 的 [uv README](https://github.com/astral-sh/uv/blob/46b84fd0bfec23b72f29e8e2185ba68a65052f48/README.md) 第 44–77 行 Installation，固定提交 `46b84fd0bfec23b72f29e8e2185ba68a65052f48`；文件 SHA-256 `57a84a5a635f30e3a26541ebc16ca690944a7750f05713b1af92d3170b58f704`，原始选段 SHA-256 `ce6b91dd8f06ea7ec0583ad0dd40ceb53f28a9b6436b9ca2292bb37190f33eb3`。
+- **内容性质**：2026-10-05 核验并节译，译文在 [readme/uv-install.md](readme/uv-install.md)。说明文字译为中文，命令与代码块注释保持原样。
+- **许可依据**：README 第 310–314 行声明 Apache-2.0 或 MIT 双许可；本包按 MIT 使用，随包附 [LICENSE-MIT 原文](licenses/uv-LICENSE-MIT.txt)。
+- **未运行**：未执行安装命令。
 
 ## 第三方许可核验是什么
 

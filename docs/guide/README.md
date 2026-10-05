@@ -38,6 +38,7 @@ doc-writing 面向支持 Agent Skills 标准的模型与框架，用于技术文
    ```text
    doc-writing/
    ├── SKILL.md
+   ├── LICENSE
    ├── runtime/
    ├── templates/
    ├── docs/
@@ -46,10 +47,11 @@ doc-writing 面向支持 Agent Skills 标准的模型与框架，用于技术文
    └── examples/
        ├── SOURCES.md
        ├── tech-design/
+       ├── readme/
        └── licenses/
    ```
 
-   `SKILL.md` 是入口，其他资源提供规则、模板、扫描器及来源记录。`docs/modules/constraints-*.md` 保存共同、编写和架构约束；`runtime/` 中的入口按准备、取材、编写和验证阶段引用原文。不要只复制主规格或入口文件。安装时保留 `examples/licenses/` 中的许可证与 NOTICE。维护用的 `tests/` 和本套使用文档可以随包保留。
+   `SKILL.md` 是入口，其他资源提供规则、模板、扫描器及来源记录。`docs/modules/constraints-*.md` 保存共同、编写和架构约束；`runtime/` 中的入口按准备、取材、编写和验证阶段引用原文。不要只复制主规格或入口文件。安装时保留根目录 `LICENSE` 以及 `examples/licenses/` 中的许可证与 NOTICE。维护用的 `tests/` 和本套使用文档可以随包保留。
 
 2. **在目标项目会话中确认发现状态。** 输入 `/skills`，确认列表中出现 `doc-writing`。入口未出现时，检查包目录名，以及 `SKILL.md` 是否位于上表对应层级；更新目录后重新打开会话再确认。
 
@@ -65,4 +67,4 @@ doc-writing 面向支持 Agent Skills 标准的模型与框架，用于技术文
 | 理解规则、模板、项目证据与扫描器的分工，以及文档优化流程 | [架构与优化方法](architecture.md) |
 | 选择扩展层级，添加变体、模块或新类型，并验证扩展结果 | [模板扩展](templates.md) |
 
-支持的文档包括需求、技术方案、API、变更说明、测试报告、部署与值班手册、决策记录，以及教程、操作指南、参考文档和概念说明。只需用自然语言说明读者要完成的任务；要查具体结构时，再打开[模板索引](../../templates/_index.md)。
+支持的文档包括需求、技术方案、API、变更说明、测试报告、部署与值班手册、决策记录，教程、操作指南、参考文档、概念说明，以及仓库首页 README。只需用自然语言说明读者要完成的任务；要查具体结构时，再打开[模板索引](../../templates/_index.md)。

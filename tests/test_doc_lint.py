@@ -88,8 +88,11 @@ class RuleTests(unittest.TestCase):
             ('"众所周知/不言而喻"', "众所周知/不言而喻"),
             ('"众所周知/不言而喻"', '"众所周知//不言而喻"'),
             ("**禁用修饰词**", "**其他修饰词**"),
-            ("显著、深入、全面、充分、有力、极致、高效。", "。"),
-            ("显著、深入、全面、充分、有力、极致、高效。", "显著、、深入。"),
+            ("显著、深入、全面、充分、有力、极致、高效、强大、无缝。", "。"),
+            (
+                "显著、深入、全面、充分、有力、极致、高效、强大、无缝。",
+                "显著、、深入。",
+            ),
             ("**禁用抽象大词**", "**其他大词**"),
             ("- 通用大词：赋能、协同、闭环、抓手、范式、沉淀、生态", "- 通用大词："),
         ]
@@ -177,6 +180,46 @@ class ScanTests(unittest.TestCase):
         records, _ = scan("`显著。")
         self.assertEqual(len(candidates("`显著。")), 1)
         self.assertTrue(any(category == "范围" for _, category, _ in records))
+
+    def test_prose_in_leading_metadata_warns(self):
+        records, _ = scan("---\n显著的正文。\n---\n后文。")
+        self.assertEqual(candidates("---\n显著的正文。\n---\n后文。"), [])
+        self.assertTrue(any("非键值行" in hit for _, _, hit in records))
+        records, _ = scan("---\ndescription: >-\n  显著\n---\n后文。")
+        self.assertFalse(any("非键值行" in hit for _, _, hit in records))
+
+    def test_inline_code_stops_at_blank_line(self):
+        text = "前 `未配对\n\n综上所述，显著。\n\n后 `代码`"
+        self.assertEqual([hit[2] for hit in candidates(text)], ["综上所述", "显著"])
+
+    def test_quoted_fence_ends_with_quote(self):
+        text = "> ```\n> 显著\n显著的正文。\n```\n"
+        self.assertEqual([hit[0] for hit in candidates(text)], [3])
+
+    def test_nested_quote_fence_ends_at_its_depth(self):
+        text = "> > ```\n> > 显著\n> 显著的外层正文。\n"
+        self.assertEqual([hit[0] for hit in candidates(text)], [3])
+
+    def test_metadata_lists_need_a_key(self):
+        for text in ("---\n- 显著提升。\n---\n", "---\n[显著](a)\n---\n"):
+            with self.subTest(text=text):
+                records, _ = scan(text)
+                self.assertTrue(any("非键值行" in hit for _, _, hit in records))
+        records, _ = scan("---\ntags:\n  - a\n- b\n---\n")
+        self.assertFalse(any("非键值行" in hit for _, _, hit in records))
+
+    def test_keyless_metadata_and_quoted_blank_lines(self):
+        records, _ = scan("---\n# 显著的说明\n---\n后文。")
+        self.assertTrue(any("非键值行" in hit for _, _, hit in records))
+        text = "> `a\n>\n> 显著。\n>\n> b`"
+        self.assertEqual([hit[0] for hit in candidates(text)], [3])
+
+    def test_long_han_line_stays_fast(self):
+        import time
+
+        start = time.perf_counter()
+        scan("中" * 20000)
+        self.assertLess(time.perf_counter() - start, 1.0)
 
     def test_complex_exclusion_limits_warn(self):
         for text in ("[显著](a(b(c)))", "https://example.test/a(显著)", "<!-- 未闭合"):
