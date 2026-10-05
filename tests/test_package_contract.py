@@ -45,14 +45,24 @@ class PackageTests(unittest.TestCase):
         text = data.decode("utf-8")
         front = text.split("---", 2)[1]
         fields = dict(re.findall(r"^([a-z-]+):[ \t]*(.*)$", front, re.MULTILINE))
+        # Agent Skills 规范只允许这六个顶层字段，客户端专用字段会让 skills-ref 校验失败。
+        self.assertLessEqual(
+            set(fields),
+            {
+                "name",
+                "description",
+                "license",
+                "compatibility",
+                "metadata",
+                "allowed-tools",
+            },
+        )
         self.assertEqual(fields["name"], "doc-writer")
-        self.assertEqual(fields["disable-model-invocation"], "true")
-        self.assertEqual(fields["user-invocable"], "true")
+        self.assertEqual(fields["license"], "MIT")
         self.assertIn("description", fields)
-        self.assertNotIn("hooks", fields)
-        self.assertNotIn("allowed-tools", fields)
         self.assertLess(len(text.splitlines()), 500)
-        self.assertEqual(text.count("$ARGUMENTS"), 1)
+        self.assertNotIn("CLAUDE_SKILL_DIR", text)
+        self.assertNotIn("$ARGUMENTS", text)
         self.assertIn("需要批准", text)
         self.assertIn("安全检查无法分析命令", text)
         self.assertIn("不得通过改变引号", text)
@@ -60,7 +70,9 @@ class PackageTests(unittest.TestCase):
     def test_entry_resources_are_real_and_portable(self):
         text = (ROOT / "SKILL.md").read_text(encoding="utf-8")
         resources = set(
-            re.findall(r"\$\{CLAUDE_SKILL_DIR\}/([a-zA-Z0-9_./-]+\.(?:md|py))", text)
+            re.findall(
+                r"`((?:docs|runtime|templates)/[a-zA-Z0-9_./-]+\.(?:md|py))`", text
+            )
         )
         resources |= {unquote(link) for link in re.findall(r"\]\(([^)\s#]+)\)", text)}
         # 手动入口必须指向实际阶段入口、单一规则源、脚本和模板索引。

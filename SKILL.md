@@ -1,13 +1,15 @@
 ---
 name: doc-writer
 description: >-
-  编写、补全和检查代码工程中的中文技术文档，包括 PRD、技术设计、API 文档、
-  Changelog、测试报告、部署手册、ADR、README，以及 Tutorial、How-to、Reference、Explanation。
-  用户通过 /doc-writer 手动调用时使用；依据项目证据写作，检查全部适用约束，
-  用本地脚本辅助定位用词和格式候选，不把脚本结果当作质量裁决。
-argument-hint: "[文档类型] <任务、材料或目标文件>"
-disable-model-invocation: true
-user-invocable: true
+  编写、补全和检查中文技术文档：PRD、技术设计、API 文档、Changelog、测试报告、
+  部署手册、ADR、README，以及 Tutorial、How-to、Reference、Explanation。
+  仅在用户明确要求写或检查这类文档时使用；改代码、写提交说明、日常问答不要使用。
+  依据项目证据写作，检查全部适用约束，用本地脚本辅助定位用词和格式候选。
+license: MIT
+compatibility: 适用于能读取文件的 agent；候选扫描需要 Python 3.9+（可选，缺失时由模型完成检查）。
+metadata:
+  author: blankhoney
+  version: "2.1"
 ---
 
 # 文档写作
@@ -20,33 +22,33 @@ user-invocable: true
 4. **验证**：模型逐项主检，脚本只定位候选，关键文档做独立读者测试。
 5. **交付**：给出正文或文件，写明核对范围、已读规则、未执行检查和缺口。
 
-只处理本次手动调用的文档任务，结束后不延续到无关对话。
+只处理本次文档任务，结束后不延续到无关对话。
 
 ## 本次请求
 
-$ARGUMENTS
+用户触发本技能时给出的请求就是本次任务：可能包含文档类型、任务描述、材料或目标文件。
 
 ## 资源
 
-技能包根目录是 `${CLAUDE_SKILL_DIR}`，包内资源一律从这里定位。待写文档和项目证据在用户的工作项目里，两者分开。
+技能包根目录是本 `SKILL.md` 所在目录，下表路径都相对这个目录。待写文档和项目证据在用户的工作项目里，两者分开。
 
 | 资源 | 何时读取（未注明小节即完整读） |
 |---|---|
-| `${CLAUDE_SKILL_DIR}/docs/modules/constraints-common.md` | 调用后第一步，先于取材与范围决定 |
-| `${CLAUDE_SKILL_DIR}/runtime/prepare.md` | 选型和骨架决定前 |
-| `${CLAUDE_SKILL_DIR}/templates/_index.md` | 匹配类型时；选定的模板始终完整读 |
-| `${CLAUDE_SKILL_DIR}/runtime/research.md` | 核对或获取任务材料前 |
-| `${CLAUDE_SKILL_DIR}/docs/modules/constraints-writing.md` 和 `${CLAUDE_SKILL_DIR}/runtime/write-assist.md` | 输出任何文稿、骨架文字或建议之前 |
-| `${CLAUDE_SKILL_DIR}/docs/modules/constraints-architecture.md` | 提出技术架构决策前，含详细设计中的架构选择 |
-| `${CLAUDE_SKILL_DIR}/runtime/verify-checks.md` | 初稿完成后、交付前 |
-| `${CLAUDE_SKILL_DIR}/docs/modules/5.3-verification-pipeline.md` | 验证时按 verify-checks 指明的小节读 |
+| `docs/modules/constraints-common.md` | 调用后第一步，先于取材与范围决定 |
+| `runtime/prepare.md` | 选型和骨架决定前 |
+| `templates/_index.md` | 匹配类型时；选定的模板始终完整读 |
+| `runtime/research.md` | 核对或获取任务材料前 |
+| `docs/modules/constraints-writing.md` 和 `runtime/write-assist.md` | 输出任何文稿、骨架文字或建议之前 |
+| `docs/modules/constraints-architecture.md` | 提出技术架构决策前，含详细设计中的架构选择 |
+| `runtime/verify-checks.md` | 初稿完成后、交付前 |
+| `docs/modules/5.3-verification-pipeline.md` | 验证时按 verify-checks 指明的小节读 |
 
 读取规则：
 
-- 用 Read 读原文。截断就补齐；缺少必读资源时报告安装不完整。
+- 用文件读取工具读原文。截断就补齐；缺少必读资源时报告安装不完整。
 - 按需小节用当前起止标题定位读取区间，不用链接锚点或旧行号。
 - 已完整读到且仍可用的规则不必重读；换类型、版本变化或上下文缺失时补读。
-- `${CLAUDE_SKILL_DIR}/docs/design-spec.md` 是设计索引，只在委托写作时读其中 §5.7。
+- `docs/design-spec.md` 是设计索引，只在委托写作时读其中 §5.7。
 
 ## 1. 准备
 
@@ -84,10 +86,10 @@ $ARGUMENTS
 ## 4. 验证
 
 1. 读取验证入口，按其中表格对当前类型与变体做一次完整模型检查，不重复跑同义清单。
-2. 对当前稿运行候选扫描器。把占位符换成目标文件的实际绝对路径。两个路径都用单引号包住；路径本身含单引号时写成 `'\''`：
+2. 对当前稿运行候选扫描器 `runtime/doc-lint.py`。把两个占位符分别换成技能包根目录和目标文件的实际绝对路径。两个路径都用单引号包住；路径本身含单引号时写成 `'\''`：
 
    ```bash
-   python3 '${CLAUDE_SKILL_DIR}/runtime/doc-lint.py' -- '<目标文档绝对路径>'
+   python3 '<技能包根目录>/runtime/doc-lint.py' -- '<目标文档绝对路径>'
    ```
 
    每次只运行这一条命令，从工具结果读取执行状态。正文尚未获准保存时，只做模型检查，并说明未执行文件扫描。
@@ -112,7 +114,7 @@ $ARGUMENTS
 | 不做 | 改为 |
 |---|---|
 | 使用 hook、修改全局配置或权限、自动安装依赖 | 缺什么就在交付中写明 |
-| 凭文件名、摘要或编号推断规则内容 | 用 Read 读原文 |
+| 凭文件名、摘要或编号推断规则内容 | 用文件读取工具读原文 |
 | 未获保存或覆盖授权就写入文件 | 先输出正文 |
 | 为补字段遍历仓库，或因包内示例好取材而改题 | 按读者任务取材 |
 | 为满足模板编造或删除不完整事实 | 保留已知部分，标注缺口 |

@@ -10,31 +10,31 @@
 
 An Agent Skill that writes and checks Chinese technical documents from project evidence, covering 12 types including PRDs, designs, APIs, ADRs, and READMEs.
 
-You provide material and a goal. The assistant picks a document type and variant, reads the matching rules, checks facts against code, configuration, and execution logs, drafts the text, and then reviews structure, evidence, and wording item by item. It runs only when you type `/doc-writer`; it never triggers on its own in ordinary conversation. Saving files, running operations described in a document, and committing code each need your separate permission. The installation and invocation examples use Claude Code; other frameworks that support Agent Skills need an adapted entry and tool mappings, and compatibility has not been verified. The skill's rules, templates, and guides are written in Chinese.
+You provide material and a goal. The assistant picks a document type and variant, reads the matching rules, checks facts against code, configuration, and execution logs, drafts the text, and then reviews structure, evidence, and wording item by item. The skill follows the [Agent Skills](https://agentskills.io) specification, so any agent that can read files can use it. It activates only when you explicitly ask to write or review a technical document, not for code changes or everyday questions. Saving files, running operations described in a document, and committing code each need your separate permission. The skill's rules, templates, and guides are written in Chinese.
 
 <a id="安装"></a>
 
 ## Installation
 
-You need a version of Claude Code that supports skills. From your target project's root directory, run:
+Clone the repository into your agent's skills directory and keep the directory name `doc-writer` (it must match `name` in `SKILL.md`). For example, Claude Code's project-level directory:
 
 ```bash
 mkdir -p .claude/skills
 git clone https://github.com/blankhoney/doc-writer.git .claude/skills/doc-writer
 ```
 
-Type `/skills` in a project session; `doc-writer` should appear in the list. If it does not, reopen the session.
+For other agents, see their documentation for the skills directory. Reopen the session and check that the agent lists `doc-writer`.
 
-To use it in all your projects, clone it into `~/.claude/skills/doc-writer/` instead. If that directory already exists, compare versions before updating and keep your local customizations.
+To use it in all your projects, clone it into the agent's personal skills directory (for Claude Code, `~/.claude/skills/doc-writer/`). If that directory already exists, compare versions before updating and keep your local customizations.
 
 The candidate scanner needs Python 3.9 or later and uses only the standard library. Without Python, the assistant still writes and checks the document, and notes in its delivery summary that the scan did not run.
 
 ## Quick start
 
-In a session opened in your target project, type:
+In a session opened in your target project, type (clients with slash commands also accept a leading `/doc-writer`):
 
 ```text
-/doc-writer Using the following material, write a Chinese code contribution guide for project contributors. Return the text in chat only: developers create a feature branch and submit a pull request; each pull request must explain the purpose of the changes; a maintainer merges it after automated tests pass and one maintainer approves.
+Use doc-writer: using the following material, write a Chinese code contribution guide for project contributors. Return the text in chat only: developers create a feature branch and submit a pull request; each pull request must explain the purpose of the changes; a maintainer merges it after automated tests pass and one maintainer approves.
 ```
 
 You get an operational guide organized around branching, submitting a pull request, testing, and review, ending with a line stating that no file was saved and the scanner did not run.
@@ -42,13 +42,13 @@ You get an operational guide organized around branching, submitting a pull reque
 To save the result, name a path in the request:
 
 ```text
-/doc-writer Based on this project's README.md, write a Chinese quick-start guide for engineers joining the project. Save it to docs/quickstart.md.
+Use doc-writer: based on this project's README.md, write a Chinese quick-start guide for engineers joining the project. Save it to docs/quickstart.md.
 ```
 
 To review without rewriting:
 
 ```text
-/doc-writer Review docs/architecture.md for structure, terminology, and accuracy against the implementation. List specific locations and suggested changes. Do not modify any files.
+Use doc-writer: review docs/architecture.md for structure, terminology, and accuracy against the implementation. List specific locations and suggested changes. Do not modify any files.
 ```
 
 ## What it writes
@@ -66,7 +66,7 @@ To review without rewriting:
 | Look up a contract or understand a mechanism | Reference, Explanation |
 | Write a repository front page | README |
 
-Describe the task in plain language, or put the type name right after `/doc-writer`. See the [template index](templates/_index.md) (Chinese) for each type's variants and style requirements.
+Describe the task in plain language, or name the type in your request. See the [template index](templates/_index.md) (Chinese) for each type's variants and style requirements.
 
 ## How it keeps quality up
 
@@ -81,8 +81,8 @@ See [architecture and writing methods](docs/guide/architecture.md) (Chinese) for
 ## When not to use it
 
 - You are writing English documents. The rules, word lists, and scanner target Chinese.
-- You work outside Claude Code and do not plan to adapt the entry and tool mappings.
-- You want it to trigger automatically, or to commit and publish on its own. It responds only to manual invocation; committing and publishing stay your decision.
+- Your agent cannot read local files. Rules and templates are read from disk on demand.
+- You want it to commit or publish on its own. Committing and publishing stay your decision.
 
 ## Documentation
 
