@@ -54,7 +54,7 @@
 | 解释当前项目的组成与机制 | `explanation` | 根据项目实现说明架构及组件职责 |
 | 写或更新仓库首页 | `readme` | 根据项目实际安装方式和功能写 README |
 
-完整变体见[模板索引](../../templates/_index.md)。不知道类型时，直接描述读者要完成的任务，助手会匹配模板。
+完整变体见[模板索引](../../skills/doc-writer/assets/templates/_index.md)。不知道类型时，直接描述读者要完成的任务，助手会匹配模板。
 
 技术设计支持架构方案和程序详细设计两个分支。需要交接实现时，说明依据的需求、已确认方案和代码版本；助手会展开接口、执行逻辑、失败处理、依赖与包布局，并标明既有内容和拟议变更。局部小改动沿用简要说明，不强制生成完整依赖表和项目树。
 
@@ -124,7 +124,7 @@
 1. **定位脚本与目标文件。** 以下示例假设终端位于目标项目根目录，skill 按 Claude Code 项目级目录安装（其他 agent 换成实际技能目录），并已有 `docs/guide.md`：
 
    ```bash
-   python3 .claude/skills/doc-writer/runtime/doc-lint.py -- docs/guide.md
+   python3 .claude/skills/doc-writer/scripts/doc-lint.py -- docs/guide.md
    ```
 
    确认：末尾统计显示完成文件数量和错误数量。退出码 `0` 表示扫描完成；`2` 表示参数、输入或规则读取发生错误。
@@ -134,7 +134,7 @@
 3. **根据项目格式选择扫描项。** 例如，项目采用自己的中英文间距规则时，可以关闭间距候选：
 
    ```bash
-   python3 .claude/skills/doc-writer/runtime/doc-lint.py --skip-format spacing -- docs/guide.md
+   python3 .claude/skills/doc-writer/scripts/doc-lint.py --skip-format spacing -- docs/guide.md
    ```
 
    确认：该次输出不再包含 `spacing` 候选，其他扫描类别继续执行。
@@ -146,7 +146,7 @@
 | 项目 | 行为 |
 |---|---|
 | 输入 | 一个或多个 UTF-8 文件，支持 BOM、CRLF 和含空格路径 |
-| 词源 | 直接读取 `docs/modules/constraints-writing.md` 中的 G1 禁用模式清单 |
+| 词源 | 直接读取 `references/constraints-writing.md` 中的 G1 禁用模式清单 |
 | 格式检查 | 中文标点、间距和括号；`--skip-format` 可重复指定 `punctuation`、`spacing`、`parentheses` 关闭 |
 | 输出 | `文件:行号:warning/类别:命中文本`，附完成统计 |
 | 退出码 | `0`：扫描完成，可带警告；`2`：参数、输入或规则读取发生错误 |

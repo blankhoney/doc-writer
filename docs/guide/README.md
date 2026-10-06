@@ -22,7 +22,7 @@ doc-writer 面向支持 Agent Skills 标准的模型与框架，用于技术文�
 
 ### 2.1 选择安装位置
 
-首次获取完整技能包可按[仓库克隆步骤](../../README.zh-CN.md#安装)安装。已有源码目录时，将其中的运行资源放入一种安装目录，包目录名使用 `doc-writer`：
+首次获取完整技能包可按[仓库克隆步骤](../../README.zh-CN.md#安装)安装。已有源码目录时，把其中的 `skills/doc-writer/` 放入一种安装目录，包目录名使用 `doc-writer`：
 
 | 使用范围 | 入口位置 |
 |---|---|
@@ -33,25 +33,22 @@ doc-writer 面向支持 Agent Skills 标准的模型与框架，用于技术文�
 
 ### 2.2 放置完整包
 
-1. **复制运行资源。** 安装目录中保留以下相对结构，其中子目录里的文件一并复制：
+1. **复制技能目录。** 把仓库中的 `skills/doc-writer/` 整个复制到安装位置，结构如下：
 
    ```text
    doc-writer/
    ├── SKILL.md
    ├── LICENSE
-   ├── runtime/
-   ├── templates/
-   ├── docs/
-   │   ├── design-spec.md
-   │   └── modules/
-   └── examples/
-       ├── SOURCES.md
-       ├── tech-design/
-       ├── readme/
-       └── licenses/
+   ├── scripts/doc-lint.py
+   ├── references/
+   └── assets/
+       ├── templates/
+       └── examples/
+           ├── SOURCES.md
+           └── licenses/
    ```
 
-   `SKILL.md` 是入口，其他资源提供规则、模板、扫描器及来源记录。`docs/modules/constraints-*.md` 保存共同、编写和架构约束；`runtime/` 中的入口按准备、取材、编写和验证阶段引用原文。不要只复制主规格或入口文件。安装时保留根目录 `LICENSE` 以及 `examples/licenses/` 中的许可证与 NOTICE。维护用的 `tests/` 和本套使用文档可以随包保留。
+   `SKILL.md` 是入口；`references/` 保存约束、阶段入口和按需规范；`assets/templates/` 是文档模板；`assets/examples/` 是已核验示例及其许可证；`scripts/doc-lint.py` 是候选扫描器。不要只复制入口文件，`LICENSE` 和 `assets/examples/licenses/` 必须保留。仓库根目录的 `tests/`、`evals/` 和 `docs/` 是维护用文件，不需要安装。
 
 2. **在目标项目会话中确认发现状态。** 确认 agent 的技能列表中出现 `doc-writer`（Claude Code 可输入 `/skills` 查看）。入口未出现时，检查包目录名，以及 `SKILL.md` 是否位于上表对应层级；更新目录后重新打开会话再确认。
 
@@ -67,4 +64,4 @@ doc-writer 面向支持 Agent Skills 标准的模型与框架，用于技术文�
 | 理解规则、模板、项目证据与扫描器的分工，以及文档优化流程 | [架构与优化方法](architecture.md) |
 | 选择扩展层级，添加变体、模块或新类型，并验证扩展结果 | [模板扩展](templates.md) |
 
-支持的文档包括需求、技术方案、API、变更说明、测试报告、部署与值班手册、决策记录，教程、操作指南、参考文档、概念说明，以及仓库首页 README。只需用自然语言说明读者要完成的任务；要查具体结构时，再打开[模板索引](../../templates/_index.md)。
+支持的文档包括需求、技术方案、API、变更说明、测试报告、部署与值班手册、决策记录，教程、操作指南、参考文档、概念说明，以及仓库首页 README。只需用自然语言说明读者要完成的任务；要查具体结构时，再打开[模板索引](../../skills/doc-writer/assets/templates/_index.md)。

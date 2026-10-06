@@ -14,8 +14,8 @@ doc-writer 是由入口、写作规则、类型模板和候选扫描器组成的
 
 | 输入 | 回答的问题 | 主要来源 | 对正文的作用 |
 |---|---|---|---|
-| 写作规则 | 怎样组织、表达和检查信息？ | `docs/modules/constraints-common.md`、`constraints-writing.md`、`constraints-architecture.md`；`docs/design-spec.md` 是设计索引 | 要求结论先行、证据可辨、术语一致，并规定检查方法 |
-| 类型模板 | 这类文档必须回答什么？ | `templates/_index.md` 和对应类型文件 | 确定类型、变体、必需内容、按需模块及类型验证 |
+| 写作规则 | 怎样组织、表达和检查信息？ | `references/constraints-common.md`、`constraints-writing.md`、`constraints-architecture.md`；设计索引在仓库的 `docs/design/design-spec.md` | 要求结论先行、证据可辨、术语一致，并规定检查方法 |
+| 类型模板 | 这类文档必须回答什么？ | `assets/templates/_index.md` 和对应类型文件 | 确定类型、变体、必需内容、按需模块及类型验证 |
 | 项目事实 | 这个项目实际是什么、做了什么？ | 用户材料、代码、配置、项目历史和运行记录 | 提供接口、行为、约束、已有决策与测试结果 |
 
 必需内容是定义文档职责的必需内容。例如，How-to 操作指南保留目标、前置条件和步骤；Reference 参考文档保留所描述对象的名称、类型、默认值及其他契约字段。模板决定这些内容如何组织，具体值仍来自目标项目。
@@ -24,7 +24,7 @@ doc-writer 是由入口、写作规则、类型模板和候选扫描器组成的
 
 ### 2.2 模型主检与候选扫描
 
-模型主检处理需要上下文的问题，包括主题是否偏移、理由是否支持结论、操作是否具备前提、术语含义是否一致。`runtime/doc-lint.py` 从编写规则模块的 G1 禁用模式清单提取字面词项，输出文件、行号、类别和命中文本，供模型回到原文裁决。
+模型主检处理需要上下文的问题，包括主题是否偏移、理由是否支持结论、操作是否具备前提、术语含义是否一致。`scripts/doc-lint.py` 从编写规则模块的 G1 禁用模式清单提取字面词项，输出文件、行号、类别和命中文本，供模型回到原文裁决。
 
 以正文中的“高效”为例：扫描器能够找到这个词；模型还要查看它是否有对应度量、度量是否有来源，以及该词是否有必要保留。由脚本直接改写，会跳过这些与原意有关的判断。因此，候选的处理结果由模型确定：修正、按上下文保留，或提出需要确认的信息。
 
@@ -79,21 +79,20 @@ flowchart LR
 
 | 文件或目录 | 职责 | 读取时机 |
 |---|---|---|
-| `SKILL.md` | 手动入口、准备到交付的执行顺序、资源定位 | 使用者调用 skill 时 |
-| `docs/modules/constraints-common.md` | C1–C6、全部子规则及 G2 | 调用后先读，先于取材与范围决定 |
-| `runtime/prepare.md` | 组织准备与选型 | 准备与选型前 |
-| `runtime/research.md` | 组织取材与证据路由 | 核对或获取任务材料前 |
-| `runtime/write-assist.md` 与 `docs/modules/constraints-writing.md` | 组织编写阶段的规则查阅与表达选择；G1/G3 原文 | 首次文稿、实际骨架文字或建议前；提前输出则提前读 |
-| `docs/modules/constraints-architecture.md` | 完整 D1 | 实际提出技术架构决策前，含详细设计中的架构选择 |
-| `docs/modules/` | 约束原文、模板、表达、读取方式、验证和读者测试的详细规则 | 按阶段及所需功能读取 |
-| `docs/design-spec.md` | 设计索引：设计原则、模块摘要与交叉引用 | 不每次作为前置；需要设计理由或优先级时按需查 |
-| `templates/_index.md` | 将读者任务对应到文档类型 | 准备阶段匹配类型时 |
-| `templates/{type}.md` | 变体选择、必需内容、模块和类型验证 | 类型确定后完整读取，含变体、条件、类型验证与适用分支 |
-| `runtime/verify-checks.md` | 组织完整模型主检、原收尾责任及后续验证 | 初稿完成后和交付前，重新核对适用原文 |
-| `runtime/doc-lint.py` | 读取 G1 词项并扫描文本候选 | 验证阶段，对已保存文档执行 |
-| `examples/SOURCES.md` | 登记示例来源、用途与许可依据 | 使用示例前 |
+| `SKILL.md` | 入口、准备到交付的执行顺序、必读文件表 | 用户明确提出文档任务时 |
+| `references/constraints-common.md` | C1–C6、全部子规则及 G2 | 调用后先读，先于取材与范围决定 |
+| `references/prepare.md` | 组织准备与选型 | 准备与选型前 |
+| `references/research.md` | 组织取材与证据路由 | 核对或获取任务材料前 |
+| `references/write-assist.md` 与 `references/constraints-writing.md` | 组织编写阶段的规则查阅与表达选择；G1/G3 原文 | 首次文稿、实际骨架文字或建议前；提前输出则提前读 |
+| `references/constraints-architecture.md` | 完整 D1 | 实际提出技术架构决策前，含详细设计中的架构选择 |
+| `references/` 其余文件 | 类型总览、示例指导、表格/图/代码块规范、验证管线、读者测试、委托写作 | 由阶段入口的"按需读取"表指向，用到时读 |
+| `assets/templates/_index.md` | 将读者任务对应到文档类型 | 准备阶段匹配类型时 |
+| `assets/templates/{type}.md` | 变体选择、必需内容、模块和类型验证 | 类型确定后完整读取，含变体、条件、类型验证与适用分支 |
+| `references/verify-checks.md` | 组织完整模型主检、原收尾责任及后续验证 | 初稿完成后和交付前，重新核对适用原文 |
+| `scripts/doc-lint.py` | 读取 G1 词项并扫描文本候选 | 验证阶段，对已保存文档执行 |
+| `assets/examples/SOURCES.md` | 登记示例来源、用途与许可依据 | 使用示例前 |
 
-入口中的包内路径都相对 `SKILL.md` 所在目录，定位实际加载的技能包。用户文档路径则属于当前工作项目。二者分开定位，助手才能在不同项目中使用同一套规则，同时让文档引用当前项目的真实材料。
+表中路径都相对技能包目录 `skills/doc-writer/`（安装后即 `SKILL.md` 所在目录）。设计理由和模块摘要在仓库的 [设计规格](../design/design-spec.md)，只供维护者阅读，运行时不读。用户文档路径则属于当前工作项目。二者分开定位，助手才能在不同项目中使用同一套规则，同时让文档引用当前项目的真实材料。
 
 ### 3.3 按阶段读取，而不是一次装入所有模板
 
@@ -171,4 +170,4 @@ Brief、备忘、PR Note、决策日志和 CI 报告采用快速路径：简化�
 
 - [使用指南](usage.md)：把写作目标转为调用请求，提供材料并修改已有文档。
 - [模板扩展](templates.md)：选择类型、变体或模块作为扩展位置，并完成登记与试写。
-- [完整写作规则](../modules/constraints-common.md)：查阅具体规则的条件、优先级与检查要求；编写规则见[constraints-writing.md](../modules/constraints-writing.md)，架构约束见[constraints-architecture.md](../modules/constraints-architecture.md)。
+- [完整写作规则](../../skills/doc-writer/references/constraints-common.md)：查阅具体规则的条件、优先级与检查要求；编写规则见[constraints-writing.md](../../skills/doc-writer/references/constraints-writing.md)，架构约束见[constraints-architecture.md](../../skills/doc-writer/references/constraints-architecture.md)。
