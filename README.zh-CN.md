@@ -1,8 +1,8 @@
 <p>
-  <img src="assets/doc-writing-logo.png" alt="doc-writing 黑白笔记本与笔标志" width="64" height="64">
+  <img src="assets/doc-writer-logo.png" alt="doc-writer 黑白笔记本与笔标志" width="64" height="64">
 </p>
 
-# doc-writing
+# doc-writer
 
 [English](README.md) | **简体中文**
 
@@ -10,29 +10,29 @@
 
 按项目证据编写和检查中文技术文档的 Agent Skill，覆盖 PRD、技术设计、API、ADR、README 等 12 类文档。
 
-你给出材料和目标，助手选择文档类型和变体，读取对应规则，从代码、配置和运行记录核对事实，写出正文后逐项检查结构、证据和用词。它只在你输入 `/doc-writing` 时运行，不会在普通对话中自动触发；保存文件、执行文档里描述的操作、提交代码都需要你另外授权。安装和调用示例基于 Claude Code；其他支持 Agent Skills 的框架需要适配入口和工具映射，兼容性尚未验证。
+你给出材料和目标，助手选择文档类型和变体，读取对应规则，从代码、配置和运行记录核对事实，写出正文后逐项检查结构、证据和用词。本技能遵循 [Agent Skills](https://agentskills.io) 规范，能读取文件的 agent 都可以使用。只有你明确要求写或检查技术文档时它才会启用，改代码、日常问答不会触发；保存文件、执行文档里描述的操作、提交代码都需要你另外授权。
 
 ## 安装
 
-需要支持 skills 的 Claude Code。在目标项目根目录执行：
+把仓库克隆到你所用 agent 的技能目录，目录名保持 `doc-writer`（与 `SKILL.md` 中的 `name` 一致）。以 Claude Code 的项目级目录为例：
 
 ```bash
 mkdir -p .claude/skills
-git clone https://github.com/blankhoney/doc-writing.git .claude/skills/doc-writing
+git clone https://github.com/blankhoney/doc-writer.git .claude/skills/doc-writer
 ```
 
-在项目会话中输入 `/skills`，列表里应出现 `doc-writing`；没有出现时重新打开会话。
+其他 agent 的技能目录位置见各自文档。安装后重新打开会话，确认 agent 能列出 `doc-writer`。
 
-想在所有项目中使用，改为克隆到 `~/.claude/skills/doc-writing/`。目录已存在时，先比较版本再更新，保留本地定制。
+想在所有项目中使用，克隆到该 agent 的个人技能目录（Claude Code 为 `~/.claude/skills/doc-writer/`）。目录已存在时，先比较版本再更新，保留本地定制。
 
 候选扫描器需要 Python 3.9 或更高版本，只用标准库。没有 Python 时，助手照常写作和检查，并在交付说明里注明扫描未执行。
 
 ## 快速开始
 
-在目标项目的会话中输入：
+在目标项目的会话中输入（支持斜杠命令的客户端也可以用 `/doc-writer` 开头）：
 
 ```text
-/doc-writing 根据以下材料，写一份给项目贡献者的代码提交流程指南，只在对话中输出：开发者创建功能分支并提交合并请求；合并请求需要说明改动目的；自动化测试通过且一名维护者审核通过后，由维护者合并。
+用 doc-writer 根据以下材料，写一份给项目贡献者的代码提交流程指南，只在对话中输出：开发者创建功能分支并提交合并请求；合并请求需要说明改动目的；自动化测试通过且一名维护者审核通过后，由维护者合并。
 ```
 
 你会得到一份按创建分支、提交请求、测试和审核组织的操作指南，文末注明"未保存文件，未运行候选脚本"。
@@ -40,13 +40,13 @@ git clone https://github.com/blankhoney/doc-writing.git .claude/skills/doc-writi
 需要保存时，在请求里写明路径：
 
 ```text
-/doc-writing 根据当前项目的 README.md，为新加入项目的工程师编写快速开始，保存到 docs/quickstart.md。
+用 doc-writer 根据当前项目的 README.md，为新加入项目的工程师编写快速开始，保存到 docs/quickstart.md。
 ```
 
 只检查、不改写：
 
 ```text
-/doc-writing 检查 docs/architecture.md 的结构、术语和实现描述，列出具体位置及修改建议，不修改文件。
+用 doc-writer 检查 docs/architecture.md 的结构、术语和实现描述，列出具体位置及修改建议，不修改文件。
 ```
 
 ## 能写哪些文档
@@ -64,7 +64,7 @@ git clone https://github.com/blankhoney/doc-writing.git .claude/skills/doc-writi
 | 查询契约或理解机制 | Reference、Explanation |
 | 写仓库首页 | README |
 
-用自然语言描述任务即可，也可以在 `/doc-writing` 后直接写类型名。每种类型的变体和文风要求见[模板索引](templates/_index.md)。
+用自然语言描述任务即可，也可以在请求里直接写类型名。每种类型的变体和文风要求见[模板索引](templates/_index.md)。
 
 ## 它怎样保证质量
 
@@ -79,8 +79,8 @@ git clone https://github.com/blankhoney/doc-writing.git .claude/skills/doc-writi
 ## 什么时候不适合用
 
 - 你要写英文文档。规则、禁用词表和扫描器都针对中文。
-- 你在 Claude Code 以外的框架中使用，且不打算适配入口和工具映射。
-- 你希望它在对话中自动触发，或写完后自动提交、发布。它只响应手动调用，提交和发布需要你自己决定。
+- 你的 agent 不能读取本地文件。规则和模板都要按需读取原文。
+- 你希望它写完后自动提交或发布。提交和发布需要你自己决定。
 
 ## 文档
 
@@ -97,11 +97,11 @@ git clone https://github.com/blankhoney/doc-writing.git .claude/skills/doc-writi
 
 ## Star 趋势
 
-<a href="https://www.star-history.com/#blankhoney/doc-writing&Date">
+<a href="https://www.star-history.com/#blankhoney/doc-writer&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=blankhoney/doc-writing&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=blankhoney/doc-writing&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=blankhoney/doc-writing&type=Date" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=blankhoney/doc-writer&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=blankhoney/doc-writer&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=blankhoney/doc-writer&type=Date" />
   </picture>
 </a>
 
