@@ -14,19 +14,14 @@
 
 ## 安装
 
-从仓库取出 `skills/doc-writer/` 目录，放进你所用 agent 的技能目录，目录名保持 `doc-writer`（与 `SKILL.md` 中的 `name` 一致）。以 Claude Code 的项目级目录为例：
+用 [skills](https://github.com/vercel-labs/skills) 命令行安装，它会识别你本机的 agent（Codex、Cursor、Gemini CLI、GitHub Copilot、Claude Code 等），把技能放进各自的技能目录：
 
 ```bash
-tmp=$(mktemp -d) &&
-  git clone --depth 1 https://github.com/blankhoney/doc-writer.git "$tmp" &&
-  mkdir -p .claude/skills &&
-  cp -r "$tmp/skills/doc-writer" .claude/skills/ &&
-  rm -rf "$tmp"
+npx skills add blankhoney/doc-writer        # 装到当前项目
+npx skills add blankhoney/doc-writer -g     # 装到个人目录，所有项目可用
 ```
 
-其他 agent 的技能目录位置见各自文档。安装后重新打开会话，确认 agent 能列出 `doc-writer`。
-
-想在所有项目中使用，复制到该 agent 的个人技能目录（Claude Code 为 `~/.claude/skills/doc-writer/`）。目录已存在时，先比较版本再更新，保留本地定制。
+不用 Node 时，手动把仓库里的 `skills/doc-writer/` 目录复制到你所用 agent 的技能目录，目录名保持 `doc-writer`（与 `SKILL.md` 中的 `name` 一致）。各 agent 的技能目录位置见其文档。安装后重新打开会话，确认 agent 能列出 `doc-writer`。
 
 候选扫描器需要 Python 3.9 或更高版本，只用标准库。没有 Python 时，助手照常写作和检查，并在交付说明里注明扫描未执行。
 

@@ -4,7 +4,7 @@
 
 ## 1. 前置条件
 
-- 在目标项目的会话中使用已安装的 `doc-writer`，确认 agent 能列出它（Claude Code 可用 `/skills` 查看）。
+- 在目标项目的会话中使用已安装的 `doc-writer`，确认 agent 能列出它。
 - 将材料放在助手可读取的位置，或直接贴在请求中。涉及当前实现时，保持会话位于对应项目。
 - 需要保存或修改文件时，明确目标路径及允许修改的范围，并具备相应写入权限。
 - 写作授权只覆盖请求中的文档操作；执行正文描述的部署、付款等动作，以及提交或发布结果，均需单独授权。
@@ -121,10 +121,10 @@
 
 需要独立定位用词和格式候选时，可以直接调用随包脚本。该操作需要 Python 3.9 或更高版本，只使用标准库。
 
-1. **定位脚本与目标文件。** 以下示例假设终端位于目标项目根目录，skill 按 Claude Code 项目级目录安装（其他 agent 换成实际技能目录），并已有 `docs/guide.md`：
+1. **定位脚本与目标文件。** 以下示例假设终端位于目标项目根目录，skill 用 `npx skills add` 装在项目的 `.agents/skills/` 下（手动安装时换成实际技能目录），并已有 `docs/guide.md`：
 
    ```bash
-   python3 .claude/skills/doc-writer/scripts/doc-lint.py -- docs/guide.md
+   python3 .agents/skills/doc-writer/scripts/doc-lint.py -- docs/guide.md
    ```
 
    确认：末尾统计显示完成文件数量和错误数量。退出码 `0` 表示扫描完成；`2` 表示参数、输入或规则读取发生错误。
@@ -134,7 +134,7 @@
 3. **根据项目格式选择扫描项。** 例如，项目采用自己的中英文间距规则时，可以关闭间距候选：
 
    ```bash
-   python3 .claude/skills/doc-writer/scripts/doc-lint.py --skip-format spacing -- docs/guide.md
+   python3 .agents/skills/doc-writer/scripts/doc-lint.py --skip-format spacing -- docs/guide.md
    ```
 
    确认：该次输出不再包含 `spacing` 候选，其他扫描类别继续执行。

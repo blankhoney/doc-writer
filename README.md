@@ -16,19 +16,14 @@ You provide material and a goal. The assistant picks a document type and variant
 
 ## Installation
 
-Copy the `skills/doc-writer/` directory from this repository into your agent's skills directory and keep the directory name `doc-writer` (it must match `name` in `SKILL.md`). For example, Claude Code's project-level directory:
+Install with the [skills](https://github.com/vercel-labs/skills) CLI. It detects the agents on your machine (Codex, Cursor, Gemini CLI, GitHub Copilot, Claude Code, and others) and places the skill in each one's skills directory:
 
 ```bash
-tmp=$(mktemp -d) &&
-  git clone --depth 1 https://github.com/blankhoney/doc-writer.git "$tmp" &&
-  mkdir -p .claude/skills &&
-  cp -r "$tmp/skills/doc-writer" .claude/skills/ &&
-  rm -rf "$tmp"
+npx skills add blankhoney/doc-writer        # current project
+npx skills add blankhoney/doc-writer -g     # personal directory, all projects
 ```
 
-For other agents, see their documentation for the skills directory. Reopen the session and check that the agent lists `doc-writer`.
-
-To use it in all your projects, copy it into the agent's personal skills directory (for Claude Code, `~/.claude/skills/doc-writer/`). If that directory already exists, compare versions before updating and keep your local customizations.
+Without Node, copy the repository's `skills/doc-writer/` directory into your agent's skills directory and keep the directory name `doc-writer` (it must match `name` in `SKILL.md`). See your agent's documentation for that location. Reopen the session and check that the agent lists `doc-writer`.
 
 The candidate scanner needs Python 3.9 or later and uses only the standard library. Without Python, the assistant still writes and checks the document, and notes in its delivery summary that the scan did not run.
 

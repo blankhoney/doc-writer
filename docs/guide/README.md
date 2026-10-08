@@ -2,7 +2,7 @@
 
 doc-writer 面向支持 Agent Skills 标准的模型与框架，用于技术文档和审核文档的编写、补全与检查。提供材料和写作目标后，助手会选择模板、核对事实、编写并检查正文。当前规则与模板主要使用中文。
 
-本技能遵循 Agent Skills 规范，能读取文件的 agent 都可以使用。本页的目录示例以 Claude Code 为例，其他 agent 换成各自的技能目录即可。其他任务、工作原理与模板扩展分别见文末导航。
+本技能遵循 Agent Skills 规范，能读取文件的 agent 都可以使用。其他任务、工作原理与模板扩展分别见文末导航。
 
 ## 1. 快速上手
 
@@ -22,12 +22,12 @@ doc-writer 面向支持 Agent Skills 标准的模型与框架，用于技术文�
 
 ### 2.1 选择安装位置
 
-首次获取完整技能包可按[仓库克隆步骤](../../README.zh-CN.md#安装)安装。已有源码目录时，把其中的 `skills/doc-writer/` 放入一种安装目录，包目录名使用 `doc-writer`：
+推荐用 `npx skills add blankhoney/doc-writer` 安装（见 [README](../../README.zh-CN.md#安装)），它会自动放到下表位置。手动安装时，把源码中的 `skills/doc-writer/` 放入一种安装目录，包目录名使用 `doc-writer`：
 
 | 使用范围 | 入口位置 |
 |---|---|
-| 当前项目 | `<项目>/<agent 技能目录>/doc-writer/SKILL.md`，Claude Code 为 `<项目>/.claude/skills/doc-writer/SKILL.md` |
-| 个人所有项目 | agent 的个人技能目录，Claude Code 为 `~/.claude/skills/doc-writer/SKILL.md` |
+| 当前项目 | `<项目>/<agent 技能目录>/doc-writer/SKILL.md` |
+| 个人所有项目 | `<agent 个人技能目录>/doc-writer/SKILL.md` |
 
 如果目标目录已经存在，先比较已有内容，再决定更新哪些文件。安装需要目标目录的写入权限；首次写作只在对话中输出时，不需要授予项目文档写入权限。
 
@@ -50,7 +50,7 @@ doc-writer 面向支持 Agent Skills 标准的模型与框架，用于技术文�
 
    `SKILL.md` 是入口；`references/` 保存约束、阶段入口和按需规范；`assets/templates/` 是文档模板；`assets/examples/` 是已核验示例及其许可证；`scripts/doc-lint.py` 是候选扫描器。不要只复制入口文件，`LICENSE` 和 `assets/examples/licenses/` 必须保留。仓库根目录的 `tests/`、`evals/` 和 `docs/` 是维护用文件，不需要安装。
 
-2. **在目标项目会话中确认发现状态。** 确认 agent 的技能列表中出现 `doc-writer`（Claude Code 可输入 `/skills` 查看）。入口未出现时，检查包目录名，以及 `SKILL.md` 是否位于上表对应层级；更新目录后重新打开会话再确认。
+2. **在目标项目会话中确认发现状态。** 确认 agent 的技能列表中出现 `doc-writer`。入口未出现时，检查包目录名，以及 `SKILL.md` 是否位于上表对应层级；更新目录后重新打开会话再确认。
 
 3. **完成第一次调用。** 返回[快速上手](#1-快速上手)，输入材料与写作目标，确认收到所需文档。
 
