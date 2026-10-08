@@ -1,5 +1,5 @@
 <p>
-  <img src="assets/doc-writer-logo.png" alt="doc-writer black-and-white notebook and pen logo" width="64" height="64">
+  <img src="docs/images/doc-writer-logo.png" alt="doc-writer black-and-white notebook and pen logo" width="64" height="64">
 </p>
 
 # doc-writer
@@ -16,16 +16,14 @@ You provide material and a goal. The assistant picks a document type and variant
 
 ## Installation
 
-Clone the repository into your agent's skills directory and keep the directory name `doc-writer` (it must match `name` in `SKILL.md`). For example, Claude Code's project-level directory:
+Install with the [skills](https://github.com/vercel-labs/skills) CLI. It detects the agents on your machine (Codex, Cursor, Gemini CLI, GitHub Copilot, Claude Code, and others) and places the skill in each one's skills directory:
 
 ```bash
-mkdir -p .claude/skills
-git clone https://github.com/blankhoney/doc-writer.git .claude/skills/doc-writer
+npx skills add blankhoney/doc-writer        # current project
+npx skills add blankhoney/doc-writer -g     # personal directory, all projects
 ```
 
-For other agents, see their documentation for the skills directory. Reopen the session and check that the agent lists `doc-writer`.
-
-To use it in all your projects, clone it into the agent's personal skills directory (for Claude Code, `~/.claude/skills/doc-writer/`). If that directory already exists, compare versions before updating and keep your local customizations.
+Without Node, copy the repository's `skills/doc-writer/` directory into your agent's skills directory and keep the directory name `doc-writer` (it must match `name` in `SKILL.md`). See your agent's documentation for that location. Reopen the session and check that the agent lists `doc-writer`.
 
 The candidate scanner needs Python 3.9 or later and uses only the standard library. Without Python, the assistant still writes and checks the document, and notes in its delivery summary that the scan did not run.
 
@@ -66,7 +64,7 @@ Use doc-writer: review docs/architecture.md for structure, terminology, and accu
 | Look up a contract or understand a mechanism | Reference, Explanation |
 | Write a repository front page | README |
 
-Describe the task in plain language, or name the type in your request. See the [template index](templates/_index.md) (Chinese) for each type's variants and style requirements.
+Describe the task in plain language, or name the type in your request. See the [template index](skills/doc-writer/assets/templates/_index.md) (Chinese) for each type's variants and style requirements.
 
 ## How it keeps quality up
 
@@ -111,4 +109,4 @@ Issues and pull requests are welcome. Before changing rules, templates, or the s
 
 ## License
 
-The project's code, rules, and documentation are licensed under the [MIT License](LICENSE). Example excerpts from Requests, Backstage, Django, Kubernetes enhancements, ripgrep, and uv keep their respective licenses and attribution; the PEP 380 excerpt keeps Gregory Ewing's public-domain dedication. See the [source registry](examples/SOURCES.md) and [examples/licenses/](examples/licenses/).
+The project's code, rules, and documentation are licensed under the [MIT License](LICENSE). Example excerpts from Requests, Backstage, Django, Kubernetes enhancements, ripgrep, and uv keep their respective licenses and attribution; the PEP 380 excerpt keeps Gregory Ewing's public-domain dedication. See the [source registry](skills/doc-writer/assets/examples/SOURCES.md) and [assets/examples/licenses/](skills/doc-writer/assets/examples/licenses/).

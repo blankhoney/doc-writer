@@ -1,5 +1,5 @@
 <p>
-  <img src="assets/doc-writer-logo.png" alt="doc-writer 黑白笔记本与笔标志" width="64" height="64">
+  <img src="docs/images/doc-writer-logo.png" alt="doc-writer 黑白笔记本与笔标志" width="64" height="64">
 </p>
 
 # doc-writer
@@ -14,16 +14,14 @@
 
 ## 安装
 
-把仓库克隆到你所用 agent 的技能目录，目录名保持 `doc-writer`（与 `SKILL.md` 中的 `name` 一致）。以 Claude Code 的项目级目录为例：
+用 [skills](https://github.com/vercel-labs/skills) 命令行安装，它会识别你本机的 agent（Codex、Cursor、Gemini CLI、GitHub Copilot、Claude Code 等），把技能放进各自的技能目录：
 
 ```bash
-mkdir -p .claude/skills
-git clone https://github.com/blankhoney/doc-writer.git .claude/skills/doc-writer
+npx skills add blankhoney/doc-writer        # 装到当前项目
+npx skills add blankhoney/doc-writer -g     # 装到个人目录，所有项目可用
 ```
 
-其他 agent 的技能目录位置见各自文档。安装后重新打开会话，确认 agent 能列出 `doc-writer`。
-
-想在所有项目中使用，克隆到该 agent 的个人技能目录（Claude Code 为 `~/.claude/skills/doc-writer/`）。目录已存在时，先比较版本再更新，保留本地定制。
+不用 Node 时，手动把仓库里的 `skills/doc-writer/` 目录复制到你所用 agent 的技能目录，目录名保持 `doc-writer`（与 `SKILL.md` 中的 `name` 一致）。各 agent 的技能目录位置见其文档。安装后重新打开会话，确认 agent 能列出 `doc-writer`。
 
 候选扫描器需要 Python 3.9 或更高版本，只用标准库。没有 Python 时，助手照常写作和检查，并在交付说明里注明扫描未执行。
 
@@ -64,7 +62,7 @@ git clone https://github.com/blankhoney/doc-writer.git .claude/skills/doc-writer
 | 查询契约或理解机制 | Reference、Explanation |
 | 写仓库首页 | README |
 
-用自然语言描述任务即可，也可以在请求里直接写类型名。每种类型的变体和文风要求见[模板索引](templates/_index.md)。
+用自然语言描述任务即可，也可以在请求里直接写类型名。每种类型的变体和文风要求见[模板索引](skills/doc-writer/assets/templates/_index.md)。
 
 ## 它怎样保证质量
 
@@ -107,4 +105,4 @@ git clone https://github.com/blankhoney/doc-writer.git .claude/skills/doc-writer
 
 ## 许可证
 
-本项目的代码、规则和文档采用 [MIT License](LICENSE)。Requests、Backstage、Django、Kubernetes enhancements、ripgrep 和 uv 的示例片段保留各自的许可证和署名；PEP 380 片段保留作者 Gregory Ewing 的公共领域声明。详见[来源记录](examples/SOURCES.md)和 [examples/licenses/](examples/licenses/)。
+本项目的代码、规则和文档采用 [MIT License](LICENSE)。Requests、Backstage、Django、Kubernetes enhancements、ripgrep 和 uv 的示例片段保留各自的许可证和署名；PEP 380 片段保留作者 Gregory Ewing 的公共领域声明。详见[来源记录](skills/doc-writer/assets/examples/SOURCES.md)和 [assets/examples/licenses/](skills/doc-writer/assets/examples/licenses/)。

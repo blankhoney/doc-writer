@@ -9,9 +9,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-SCRIPT = ROOT / "runtime" / "doc-lint.py"
-SOURCE = (ROOT / "docs" / "modules" / "constraints-writing.md").read_text(
+REPO = Path(__file__).resolve().parent.parent
+ROOT = REPO / "skills" / "doc-writer"
+SCRIPT = ROOT / "scripts" / "doc-lint.py"
+SOURCE = (ROOT / "references" / "constraints-writing.md").read_text(
     encoding="utf-8-sig"
 )
 MODULE = runpy.run_path(str(SCRIPT))
@@ -428,14 +429,14 @@ class CLITests(unittest.TestCase):
 
     def test_missing_or_damaged_word_source_exit_two(self):
         package = self.cwd / "package"
-        (package / "runtime").mkdir(parents=True)
-        script = package / "runtime" / "doc-lint.py"
+        (package / "scripts").mkdir(parents=True)
+        script = package / "scripts" / "doc-lint.py"
         script.write_bytes(SCRIPT.read_bytes())
         target = self.input("input.md", "显著。")
         for source in (None, "# 损坏词源\n", b"\xff"):
             if source is not None:
-                (package / "docs" / "modules").mkdir(parents=True, exist_ok=True)
-                (package / "docs" / "modules" / "constraints-writing.md").write_bytes(
+                (package / "references").mkdir(parents=True, exist_ok=True)
+                (package / "references" / "constraints-writing.md").write_bytes(
                     source.encode("utf-8") if isinstance(source, str) else source
                 )
             with self.subTest(source=source):
@@ -447,12 +448,12 @@ class CLITests(unittest.TestCase):
     def test_missing_word_source_does_not_fall_back_to_spec(self):
         # 旧路径即使放着可用副本也必须失败：脚本只认单一词源，不回退到 design-spec.md。
         package = self.cwd / "package"
-        (package / "runtime").mkdir(parents=True)
-        script = package / "runtime" / "doc-lint.py"
+        (package / "scripts").mkdir(parents=True)
+        script = package / "scripts" / "doc-lint.py"
         script.write_bytes(SCRIPT.read_bytes())
         (package / "docs").mkdir(parents=True, exist_ok=True)
         (package / "docs" / "design-spec.md").write_bytes(
-            (ROOT / "docs" / "modules" / "constraints-writing.md").read_bytes()
+            (ROOT / "references" / "constraints-writing.md").read_bytes()
         )
         target = self.input("input.md", "显著。")
         result = self.run_cli(target, script=script)

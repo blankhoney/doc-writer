@@ -4,7 +4,7 @@
 
 ## 1. 前置条件
 
-- 在目标项目的会话中使用已安装的 `doc-writer`，确认 agent 能列出它（Claude Code 可用 `/skills` 查看）。
+- 在目标项目的会话中使用已安装的 `doc-writer`，确认 agent 能列出它。
 - 将材料放在助手可读取的位置，或直接贴在请求中。涉及当前实现时，保持会话位于对应项目。
 - 需要保存或修改文件时，明确目标路径及允许修改的范围，并具备相应写入权限。
 - 写作授权只覆盖请求中的文档操作；执行正文描述的部署、付款等动作，以及提交或发布结果，均需单独授权。
@@ -54,7 +54,7 @@
 | 解释当前项目的组成与机制 | `explanation` | 根据项目实现说明架构及组件职责 |
 | 写或更新仓库首页 | `readme` | 根据项目实际安装方式和功能写 README |
 
-完整变体见[模板索引](../../templates/_index.md)。不知道类型时，直接描述读者要完成的任务，助手会匹配模板。
+完整变体见[模板索引](../../skills/doc-writer/assets/templates/_index.md)。不知道类型时，直接描述读者要完成的任务，助手会匹配模板。
 
 技术设计支持架构方案和程序详细设计两个分支。需要交接实现时，说明依据的需求、已确认方案和代码版本；助手会展开接口、执行逻辑、失败处理、依赖与包布局，并标明既有内容和拟议变更。局部小改动沿用简要说明，不强制生成完整依赖表和项目树。
 
@@ -121,10 +121,10 @@
 
 需要独立定位用词和格式候选时，可以直接调用随包脚本。该操作需要 Python 3.9 或更高版本，只使用标准库。
 
-1. **定位脚本与目标文件。** 以下示例假设终端位于目标项目根目录，skill 按 Claude Code 项目级目录安装（其他 agent 换成实际技能目录），并已有 `docs/guide.md`：
+1. **定位脚本与目标文件。** 以下示例假设终端位于目标项目根目录，skill 用 `npx skills add` 装在项目的 `.agents/skills/` 下（手动安装时换成实际技能目录），并已有 `docs/guide.md`：
 
    ```bash
-   python3 .claude/skills/doc-writer/runtime/doc-lint.py -- docs/guide.md
+   python3 .agents/skills/doc-writer/scripts/doc-lint.py -- docs/guide.md
    ```
 
    确认：末尾统计显示完成文件数量和错误数量。退出码 `0` 表示扫描完成；`2` 表示参数、输入或规则读取发生错误。
@@ -134,7 +134,7 @@
 3. **根据项目格式选择扫描项。** 例如，项目采用自己的中英文间距规则时，可以关闭间距候选：
 
    ```bash
-   python3 .claude/skills/doc-writer/runtime/doc-lint.py --skip-format spacing -- docs/guide.md
+   python3 .agents/skills/doc-writer/scripts/doc-lint.py --skip-format spacing -- docs/guide.md
    ```
 
    确认：该次输出不再包含 `spacing` 候选，其他扫描类别继续执行。
@@ -146,7 +146,7 @@
 | 项目 | 行为 |
 |---|---|
 | 输入 | 一个或多个 UTF-8 文件，支持 BOM、CRLF 和含空格路径 |
-| 词源 | 直接读取 `docs/modules/constraints-writing.md` 中的 G1 禁用模式清单 |
+| 词源 | 直接读取 `references/constraints-writing.md` 中的 G1 禁用模式清单 |
 | 格式检查 | 中文标点、间距和括号；`--skip-format` 可重复指定 `punctuation`、`spacing`、`parentheses` 关闭 |
 | 输出 | `文件:行号:warning/类别:命中文本`，附完成统计 |
 | 退出码 | `0`：扫描完成，可带警告；`2`：参数、输入或规则读取发生错误 |
