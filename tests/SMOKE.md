@@ -28,16 +28,15 @@
 
 ## 3. 资源定位与阶段读取核对
 
-以下仍属待执行任务，不是已通过记录。V2 把规则原文拆到约束模块和阶段入口后，除静态测试外，需要在真实会话中核对资源按阶段送达：
+以下仍属待执行任务，不是已通过记录。除静态测试外，需要在真实会话中核对资源按时机送达：
 
 | 核对项 | 方法 | 判定依据 |
 |---|---|---|
-| 共同约束先读 | 新会话提一次普通写作请求，查看实际 Read 轨迹 | 取材与范围决定前读到 `references/constraints-common.md`；主规格不整体前置 |
-| 编写规则前置 | 请求先要骨架或建议，再要正文 | 首次实际文稿、骨架文字或建议前读到 `references/constraints-writing.md` 与 `references/write-assist.md` |
-| 类型模板完整 | 指定一个文档类型 | 完整读所选模板，含变体、适用条件、类型验证与适用分支 |
-| 架构约束时机 | 请求一个含技术选型的方案 | 实际提出架构决策前读 `references/constraints-architecture.md` 的完整 D1，而非验证阶段才读 |
-| 条件资源按需 | 请求涉及图、表格或额外示例 | 只在触发时读对应 `references/5.8-*.md`、`references/test-evidence-presentation.md` 或已登记示例，不批量加载 |
-| 收尾责任保留 | 走完整交付流程 | `references/verify-checks.md` 的 11 项收尾责任与 V1–V5 均被执行或明确说明未执行 |
+| 定义先于取材 | 新会话提一次写作请求，查看 Read 轨迹 | 先读 `assets/templates/_index.md` 与所选模板，按性质读 `references/product-docs.md` 或 `references/tech-docs.md` |
+| 委派取材 | 请求一份涉及源码的技术文档 | 读 `references/delegation.md`，并行派子 agent 取材，回报带 `文件:行号` |
+| 规则前置 | 请求先要大纲，再要正文 | 动笔前读到 `references/rules.md` 与 `references/constraints-writing.md` |
+| 条件资源按需 | 请求涉及图表或多篇文档 | 触发时才读 `references/formatting.md`、`references/doc-set.md` |
+| 核对 | 走完整交付流程 | 读 `references/verify.md`，派全新子 agent 核对事实，运行扫描器 |
 | 防御性解释 | 结论重复自辩且带必要限制 | 删除无新增信息的自辩，保留事实和限制 |
 | 重点注释 | 无代码示例的详细设计，仅给契约 | 交接注释位置、内容与核验方式，再查施工代码是否落实 |
 

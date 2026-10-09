@@ -27,7 +27,7 @@ Without Node, copy the repository's `skills/doc-writer/` directory into your age
 
 The candidate scanner needs Python 3.9 or later and uses only the standard library. Without Python, the assistant still writes and checks the document, and notes in its delivery summary that the scan did not run.
 
-## Quick start
+## Usage
 
 In a session opened in your target project, type (clients with slash commands also accept a leading `/doc-writer`):
 

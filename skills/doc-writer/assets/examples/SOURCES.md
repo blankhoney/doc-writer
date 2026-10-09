@@ -10,7 +10,7 @@
 | ADR 模板（`assets/templates/adr.md`）的 Backstage ADR003 片段 | 非官方节译 | 理由摘要与决策句，不是完整 ADR |
 | How-to 模板（`assets/templates/how-to.md`）的 Django CSV 片段 | 非官方节译＋格式转换 | 任务前提与完整实现片段 |
 | 技术设计模板（`assets/templates/tech-design.md`）的备忘与长片段、How-to 模板的扫描操作 | 本仓库源码改编，MIT | 深度与操作组织；不是运行记录 |
-| 编写入口（`references/write-assist.md`）5.8.1 的动作/图树、Reference 模板（`assets/templates/reference.md`）的 JSON | 构造示意，MIT | 排版与语法 |
+| Reference 模板（`assets/templates/reference.md`）的 JSON | 构造示意，MIT | 排版与语法 |
 | `tech-design/kep-753.md`、`tech-design/kep-1287-cri.md`、`tech-design/pep-380.md` | 非官方节译 | 完整子节、步骤顺序与前提、局部接口契约 |
 | `tech-design/implementation-sketch.md` | 构造示意，MIT | 结构、拟议文件、契约与验证的对应 |
 | `readme/ripgrep.md`、`readme/uv-install.md` | 非官方节译 | 首段定义、"何时不该用"、安装节 |

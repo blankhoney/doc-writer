@@ -64,48 +64,35 @@
 
 ---
 
-## 3. 约束体系设计
+## 3. 规则体系
 
 ### 3.1 设计原则
 
-按四层组织规则。仅保留高层原则可能遗漏适用条件，这是保留完整规则的设计假设，效果待实测。
+- **先定义，再写**：动笔前确定读者与用途、产品或技术性质、类型、范围和篇数；性质决定用哪种规范语言、关注哪些重点。
+- **一条规则一个出处**：规则按读取时机分到几个文件，其他文件写路径引用，不复述。
+- **事实来自实现**：取材和核对委派子 agent，带 `文件:行号` 回报；主 agent 判断取舍并成稿。
+- **不写防御性文字**：未知只在"未决问题"或"验证"一节集中写一次，不在正文逐句加"未验证""不保证"。
+- **模型裁决，脚本定位**：语义判断由模型做，脚本只给字面候选。
 
-| 层级 | 作用 | 执行方式 |
-|------|------|---------|
-| 核心约束 | 通用写作要求 | 模型理解并执行 |
-| 边界护栏 | 具体条件与优先级 | 模型按上下文裁决 |
-| 领域子规则 | 类型专用要求 | 按所选变体执行 |
-| 收尾检查 | 核对全文 | 模型主检含语义判断，脚本补充候选 |
+### 3.2 规则文件
 
-### 3.2 核心约束（6 条）
+| 文件 | 管什么 |
+|---|---|
+| [rules.md](../../skills/doc-writer/references/rules.md) | 结构（结论先行、标准标题）、内容（具体、有理由、一物一名）、真实、密度 |
+| [constraints-writing.md](../../skills/doc-writer/references/constraints-writing.md) | G1 禁用句式与词项（扫描器词源）、G3 |
+| [product-docs.md](../../skills/doc-writer/references/product-docs.md) | 产品语言、PRD 要讲清的内容、用户视角呈现 |
+| [tech-docs.md](../../skills/doc-writer/references/tech-docs.md) | 技术语言、技术重点清单、架构论证与反模式、测试口径 |
+| [doc-set.md](../../skills/doc-writer/references/doc-set.md) | 多篇文档的权威归属、术语表、读者分层、修改后全文对齐 |
 
-> 原文：[共同约束](../../skills/doc-writer/references/constraints-common.md)。
-
-### 3.3 边界护栏（3 条）
-
-这三条约束解决的问题是：模型在执行核心约束时产生的已知逃逸模式。它们不是新方向，而是对核心约束的加固。
-
-> 规则原文：G1/G3 见[编写规则](../../skills/doc-writer/references/constraints-writing.md)，G2 见[共同约束](../../skills/doc-writer/references/constraints-common.md)。首次生成文稿前补齐 G1/G3，真实性与范围边界先于取材。
-
-### 3.4 领域子规则
-
-> 原文：[技术架构决策约束 D1](../../skills/doc-writer/references/constraints-architecture.md)。实际提出相应方案前完整读取；模板保留其类型层检查与变体适用条件。
-
-### 3.5 收尾检查清单（原始规格，运行时已合并）
-
-> 原 11 项责任与完整原文均见[检查入口](../../skills/doc-writer/references/verify-checks.md#35-收尾检查清单原始规格运行时已合并)。不重复执行同义检查，也不取消任何适用责任。
-
-### 3.6 端到端工作流
-
-约束体系（3.2-3.5）管"写作规则"，模块设计（§5）管"各环节怎么做"。本节将它们串联为完整流程，明确每个阶段的输入、输出和执行顺序。
+### 3.3 端到端工作流
 
 ```
-Phase 1 准备 → Phase 2 信息获取 → Phase 3 编写 → Phase 4 验证管线 → Phase 5 交付
-                                      ↑                    |
-                                      └── 修正循环 ─────────┘
+定义文档 → 取材（委派） → 大纲 → 编写 → 核对（委派）与交付
+                                  ↑            |
+                                  └── 修正 ────┘
 ```
 
-> 阶段原文：完整动作按阶段移至[准备](../../skills/doc-writer/references/prepare.md)、[取材](../../skills/doc-writer/references/research.md)、[编写](../../skills/doc-writer/references/write-assist.md)、[验证与交付](../../skills/doc-writer/references/verify-checks.md)。任务提前产生文稿时，对应写作前置同步提前；已完整读取且仍可用的规则无需每阶段重复读取。
+> 流程原文见 [SKILL.md](../../skills/doc-writer/SKILL.md)。
 
 ## 4. 技术选型依据
 
@@ -115,11 +102,11 @@ Phase 1 准备 → Phase 2 信息获取 → Phase 3 编写 → Phase 4 验证管
 
 | 来源 | 采纳内容 | 用于 |
 |------|---------|------|
-| ASD-STE100 | 一词一义原则、句长约束思想、强制主动语态 | C6 一物一名、G1 禁用句式 |
-| i-have-adhd skill | 首行规则、禁止清单、发前检查机制 | G1 禁用清单、收尾检查流程 |
-| RFC 2119 | MUST/SHOULD/MAY 语义分级 | C3 判断义务中的约束强度标记 |
-| Google Tech Writing | 范围+非范围声明、读者定义、关键信息前置 | C5 范围锁定 |
-| Ponytail skill | 删除优于添加、范围纪律 | C1 信息密度、C1a 反对称 |
+| ASD-STE100 | 一词一义原则、句长约束思想、强制主动语态 | rules.md 一物一名、G1 禁用句式 |
+| i-have-adhd skill | 首行规则、禁止清单、发前检查机制 | G1 禁用清单、核对清单 |
+| RFC 2119 | MUST/SHOULD/MAY 语义分级 | rules.md 判断有理由 |
+| Google Tech Writing | 范围+非范围声明、读者定义、关键信息前置 | 目标与非目标、范围 |
+| Ponytail skill | 删除优于添加、范围纪律 | rules.md 密度 |
 | Diátaxis 框架 | Tutorial / How-to / Reference / Explanation 四类及其边界 | 5.2 类型与模板 |
 
 ### 4.2 参考但未直接采纳
@@ -135,61 +122,25 @@ Phase 1 准备 → Phase 2 信息获取 → Phase 3 编写 → Phase 4 验证管
 
 ## 5. 模块设计
 
-以下模块支撑端到端工作流（3.6）的各阶段。
-
 ### 5.1 渐进式披露
-保留 H1–H9 行动提示、分阶段读取和类型层结构，但不以压缩预算代替完整约束。模型读取全部适用规则并主检，脚本只补充字面和格式候选；实际效果需要真实任务验证。
+入口只写五步流程和资源表，规则文件按读取时机拆分、只由入口分发；类型模板选定后完整读取。
 
-| 层级 | 内容 | 加载条件 |
-|------|------|---------|
-| L0-init | 手动入口、工作流与完整读取要求 | 用户调用 `/doc-writer` |
-| 共同约束 | 完整 C1–C6、全部子规则与 G2 | 调用后先读，先于取材与范围决定 |
-| 阶段原文 | prepare：Phase 1 与选型；research：Phase 2 与 5.6 | 准备与选型前；核对或获取材料前 |
-| L0-write | 完整 G1/G3、Phase 3、5.2.2 与常规表达规范 | 首次文稿、实际骨架文字或建议前，提前输出则提前读 |
-| 架构约束 | 完整 D1 | 实际提出技术架构决策前，包括详细设计中的架构选择 |
-| L0-check | 原 11 项收尾、Phase 4/5 与完整 5.3 | 初稿后、交付前，重新核对全部适用规则 |
-| L1 类型层 | 完整当前模板、变体与类型验证 | 确定类型后、骨架形成前 |
-| L2 条件资源 | 类型比较、额外示例、图表代码、设计分支、测试证据与读者测试 | 相应动作前按条件 Read，不批量加载 |
-| Script | G1 字面与格式候选 | Phase 4 直接调用，输出由模型裁决 |
-
-Python、脚本或权限不可用时由模型完整检查并说明限制，不删规则、不宣称脚本通过。备忘/Brief 快速路径保留必要证据核验，不增加规则 ID 或复杂调度。
-
-> 详述：[modules/5.1-progressive-disclosure.md](5.1-progressive-disclosure.md)
+> 详述：[5.1-progressive-disclosure.md](5.1-progressive-disclosure.md)
 
 ### 5.2 文档类型模板与示例
-三级选择架构：类型 → 变体 → 模块定制。沿用标准技术文档分工，保留所选模板的锚定节、必需字段和明确固定格式；读者需求可调整内容、深度、非固定顺序与表达、自定义模块，不锁死全文。
+类型 → 变体 → 按需模块三级选择。章节名用标准名（`_index.md` 的标准章节名表），结论写在节首句，不写进标题。12 类：工程 7 类（PRD、技术设计、API、Changelog、测试报告、部署/Runbook、ADR）、Diátaxis 4 类（Tutorial、How-to、Reference、Explanation）、README。
 
-- **9 种排版类型**（倒金字塔、问题→方案→代价、有序步骤+验证信号、定义列表、契约表、时间线、差异对照、决策日志、索引+深链）作为跨文类一等公民
-- **锚定节 + 模块槽位**：锚定节不可删（定义文档身份），模块按 5.2.3 的有效性规则处理：空洞或无关内容删除，相关但信息不完整时保留已知事实并标注缺口
-- **2-5 变体/类型**：默认由风险/范围决策树选择（类型有特殊维度时以模板为准），默认走 Lean，合规变体仅当客户/法规要求
-- **11 文档类型**：工程 7 类（PRD、技术设计、API、Changelog、测试报告、部署/Runbook、ADR）+ Diátaxis 4 类（Tutorial、How-to、Reference、Explanation）
-- **示例**：按 5.2.7 区分短文、长文片段和构造示意，用途与状态见[来源清单](../../skills/doc-writer/assets/examples/SOURCES.md)；取样长度不限制全文
-- **参考源三级分类**：教写法 / 成品信息架构 / 字段模板，不混用
+> 详述：[5.2-document-templates.md](5.2-document-templates.md)
 
-> 详述：[modules/5.2-document-templates.md](5.2-document-templates.md)
+### 5.3 委派与核对
+取材按主题并行派子 agent：低成本模型定位和摘录，中档模型分析状态机、流程、失败路径；初稿后由全新子 agent 对照实现核对事实，关键文档可加读者测试。多篇文档修改后由低成本子 agent 做全文对齐。
 
-### 5.3 验证管线详述
-细化 Phase 4 各 Step 的检查逻辑：完整模型主检与脚本候选裁决（Step 1）、内容对齐（Step 2，按版本/时间点核对代码、配置及实际运行结果）、叙述重复度（Step 3，检查跨章节冗余，保留独立阅读单元所需的必要重复）、滑动检查（长文档逐节内嵌检查）、类型专用验证（Step 1c，从 L1 模板读取，Diátaxis 类型采用二至三层验证结构）。
+> 运行时原文：[delegation.md](../../skills/doc-writer/references/delegation.md)、[verify.md](../../skills/doc-writer/references/verify.md)
 
-> 详述：[modules/5.3-verification-pipeline.md](../../skills/doc-writer/references/5.3-verification-pipeline.md)
+### 5.4 结构化表达
+按信息关系选列表、表格、Mermaid 图或代码块；图一张回答一个问题，多方交互用带失败分支的时序图。
 
-### 5.6 信息获取与上下文管理
-
-> 完整路由、事实卡片格式和污染防护见[信息获取](../../skills/doc-writer/references/research.md#56-信息获取与上下文管理)。核对或获取材料前读取，不能因材料本地可用而忽略证据和授权边界。
-
-### 5.7 Subagent 约束注入
-
-> 运行时规则见[委托写作](../../skills/doc-writer/references/delegation.md)。
-
-### 5.8 结构化表达规范
-按信息类型选择动作、条目、论证、图或文件树，说明调用关系与图文边界；沿用表格、标题、代码块和符号约定，附必要构造示意。
-
-> 详述：[5.8-structured-expression.md](5.8-structured-expression.md)
-
-### 5.9 读者测试与阅读体验验证
-用无上下文 subagent 模拟读者，检测知识诅咒。四类问题分类（误解/费解/缺失/错误推断），每类对应不同修正策略。问题回溯到约束体系形成闭环。多角色读者（默认测新成员，关键文档加评审委员会）。同一段落修正 3 次仍有问题则标记人类审阅。
-
-> 详述：[modules/5.9-reader-testing.md](../../skills/doc-writer/references/5.9-reader-testing.md)
+> 运行时原文：[formatting.md](../../skills/doc-writer/references/formatting.md)；设计说明：[5.8-structured-expression.md](5.8-structured-expression.md)
 
 ---
 

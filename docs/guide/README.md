@@ -48,7 +48,7 @@ doc-writer 面向支持 Agent Skills 标准的模型与框架，用于技术文�
            └── licenses/
    ```
 
-   `SKILL.md` 是入口；`references/` 保存约束、阶段入口和按需规范；`assets/templates/` 是文档模板；`assets/examples/` 是已核验示例及其许可证；`scripts/doc-lint.py` 是候选扫描器。不要只复制入口文件，`LICENSE` 和 `assets/examples/licenses/` 必须保留。仓库根目录的 `tests/`、`evals/` 和 `docs/` 是维护用文件，不需要安装。
+   `SKILL.md` 是入口；`references/` 保存写作规则、产品与技术文档要点、委派、图表、文档集和核对指引；`assets/templates/` 是文档模板；`assets/examples/` 是已核验示例及其许可证；`scripts/doc-lint.py` 是候选扫描器。不要只复制入口文件，`LICENSE` 和 `assets/examples/licenses/` 必须保留。仓库根目录的 `tests/`、`evals/` 和 `docs/` 是维护用文件，不需要安装。
 
 2. **在目标项目会话中确认发现状态。** 确认 agent 的技能列表中出现 `doc-writer`。入口未出现时，检查包目录名，以及 `SKILL.md` 是否位于上表对应层级；更新目录后重新打开会话再确认。
 

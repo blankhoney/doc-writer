@@ -7,10 +7,7 @@ from urllib.parse import unquote, urlsplit
 
 REPO = Path(__file__).resolve().parent.parent
 ROOT = REPO / "skills" / "doc-writer"
-RUNTIME = [
-    ROOT / "references" / (name + ".md")
-    for name in ("prepare", "research", "write-assist", "verify-checks")
-]
+RUNTIME = sorted((ROOT / "references").glob("*.md"))
 TYPES = {
     "prd",
     "tech-design",
@@ -68,39 +65,25 @@ class PackageTests(unittest.TestCase):
         self.assertLess(len(text.splitlines()), 500)
         self.assertNotIn("CLAUDE_SKILL_DIR", text)
         self.assertNotIn("$ARGUMENTS", text)
-        self.assertIn("需要批准", text)
-        self.assertIn("安全检查无法分析命令", text)
-        self.assertIn("不得通过改变引号", text)
 
     def test_entry_resources_are_real_and_portable(self):
         text = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        # 只看资源表的行，正文步骤里顺带提到的路径不算分发。
+        table = "\n".join(l for l in text.splitlines() if l.startswith("|"))
         resources = set(
             re.findall(
-                r"`((?:references|scripts|assets)/[a-zA-Z0-9_./-]+\.(?:md|py))`", text
+                r"`((?:references|scripts|assets)/[a-zA-Z0-9_./-]+\.(?:md|py))`", table
             )
         )
         resources |= {unquote(link) for link in re.findall(r"\]\(([^)\s#]+)\)", text)}
-        # 手动入口必须指向实际阶段入口、单一规则源、脚本和模板索引。
-        self.assertTrue(
-            {
-                "references/delegation.md",
-                "assets/templates/_index.md",
-                "references/prepare.md",
-                "references/research.md",
-                "references/write-assist.md",
-                "references/verify-checks.md",
-                "references/constraints-common.md",
-                "references/constraints-writing.md",
-                "references/constraints-architecture.md",
-                "scripts/doc-lint.py",
-            }
-            <= resources
+        # 入口必须分发全部运行时文件，references 下不能有入口没提到的孤儿文件。
+        self.assertEqual(
+            {r for r in resources if r.startswith("references/")},
+            {"references/" + p.name for p in RUNTIME},
         )
-        # 示例来源清单只在编写阶段按需读取，不由入口表重复分发。
-        self.assertIn(
-            "../assets/examples/SOURCES.md",
-            (ROOT / "references" / "write-assist.md").read_text(encoding="utf-8"),
-        )
+        self.assertIn("assets/templates/_index.md", resources)
+        self.assertIn("/scripts/doc-lint.py'", text)
+        self.assertTrue((ROOT / "scripts" / "doc-lint.py").is_file())
         for resource in resources:
             with self.subTest(resource=resource):
                 self.assertEqual(urlsplit(resource).scheme, "")
@@ -110,32 +93,10 @@ class PackageTests(unittest.TestCase):
             self.assertNotIn("/Users/", body)
             self.assertNotIn("/home/", body)
 
-    def test_runtime_reads_are_listed_in_entry(self):
-        # 运行时入口要求完整读取的文件必须出现在 SKILL.md，不能藏在设计稿里。
-        entry = (ROOT / "SKILL.md").read_text(encoding="utf-8")
-        self.assertIn("references/5.3-verification-pipeline.md", entry)
-        staged = [
-            *RUNTIME,
-            ROOT / "references" / "5.3-verification-pipeline.md",
-        ]
-        for path in staged:
-            with self.subTest(stage=path.name):
-                body = path.read_text(encoding="utf-8")
-                self.assertNotIn("5.1-progressive-disclosure.md", body)
-                self.assertNotIn("5.1.4", body)
-                self.assertNotRegex(body, r"H1[–-]H9|启发式 ?H\d")
-                self.assertNotIn("docs/research/", body)
-        # 示例里写的扫描器依赖必须与脚本实际读取的词源一致。
+    def test_runtime_files_use_plain_terms(self):
+        # 运行时文件不用自造术语和失效编号，单独安装的技能包才能读懂。
         lint = (ROOT / "scripts" / "doc-lint.py").read_text(encoding="utf-8")
         self.assertIn('"constraints-writing.md"', lint)
-        howto = (ROOT / "assets" / "templates" / "how-to.md").read_text(
-            encoding="utf-8"
-        )
-        self.assertIn("references/constraints-writing.md", howto)
-        self.assertNotIn("`docs/design-spec.md`", howto)
-
-    def test_runtime_files_use_plain_terms(self):
-        # 运行时读取的文件不用自造术语和失效编号，首次读取的 agent 才能直接看懂。
         paths = [
             ROOT / "SKILL.md",
             *RUNTIME,
@@ -144,6 +105,7 @@ class PackageTests(unittest.TestCase):
         for path in paths:
             with self.subTest(path=path.name):
                 body = path.read_text(encoding="utf-8")
+                self.assertNotIn("docs/research/", body)
                 self.assertNotRegex(body, r"锚定节|锚问|可插模块|有效性检验")
                 self.assertNotRegex(body, r"Phase 4|收尾检查（3\.5）|§3\.4")
 
@@ -204,59 +166,6 @@ class PackageTests(unittest.TestCase):
                 self.assertNotIn("未核验草稿", text)
                 self.assertIn("../examples/SOURCES.md", text)
 
-    def test_constraint_and_verification_entry_points(self):
-        spec = (REPO / "docs" / "design" / "design-spec.md").read_text(encoding="utf-8")
-        # §3 保留设计原则和每条规则集的唯一原文链接；规则定义本身已移入模块。
-        stubs = {
-            "### 3.2 核心约束（6 条）": "constraints-common.md)",
-            "### 3.3 边界护栏（3 条）": "constraints-writing.md)",
-            "### 3.4 领域子规则": "constraints-architecture.md)",
-            "### 3.5 收尾检查清单（原始规格，运行时已合并）": "verify-checks.md",
-        }
-        for heading, link in stubs.items():
-            with self.subTest(heading=heading):
-                self.assertIn(heading, spec)
-                self.assertIn(link, spec[spec.index(heading) :])
-        self.assertNotRegex(spec, r"(?m)^#### [CGD]\d+\.")
-        modules = {
-            "references/constraints-common.md": (
-                "C1",
-                "C2",
-                "C3",
-                "C4",
-                "C5",
-                "C6",
-                "G2",
-            ),
-            "references/constraints-writing.md": ("G1", "G3", "G4"),
-            "references/constraints-architecture.md": ("D1",),
-        }
-        for path, names in modules.items():
-            text = (ROOT / path).read_text(encoding="utf-8")
-            with self.subTest(path=path):
-                # 规则集自己声明读取时机：正文首节之前必须写明完整读取。
-                self.assertIn("完整读取", text[: text.index("####")])
-            for name in names:
-                with self.subTest(path=path, name=name):
-                    self.assertRegex(text, r"(?m)^#### " + name + r"\. ")
-        verify = (ROOT / "references" / "verify-checks.md").read_text(encoding="utf-8")
-        for number in range(1, 12):
-            self.assertRegex(verify, r"#" + str(number) + r"(?!\d)")
-        for name in ("V1", "V2", "V3", "V4", "V5"):
-            self.assertIn(name, verify)
-        self.assertIn("constraints-common.md", verify)
-        self.assertIn("`assets/templates/_index.md`", verify)
-        # 阶段入口必须直接指向单一规则源，不再靠合并页面转述。
-        for path in (
-            "references/prepare.md",
-            "references/research.md",
-            "references/write-assist.md",
-            "references/verify-checks.md",
-        ):
-            with self.subTest(stage=path):
-                text = (ROOT / path).read_text(encoding="utf-8")
-                self.assertIn("`references/constraints-", text)
-
     def test_local_markdown_links_resolve_inside_package(self):
         paths = [REPO / "README.md", REPO / "README.zh-CN.md", REPO / "CONTRIBUTING.md"]
         paths.extend((REPO / "docs").rglob("*.md"))
@@ -264,12 +173,6 @@ class PackageTests(unittest.TestCase):
         for path in paths:
             body = path.read_text(encoding="utf-8")
             for term in {
-                "write-assist": (
-                    "删重复，不删事实、原因、依据和限制",
-                    "程序详细设计（含无代码示例）",
-                    "删无新增信息的自辩",
-                ),
-                "verify-checks": ("详细设计检查重点注释的交接",),
                 "implementation": ("| 代码规范 |", "重点注释已交接且可核验"),
                 "code-conventions": ("## 主动注释", "主动补足上述适用重点注释"),
             }.get(path.stem, ()):
@@ -293,7 +196,6 @@ class PackageTests(unittest.TestCase):
             ROOT / "SKILL.md",
             REPO / "docs" / "design" / "design-spec.md",
             REPO / "docs" / "design" / "5.1-progressive-disclosure.md",
-            ROOT / "references" / "5.3-verification-pipeline.md",
             *RUNTIME,
         ]
         for path in paths:

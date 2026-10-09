@@ -4,7 +4,7 @@
 
 ## 1. 修改规则或脚本
 
-1. 先读[设计规格](docs/design/design-spec.md) §3 及[共同约束](skills/doc-writer/references/constraints-common.md)、[编写规则](skills/doc-writer/references/constraints-writing.md)、[技术架构决策约束](skills/doc-writer/references/constraints-architecture.md)。C/G/D 原文在这些来源，阶段与收尾原文在 `references/` 的四个阶段入口；现有 C/G/D/H/V 编号可引用，不另建词库或 lint 注册表。
+1. 先读 [rules.md](skills/doc-writer/references/rules.md)、[constraints-writing.md](skills/doc-writer/references/constraints-writing.md)，以及按性质的 [product-docs.md](skills/doc-writer/references/product-docs.md) 或 [tech-docs.md](skills/doc-writer/references/tech-docs.md)。一条规则只在一个文件里写，其他文件写路径引用，不复述。
 2. 修改规则时同步相关运行时指引和适用模板。词项变化应由脚本从 G1 原文读取（当前为 `references/constraints-writing.md` 的 G1）；更改 G1 表格格式时，同步解析逻辑与损坏输入测试。
 3. 为行为变更增加可复现的正例、反例或豁免测试，再运行：
 
@@ -34,7 +34,7 @@
 - 收录规则、模板、使用文档、维护测试和已核验来源记录。
 - 排除本地配置、凭据、缓存、试写产物和临时研究材料。
 - 保留 `skills/doc-writer/` 下的全部运行文件。
-- 新增或移动包内文件时，按[跳转模型](docs/design/5.1-progressive-disclosure.md#516-文件组织)放链接：只向下链接，指向入口和阶段入口时只写路径。
+- 新增或移动包内文件时，按[跳转模型](docs/design/5.1-progressive-disclosure.md#513-文件组织)放链接：只向下链接，指向 `SKILL.md` 和它资源表里的文件时只写路径。
 - `.gitignore` 只影响未跟踪文件；敏感内容曾入库时，另行处理历史，不能只删当前文件。
 
 推送和版本发布分别确认范围，不将一次本地提交等同于发布授权。
