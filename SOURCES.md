@@ -16,7 +16,7 @@
   - Fowler YAGNI：https://martinfowler.com/bliki/Yagni.html
   - Shape Up 第 2、5、6 章：https://basecamp.com/shapeup/1.1-chapter-02 、https://basecamp.com/shapeup/1.4-chapter-05 、https://basecamp.com/shapeup/1.5-chapter-06
   - Atwood, The Last Responsible Moment：https://blog.codinghorror.com/the-last-responsible-moment/
-- 写多重与非目标：Design Docs at Google https://www.industrialempathy.com/posts/design-docs-at-google/ ；SRE Book, Embracing Risk https://sre.google/sre-book/embracing-risk/ 。保留/降级/删除三档与阻塞项条件属综合（建议）。
+- 写多重与非目标：Design Docs at Google https://www.industrialempathy.com/posts/design-docs-at-google/ ；SRE Book, Embracing Risk https://sre.google/sre-book/embracing-risk/ 。「写成结论或删除」与待问标准属综合（建议）。
 - 图和表：Google 开发者文档风格指南 Images https://developers.google.com/style/images ；Google 技术写作 Visual cues https://developers.google.com/tech-writing/accessibility/self-study/visual-cues ；Mermaid 状态图 https://mermaid.js.org/syntax/stateDiagram.html 与时序图 https://mermaid.js.org/syntax/sequenceDiagram.html 。状态数约 7、参与者不超过 5、一图一问属推论（建议），参考 Cowan 2001 https://memory.psych.missouri.edu/assets/doc/articles/2001/cowan-bbs-2001.pdf 。
 - 段落与句子：阮一峰《中文技术文档的写作规范》https://raw.githubusercontent.com/ruanyf/document-style-guide/master/docs/paragraph.md 、https://raw.githubusercontent.com/ruanyf/document-style-guide/master/docs/text.md 。
 

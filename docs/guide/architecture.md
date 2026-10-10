@@ -32,7 +32,7 @@
 
 所有片段另读 `references/formatting.md`（排版与结构）、`references/review.md`、`references/constraints-writing.md` 和 `references/unslop.md`。
 
-## 范围与比例核查
+## 解决、比例与呈现
 
 `references/review.md` 规定解决、写作和核查共用的标准：重点审核项，每条边界和风险是否该现在决定，写多重（写成结论或删除），以及图的选用。段落、句长和图文比例见 `references/formatting.md`。
 
