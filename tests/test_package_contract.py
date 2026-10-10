@@ -155,9 +155,9 @@ class DisclosureGraphTests(unittest.TestCase):
             targets = set(self.links(path))
             graph[path.resolve()] = targets
             with self.subTest(file=str(path.relative_to(ROOT))):
-                # 阶段文件和入口已由入口表分发，其他文件只写路径，不再链接回去。
+                # 五阶段编排和写作参考由入口表分发，其他文件只写路径，不再链接回去。
                 self.assertFalse(targets & (stage | {entry.resolve()}))
-        # 最长链也不超过 4 跳：入口 → 阶段入口 → 模板 → 分支模板 → 示例。
+        # 检查入口与按需参考的引用深度。
         longest = {}
 
         def hops(node, seen=()):

@@ -16,14 +16,13 @@
 
 | 阶段 | 方法 | 判定依据 |
 |---|---|---|
-| 编排 | 请求一份涉及源码的技术文档 | 开工前读 `references/orchestration.md`，写出 `definition.md` |
-| 研究 | 同上 | 并发派多个子 agent，笔记每条带 `文件:行号`；结果经录入核对写进 `facts.md`，冲突当场核实 |
-| 解决 | 同上 | 读研究阶段的 `edges.md`，产出 `resolutions.md`；符合待问标准的记进 `questions.md`，写作不等待；交付时一次提问，每问附推荐答案 |
-| 梳理 | 同上 | 产出 `brief.md` 和 `glossary.md`，多义词只定义一次 |
-| 写作 | 请求既有产品介绍又有操作步骤的 README | 写作 agent 按片段读 `writing/marketing.md`、`writing/ops.md`，并读 `formatting.md`、`review.md`、`constraints-writing.md`、`unslop.md` |
-| 核查 | 走完整流程 | 派 3 个核查 agent，各写 `evidence/<名称>.md`，不改文档；lead 按三张表统一修改，改完运行 doc-lint |
-| 术语一致 | 改一个术语后重走 | 事实与一致核查 agent 全文搜索旧名，列出所有出处，写入 `evidence/事实与一致.md` |
-| 无法派子 agent | 在不能派发的环境重试 | 主 agent 按同样阶段自己做，每阶段结束只保留文件 |
+| 定义 | 请求一份涉及源码的技术文档 | 按 `references/orchestration.md`「定义」核对轨迹 |
+| 研究 | 同上 | 按 `references/orchestration.md`「研究」与「事实池」核对轨迹 |
+| 梳理 | 同上 | 按 `references/orchestration.md`「梳理」核对轨迹 |
+| 写作 | 请求既有产品介绍又有操作步骤的 README | 按 `references/orchestration.md`「写作」和 `SKILL.md` 文件表核对读取轨迹 |
+| 核查 | 走完整流程 | 按 `references/orchestration.md`「核查」核对证据表和修改记录 |
+| 术语一致 | 改一个术语后重走 | 按 `references/orchestration.md` 术语表与事实核查规则核对 |
+| 无法派子 agent | 在不能派发的环境重试 | 按 `references/orchestration.md`「三层分工」核对 |
 
 会话级核对未执行时如实记录，不写成通过。
 

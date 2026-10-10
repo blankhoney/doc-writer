@@ -1,6 +1,6 @@
 # doc-writer 使用文档
 
-doc-writer 是遵循 Agent Skills 规范的写作技能，按项目的真实实现编写、补全和审查中文文档。它由主 session 分六个阶段编排，每篇文档一个 lead，lead 派 subagent 读代码、写作和核查。
+doc-writer 是遵循 Agent Skills 规范的写作技能，按项目的真实实现编写、补全和审查中文文档。它由主 session 分五个阶段编排，每篇文档一个 lead，lead 派 subagent 读代码、写作和核查。
 
 ## 快速上手
 
@@ -37,5 +37,5 @@ doc-writer/
 | 你要做什么 | 阅读入口 |
 |---|---|
 | 提供材料、保存、修改已有文档、只审查不改写、单独运行 doc-lint | [使用指南](usage.md) |
-| 了解六个阶段、写作指南、核查和 doc-lint 的分工 | [架构与写作方法](architecture.md) |
+| 了解五个阶段、写作指南、核查和 doc-lint 的分工 | [架构与写作方法](architecture.md) |
 | 修改 skill 本身 | [贡献指南](../../CONTRIBUTING.md) |

@@ -1,12 +1,12 @@
 # doc-writer v3 来源
 
 给维护者看，skill 运行时不读。只收 research/VERIFY.md 核对过、或调研里标明已打开原文的来源。
-标「建议」的条目在调研中属于推论或综合，skill 里只写成建议。设计稿和用户需求基线直接决定的条目（六阶段编排、MoSCoW、每节句长 60 字、处理表 20 行）不另列来源。
+标「建议」的条目在调研中属于推论或综合，skill 里只写成建议。设计稿和用户需求基线决定的编排与格式约束见 `SKILL.md`、`references/formatting.md`，不另列来源。
 
 ## SKILL.md、references/orchestration.md
 - 依据设计稿 v3-spec.md 与任务卡「用户已定」；无外部来源。
 
-## references/review.md
+## references/review.md、references/formatting.md
 - 该不该现在决定：
   - Nygard ADR：https://www.cognitect.com/blog/2011/11/15/documenting-architecture-decisions
   - arc42 §9：https://docs.arc42.org/section-9/

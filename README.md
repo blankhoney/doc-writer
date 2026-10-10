@@ -10,7 +10,7 @@
 
 An Agent Skill that writes and checks Chinese technical documents from project evidence, covering 12 types including PRDs, designs, APIs, ADRs, and READMEs.
 
-You provide material and a goal. The main session orchestrates six stages (define, research, resolve, outline, write, verify) with one lead per document, and hands code reading, drafting, and verification to sub-agents. Each stage writes its output to a file, and the next stage reads only files. The skill follows the [Agent Skills](https://agentskills.io) specification, so any agent that can read files can use it. It activates only when you explicitly ask to write or review a technical document, not for code changes or everyday questions. Saving files, running operations described in a document, and committing code each need your separate permission. The skill's rules, writing guides, and documentation are written in Chinese.
+You provide material and a goal. The main session orchestrates five stages (define, research, outline, write, verify) with one lead per document, and hands code reading, drafting, and verification to sub-agents. Each stage writes its output to a file, and the next stage reads only files. The skill follows the [Agent Skills](https://agentskills.io) specification, so any agent that can read files can use it. It activates only when you explicitly ask to write or review a technical document, not for code changes or everyday questions. Saving files, running operations described in a document, and committing code each need your separate permission. The skill's rules, writing guides, and documentation are written in Chinese.
 
 <a id="安装"></a>
 
@@ -68,7 +68,7 @@ Describe the task in plain language, or name the type in your request. A documen
 
 ## How it keeps quality up
 
-- **Stages with files.** Research notes carry `file:line` references and are checked before entering a shared fact pool (`facts.md`), with conflicts re-verified on the spot. A glossary defines each ambiguous term once, and a fresh writing agent takes facts only from the pool instead of raw research.
+- **Stages with files.** Research notes are one-line facts with `file:line` references, concatenated into a shared fact pool (`facts.md`). While outlining, the lead verifies the conflicting or inferred lines the outline cites and settles open questions. A glossary defines each ambiguous term once, and a fresh writing agent takes facts only from the pool instead of raw research.
 - **Facts from the project.** Code, configuration, recorded decisions, and execution logs back their respective claims; missing information is reported as a gap, not invented.
 - **Three parallel checks.** Three agents without the writing context check facts and consistency, scope and requirements (what is decided too early, what is written too heavily), and style and layout (the balance of text, tables, and diagrams). They write evidence tables only, and the lead makes the changes.
 - **The model judges, the script locates.** doc-lint marks candidate boilerplate, vague modifiers, Chinese formatting issues from the G1 table, and layout candidates such as overlong paragraphs and bold body text; the model decides which candidates are real. A separate unslop checklist covers the habits a word list cannot catch.
@@ -89,7 +89,7 @@ The guides below are in Chinese.
 |---|---|
 | [Documentation entry point](docs/guide/README.md) | Installation layout, first use, and navigation |
 | [Usage guide](docs/guide/usage.md) | Supplying material, saving, revising, reviewing only, running doc-lint standalone |
-| [Architecture and writing methods](docs/guide/architecture.md) | The six stages, writing guides, verification, and how the model and doc-lint divide the work |
+| [Architecture and writing methods](docs/guide/architecture.md) | The five stages, writing guides, verification, and how the model and doc-lint divide the work |
 
 ## Contributing
 

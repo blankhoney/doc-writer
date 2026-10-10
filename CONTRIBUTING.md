@@ -1,10 +1,10 @@
 # 贡献指南
 
-技能包在 `skills/doc-writer/`，下文的 `references/`、`scripts/` 都指这个目录下的路径。修改 skill 时保持每条规则只有一个来源，并用实际测试结果说明变更。
+技能包在 `skills/doc-writer/`，下文路径都相对该目录。每条规则只保留一处，其他位置引用文件名，因为复述容易失去同步。用实际测试结果说明变更。
 
 ## 1. 修改规则或脚本
 
-1. 先读 `SKILL.md`、`references/orchestration.md`，再读要改的文件：写作规则在 `references/writing/` 下按片段类型分开，解决阶段的判断标准与比例规则在 `references/review.md`，G1 表在 `references/constraints-writing.md`，G1 之外靠人判断的毛病在 `references/unslop.md`。一条规则只在一个文件里写，其他文件写路径引用，不复述。
+1. 先读 `SKILL.md`，再按文件表读要改的参考。五阶段编排见 `references/orchestration.md`，分诊见 `references/review.md`，排版见 `references/formatting.md`。
 2. `SKILL.md` 的文件表要列出 `references/` 下全部文件，新增或改名时同步。
 3. 词项变化写在 G1 表里，`scripts/doc-lint.py` 从那里读取；更改 G1 表格格式时，同步解析逻辑与 `tests/test_doc_lint.py`。
 4. 为行为变更增加正例、反例或豁免测试，再运行：

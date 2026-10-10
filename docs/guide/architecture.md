@@ -4,16 +4,15 @@
 
 主 session 定义文档、派 lead、读一行摘要、做取舍。每篇文档一个 lead，读代码、写正文、核查由 lead 派给 subagent，因为细节塞满主上下文后成稿质量会下降。每个阶段的产出写成文件，下一阶段只读文件。
 
-## 六个阶段
+## 五个阶段
 
 | 阶段 | 产出 | 执行者 |
 |---|---|---|
 | 定义 | `definition.md` | 主 session |
-| 研究 | `notes/<主题>.md`，每条附 `文件:行号`；`edges.md` 记发现的边界、竞争、风险和疑问；`facts.md` 事实池，录入前核对，冲突当场核实 | lead 派 4–6 个并发探索 subagent，每波后派录入 subagent |
-| 解决 | `resolutions.md`：每条边界查清成事实或决定、删除，或记进 `questions.md`，交付时一次提问 | lead 派一个分诊 subagent |
-| 梳理 | 依据事实池写 `brief.md`、`glossary.md`、产品梳理或架构与数据模型 | lead |
+| 研究 | `notes/<主题>.md`，一条一行、附 `文件:行号`，疑问和边界写成「？」行；lead 拼成事实池 `facts.md` | lead 派 4–6 个并发探索 subagent |
+| 梳理 | 处理「？」行（查清、删除或记进 `questions.md`，交付时一次提问）；写 `brief.md`、`glossary.md`，核实 brief 引用的冲突和推断行 | lead |
 | 写作 | 文档正文，事实只取自 `facts.md` | 新上下文的写作 subagent，长文可按章节派多个，由 lead 合稿 |
-| 核查 | `evidence/事实与一致.md`、`evidence/需求与范围.md`、`evidence/文风与排版.md` | 3 个并行的核查 agent，只写证据表不改文档；事实核查对照事实池并抽查对外契约；lead 按表统一修改 |
+| 核查 | `evidence/事实与一致.md`、`evidence/需求与范围.md`、`evidence/文风与排版.md` | 3 个并行的核查 agent，只写证据表不改文档；事实核查对照事实池，对外契约、默认值、数值回原文核对；lead 按表统一修改 |
 
 各阶段的提示模板见 `skills/doc-writer/references/orchestration.md`。
 
