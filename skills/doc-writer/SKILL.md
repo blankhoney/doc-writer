@@ -29,7 +29,7 @@ metadata:
 ## 两档
 | 档 | 做什么 | 不做 |
 |---|---|---|
-| 轻量（默认） | 动笔前想清目的、读者和要回答的问题，默认写一篇。用全部写作规则和对应的写作指南。需要新调研时，自己读代码或派 1–3 个探索 subagent，笔记一行一条：`主题 \| 结论 \| 依据`；材料够就直接写。写完运行 doc-lint，按 `references/unslop.md`、`references/formatting.md`、`references/constraints-writing.md` 自查。有疑问直接在对话里问 | 不读 `references/orchestration.md`，不建 definition、brief、术语表和证据表，不派核查 agent |
+| 轻量（默认） | 动笔前想清目的、读者和要回答的问题，默认写一篇。用全部写作规则和对应的写作指南。需要新调研时，自己读代码或派 1–3 个探索 subagent，笔记一行一条：`主题 \| 结论 \| 依据`；材料够就直接写。写完运行 doc-lint，按 `references/unslop.md`、`references/formatting.md`、`references/constraints-writing.md` 自查，再按主要读者的任务把文档过一遍，补上会卡住的地方。有疑问直接在对话里问 | 不读 `references/orchestration.md`，不建 definition、brief、术语表和证据表，不派核查 agent |
 | 完整 | 按 `references/orchestration.md` 五阶段编排 | — |
 
 ## 选档
