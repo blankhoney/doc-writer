@@ -81,7 +81,7 @@
 
 ### 5. 写作（写作 subagent）
 lead 派新上下文的写作 subagent，长文按章节派多个，由 lead 合稿。写作 subagent 只读 `brief.md`、术语表、梳理文件和以下参考，不读 `edges.md`：对应的 `references/writing/` 指南、`references/formatting.md`、`references/review.md`、`references/constraints-writing.md`、`references/unslop.md`。
-写作 subagent 只写结论，不把没有结论的讨论写进文档。缺事实时派补研 subagent。
+写作 subagent 把机制、流程、数据模型和示例写透，篇幅按内容需要定。只有没有结论的讨论不写，因为这条规则限制的是未解决的疑问，不是正文的深度。缺事实时派补研 subagent。
 
 ### 6. 核查（主 session 并行派 3 个 agent，lead 统一修改）
 核查 agent 不继承写作上下文，各自可再派 subagent。它们只写证据表 `evidence/<核查名>.md`，不改文档，因为并行改同一份文档会互相覆盖。
