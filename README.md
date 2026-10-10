@@ -68,7 +68,7 @@ Describe the task in plain language, or name the type in your request. A documen
 
 ## How it keeps quality up
 
-- **Stages with files.** Research notes carry `file:line` references, a glossary defines each ambiguous term once, and a fresh writing agent works from those files instead of raw research.
+- **Stages with files.** Research notes carry `file:line` references and are checked before entering a shared fact pool (`facts.md`), with conflicts re-verified on the spot. A glossary defines each ambiguous term once, and a fresh writing agent takes facts only from the pool instead of raw research.
 - **Facts from the project.** Code, configuration, recorded decisions, and execution logs back their respective claims; missing information is reported as a gap, not invented.
 - **Three parallel checks.** Three agents without the writing context check facts and consistency, scope and requirements (what is decided too early, what is written too heavily), and style and layout (the balance of text, tables, and diagrams). They write evidence tables only, and the lead makes the changes.
 - **The model judges, the script locates.** doc-lint marks candidate boilerplate, vague modifiers, Chinese formatting issues from the G1 table, and layout candidates such as overlong paragraphs and bold body text; the model decides which candidates are real. A separate unslop checklist covers the habits a word list cannot catch.

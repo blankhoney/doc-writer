@@ -17,7 +17,7 @@
 | 阶段 | 方法 | 判定依据 |
 |---|---|---|
 | 编排 | 请求一份涉及源码的技术文档 | 开工前读 `references/orchestration.md`，写出 `definition.md` |
-| 研究 | 同上 | 并发派多个子 agent，笔记每条带 `文件:行号` |
+| 研究 | 同上 | 并发派多个子 agent，笔记每条带 `文件:行号`；结果经录入核对写进 `facts.md`，冲突当场核实 |
 | 解决 | 同上 | 读研究阶段的 `edges.md`，产出 `resolutions.md`；符合待问标准的记进 `questions.md`，写作不等待；交付时一次提问，每问附推荐答案 |
 | 梳理 | 同上 | 产出 `brief.md` 和 `glossary.md`，多义词只定义一次 |
 | 写作 | 请求既有产品介绍又有操作步骤的 README | 写作 agent 按片段读 `writing/marketing.md`、`writing/ops.md`，并读 `formatting.md`、`review.md`、`constraints-writing.md`、`unslop.md` |
