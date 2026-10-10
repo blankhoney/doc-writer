@@ -32,7 +32,7 @@ The doc-lint scanner needs Python 3.9 or later and uses only the standard librar
 In a session opened in your target project, type (clients with slash commands also accept a leading `/doc-writer`):
 
 ```text
-Use doc-writer: using the following material, write a Chinese code contribution guide for project contributors. Return the text in chat only: developers create a feature branch and submit a pull request; each pull request must explain the purpose of the changes; a maintainer merges it after automated tests pass and one maintainer approves.
+Use doc-writer in lightweight mode: using the following material, write a Chinese code contribution guide for project contributors. Return the text in chat only: developers create a feature branch and submit a pull request; each pull request must explain the purpose of the changes; a maintainer merges it after automated tests pass and one maintainer approves.
 ```
 
 You get an operational guide organized around branching, submitting a pull request, testing, and review, ending with a line stating that no file was saved and the scanner did not run.
@@ -40,7 +40,7 @@ You get an operational guide organized around branching, submitting a pull reque
 To save the result, name a path in the request:
 
 ```text
-Use doc-writer: based on this project's README.md, write a Chinese quick-start guide for engineers joining the project. Save it to docs/quickstart.md.
+Use doc-writer in lightweight mode: based on this project's README.md, write a Chinese quick-start guide for engineers joining the project. Save it to docs/quickstart.md.
 ```
 
 ### Two modes
@@ -52,7 +52,7 @@ Use doc-writer: based on this project's README.md, write a Chinese quick-start g
 
 The mode stays for the session until you switch. Use lightweight while designing; switch to full when the design is done. Notes and drafts from lightweight mode are reused.
 
-To review without rewriting:
+To review without rewriting (full mode with three independent checks; say "lightweight" for a quick style pass):
 
 ```text
 Use doc-writer: review docs/architecture.md for structure, terminology, and accuracy against the implementation. List specific locations and suggested changes. Do not modify any files.

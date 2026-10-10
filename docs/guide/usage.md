@@ -5,7 +5,7 @@
 在请求里写清读者、用途和可用材料。需要保存时写明路径，没有路径时助手只输出正文。
 
 ```text
-用 doc-writer 根据 src/ 和 README.md，为新加入的工程师写一份快速开始，保存到 docs/quickstart.md。
+用 doc-writer 轻量写：根据 src/ 和 README.md，为新加入的工程师写一份快速开始，保存到 docs/quickstart.md。
 ```
 
 简单请求默认写一篇文档。只有你要求，或两类读者的任务一篇完成不了时才拆成多篇。
