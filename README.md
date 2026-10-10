@@ -10,7 +10,7 @@
 
 An Agent Skill that writes and checks Chinese technical documents from project evidence, covering 12 types including PRDs, designs, APIs, ADRs, and READMEs.
 
-You provide material and a goal. The main session orchestrates five stages (define, research, outline, write, verify) with one lead per document, and hands code reading, drafting, and verification to sub-agents. Each stage writes its output to a file, and the next stage reads only files. The skill follows the [Agent Skills](https://agentskills.io) specification, so any agent that can read files can use it. It activates only when you explicitly ask to write or review a technical document, not for code changes or everyday questions. Saving files, running operations described in a document, and committing code each need your separate permission. The skill's rules, writing guides, and documentation are written in Chinese.
+You provide material and a goal. By default the skill runs in lightweight mode (writing rules and research only); when you name it to write, review, or finalize, the full mode runs: the main session orchestrates five stages (define, research, outline, write, verify) with one lead per document, and hands code reading, drafting, and verification to sub-agents. Each stage writes its output to a file, and the next stage reads only files. The skill follows the [Agent Skills](https://agentskills.io) specification, so any agent that can read files can use it. It activates only when you write or review a technical document, not for code changes or everyday questions. Saving files, running operations described in a document, and committing code each need your separate permission. The skill's rules, writing guides, and documentation are written in Chinese.
 
 <a id="安装"></a>
 
@@ -48,7 +48,7 @@ Use doc-writer: based on this project's README.md, write a Chinese quick-start g
 | Mode | When | What runs |
 |---|---|---|
 | Lightweight (default) | The agent picks up the skill on its own, or you say "lightweight" | All writing rules and writing guides; research when needed; doc-lint and a self-check. Open questions are asked in chat. No orchestration, evidence tables, or check agents |
-| Full | You name doc-writer and ask it to write or finalize, or say "full process", "final", or "定稿" | The five-stage orchestration with three independent checks |
+| Full | You name doc-writer (or type `/doc-writer`) and ask it to write, review, or finalize, or say "full process", "final", or "定稿" | The five-stage orchestration with three independent checks |
 
 The mode stays for the session until you switch. Use lightweight while designing; switch to full when the design is done. Notes and drafts from lightweight mode are reused.
 

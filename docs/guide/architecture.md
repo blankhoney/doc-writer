@@ -1,4 +1,5 @@
 # 架构与写作方法
+本文讲完整档；轻量档只用写作规则、调研和 doc-lint 自查，见 `skills/doc-writer/SKILL.md`「两档」。
 
 ## 主 agent 只编排
 

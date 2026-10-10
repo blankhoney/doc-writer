@@ -1,6 +1,6 @@
 # doc-writer 使用文档
 
-doc-writer 是遵循 Agent Skills 规范的写作技能，按项目的真实实现编写、补全和审查中文文档。它由主 session 分五个阶段编排，每篇文档一个 lead，lead 派 subagent 读代码、写作和核查。
+doc-writer 是遵循 Agent Skills 规范的写作技能，按项目的真实实现编写、补全和审查中文文档。默认轻量档只用写作规则和调研；点名本技能要求写、检查或定稿时走完整档，由主 session 分五个阶段编排，每篇文档一个 lead，lead 派 subagent 读代码、写作和核查。
 
 ## 快速上手
 

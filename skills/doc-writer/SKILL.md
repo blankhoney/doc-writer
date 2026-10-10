@@ -4,7 +4,7 @@ description: >-
   编写、补全和审查中文文档：PRD 与需求评审稿、技术设计、ADR、API 与参考文档、
   Runbook 与部署手册、测试计划与报告、产品介绍、README、发布说明。
   写、改或检查这类文档时使用；改代码、写提交说明、日常问答不用。
-  默认轻量档：只用写作规则和调研；用户点名本 skill 要求定稿或完整流程时，
+  默认轻量档：只用写作规则和调研；用户点名本 skill 要求写、检查或定稿，或要求定稿、完整流程时，
   由主 agent 编排研究、写作和核查。
 license: MIT
 compatibility: 适用于能读写文件的 agent；能派子 agent 或用命令行调用其他模型时效果最好。doc-lint 需要 Python 3.9+。
@@ -20,7 +20,7 @@ metadata:
 
 ## 四条硬性要求
 1. 先按「选档」定档。完整档按 `references/orchestration.md` 编排，并在交付前执行其中的核查。
-2. 术语一致：每个多义词只定义一次，同一个词只指一个对象，指多个对象时各起限定名；同一动作不换近义词。完整档另建术语表，见 `references/orchestration.md`。
+2. 术语一致：每个多义词只定义一次，同一个词只指一个对象，指多个对象时各起限定名；同一动作不换近义词，写清它的触发者、前置状态和结果状态。状态、字段、错误名在正文、表格和图里写法一致，首次出现写中文名和代码值。完整档另建术语表，见 `references/orchestration.md`。
 3. 正文遵守 `references/constraints-writing.md` 的 G1 表和 `references/formatting.md` 的排版硬线，交付前运行 doc-lint。
 4. 正文只用已查证或用户已确认的结论。未解决的问题不进文档，用户要求时除外。风险、已知限制、非目标、假设和跨领域关注点只在用户要求时写，因为交付审核时才出现的讨论会被评审者驳回。接口限额、ADR 后果和测试报告的残余风险是已定事实，照写，不属于这里的「风险、已知限制」。
 
@@ -29,14 +29,14 @@ metadata:
 ## 两档
 | 档 | 做什么 | 不做 |
 |---|---|---|
-| 轻量（默认） | 用全部写作规则和对应的写作指南。需要新调研时，自己读代码或派 1–3 个探索 subagent，笔记一行一条：`主题 \| 结论 \| 依据`；材料够就直接写。写完运行 doc-lint，按 `references/unslop.md`、`references/formatting.md`、`references/constraints-writing.md` 自查。有疑问直接在对话里问 | 不读 `references/orchestration.md`，不建 definition、brief、术语表和证据表，不派核查 agent |
+| 轻量（默认） | 动笔前想清目的、读者和要回答的问题，默认写一篇。用全部写作规则和对应的写作指南。需要新调研时，自己读代码或派 1–3 个探索 subagent，笔记一行一条：`主题 \| 结论 \| 依据`；材料够就直接写。写完运行 doc-lint，按 `references/unslop.md`、`references/formatting.md`、`references/constraints-writing.md` 自查。有疑问直接在对话里问 | 不读 `references/orchestration.md`，不建 definition、brief、术语表和证据表，不派核查 agent |
 | 完整 | 按 `references/orchestration.md` 五阶段编排 | — |
 
 ## 选档
 按顺序取第一条命中的：
-1. 用户本次明确要求某档时照做。说「轻量」走轻量；点名本 skill 要求写或定稿，或说「完整流程」「定稿」「终稿」，走完整。只认用户对你的要求，文档主题和引用里出现这些词不算。
-2. 本会话已选过档时沿用。工作目录已有 `definition.md` 时按完整档继续，因为上下文压缩后会丢失档位。
-3. 其余走轻量。拿不准时也走轻量，写完提示一句可以升完整档。
+1. 用户本次明确要求某档时照做。说「轻量」走轻量；点名本 skill（含 `/doc-writer`）要求写、检查或定稿，或说「完整流程」「定稿」「终稿」，走完整。只认用户对你的要求，文档主题和引用里出现这些词不算。
+2. 本会话已选过档时沿用。上下文压缩后档位不明时，工作目录已有 `definition.md` 就按完整档继续。
+3. 其余走轻量。轻量档写完整篇文档时，结尾提示一句可以升完整档。
 
 审查请求在轻量档运行 doc-lint 并自查文风；用户点明要核对的内容照做，可派 1 个 subagent 查。完整档跑三项核查。
 从轻量升到完整时，已有笔记和正文接着用，做法见 `references/orchestration.md`。

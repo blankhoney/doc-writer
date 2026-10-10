@@ -1,7 +1,7 @@
 # 去 AI 味
 改写自 unslop（Lauren Tan，backnotprop/pstack，MIT 许可）。
 
-已列的规则见 `references/constraints-writing.md`、`references/formatting.md` 和 `references/orchestration.md`。
+已列的规则见 `references/constraints-writing.md`、`references/formatting.md` 和 `SKILL.md` 硬性要求 2。
 
 doc-lint 扫 G1 和排版候选，本文件的条目靠人判断。
 判断候选时问：这句话告诉读者要做什么、知道什么？答不出就删，答得出就照答案改写。
