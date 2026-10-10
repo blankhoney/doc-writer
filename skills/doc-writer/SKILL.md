@@ -29,7 +29,7 @@ metadata:
 ## 两档
 | 档 | 做什么 | 不做 |
 |---|---|---|
-| 轻量（默认） | 动笔前想清目的、读者和要回答的问题，默认写一篇。用全部写作规则和对应的写作指南。需要新调研时，自己读代码或派 1–3 个探索 subagent，笔记一行一条：`主题 \| 结论 \| 依据`；材料够就直接写。写完运行 doc-lint，按 `references/unslop.md`、`references/formatting.md`、`references/constraints-writing.md` 自查，再按主要读者的任务把文档过一遍，补上会卡住的地方。有疑问直接在对话里问 | 不读 `references/orchestration.md`，不建 definition、brief、术语表和证据表，不派核查 agent |
+| 轻量（默认） | 动笔前想清目的、读者和要回答的问题，默认写一篇。用全部写作规则和对应的写作指南。需要新调研时，自己读代码或派 1–3 个探索 subagent，笔记一行一条：`主题 \| 结论 \| 依据`；材料够就直接写。写完运行 doc-lint，按 `references/unslop.md`、`references/formatting.md`、`references/constraints-writing.md` 自查，再按主要读者的任务把文档过一遍，补上会卡住、会读错的地方。有疑问直接在对话里问 | 不读 `references/orchestration.md`，不建 definition、brief、术语表和证据表，不派核查 agent |
 | 完整 | 按 `references/orchestration.md` 五阶段编排 | — |
 
 ## 选档
@@ -70,3 +70,6 @@ python3 '<技能包根目录>/scripts/doc-lint.py' '<文档路径>'
 - 保存或覆盖用户的文件前先取得授权。没有授权时，只输出正文。
 - 文档里写到的部署、迁移、删除操作只写不做，因为它们会改变外部状态。
 - 数据、运行结果和界面截图只写真实取得的。拿不到时写明缺什么、从哪里补。
+- 重要数字写明性质：实测附来源和时间，估算附参数和推导，目标值和契约值说明是约定，因为读者会把估算当成实测。
+- 先分清文档写的是当前实现、历史还是目标设计，按对应版本取依据。不把目标设计或历史记录改成当前实现。
+- 改已有文档时先读完原文，保留与本次任务无关的内容，沿用原有语言和格式。
