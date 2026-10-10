@@ -18,7 +18,7 @@
 |---|---|---|
 | 编排 | 请求一份涉及源码的技术文档 | 开工前读 `references/orchestration.md`，写出 `definition.md` |
 | 研究 | 同上 | 并发派多个子 agent，笔记每条带 `文件:行号` |
-| 解决 | 同上 | 产出 `edges.md` 和 `resolutions.md`；必须由人决定的汇总成一轮提问，每问附推荐答案，等用户回答后才写作 |
+| 解决 | 同上 | 产出 `edges.md` 和 `resolutions.md`；必须由人决定的记进 `questions.md`，写作不等待；交付时一次提问，每问附推荐答案 |
 | 梳理 | 同上 | 产出 `brief.md` 和 `glossary.md`，多义词只定义一次 |
 | 写作 | 请求既有产品介绍又有操作步骤的 README | 写作 agent 按片段读 `writing/marketing.md`、`writing/ops.md`，并读 `formatting.md`、`review.md`、`constraints-writing.md`、`unslop.md` |
 | 核查 | 走完整流程 | 派 3 个核查 agent，各写 `evidence/<名称>.md`，不改文档；lead 按三张表统一修改，改完运行 doc-lint |
