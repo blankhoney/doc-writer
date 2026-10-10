@@ -19,9 +19,9 @@
 | 编排 | 请求一份涉及源码的技术文档 | 开工前读 `references/orchestration.md`，写出 `definition.md` |
 | 研究 | 同上 | 并发派多个子 agent，笔记每条带 `文件:行号` |
 | 梳理 | 同上 | 产出 `brief.md` 和 `glossary.md`，多义词只定义一次 |
-| 写作 | 请求既有产品介绍又有操作步骤的 README | 写作 agent 按片段读 `writing/marketing.md`、`writing/ops.md`，并读 `constraints-writing.md`、`unslop.md` |
-| 审查 | 走完整流程 | 审核 agent 不带研究笔记，读 `review.md`，产出不超过 20 行的 `review-table.md` |
-| 对齐 | 改一个术语后重走 | 对齐 agent 查出旧名残留，运行 doc-lint，写 `align-report.md` |
+| 写作 | 请求既有产品介绍又有操作步骤的 README | 写作 agent 按片段读 `writing/marketing.md`、`writing/ops.md`，并读 `formatting.md`、`review.md`、`constraints-writing.md`、`unslop.md` |
+| 核查 | 走完整流程 | 派 3 个核查 agent，各写 `evidence/<名称>.md`，不改文档；lead 按三张表统一修改，改完运行 doc-lint |
+| 术语一致 | 改一个术语后重走 | 事实与一致核查 agent 全文搜索旧名，列出所有出处，写入 `evidence/事实与一致.md` |
 | 无法派子 agent | 在不能派发的环境重试 | 主 agent 按同样阶段自己做，每阶段结束只保留文件 |
 
 会话级核对未执行时如实记录，不写成通过。
