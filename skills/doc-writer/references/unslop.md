@@ -2,7 +2,7 @@
 
 改写自 unslop（Lauren Tan，backnotprop/pstack，MIT 许可），按中文技术文档重写，条目已删减和合并。
 
-写作 agent 动笔前读，对齐 agent 逐条扫一遍。
+写作 agent 动笔前读，文风与排版核查 agent 逐条扫一遍。
 `references/constraints-writing.md` 的 G1 表已列的套话、修饰词和抽象大词，这里不再重复；doc-lint 只扫 G1，本文件的条目要靠人判断。
 判断每条候选时问一句：这句话告诉读者要做什么、知道什么？答不出就删，答得出就照答案改写。
 

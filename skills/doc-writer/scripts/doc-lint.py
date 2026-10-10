@@ -249,7 +249,7 @@ def layout_candidates(masked, lines):
             chars, sentences = len(plain), len(re.findall("[。！？]", plain))
             if chars > 200 or sentences > 5:
                 records.append((para[0][0], "候选/超长段落", f"{chars} 字，{sentences} 句"))
-            if len(re.findall("首先|其次|然后|最后", plain)) >= 2:
+            if "首先" in plain and len(re.findall("首先|其次|然后|最后", plain)) >= 2:
                 records.append((para[0][0], "候选/首先其次串连", "建议改成编号步骤"))
             para.clear()
 
@@ -265,9 +265,9 @@ def layout_candidates(masked, lines):
         body = re.sub(r"^\*\*[^*]+\*\*", "", text[item.end() :]) if item else text
         bold.extend([number] * len(re.findall(r"\*\*[^*]+\*\*", body)))
         if len(re.findall(r"[(（]\d+[)）]|[①-⑩]", text)) >= 2:
-            records.append((number, "候选/句内罗列", text[:30]))
-        if re.match(r"\d+[.)]\s+(?:应|会|将|需要被|被|系统会)", text):
-            records.append((number, "候选/步骤非祈使句", text[:30]))
+            records.append((number, "候选/句内罗列", lines[number - 1].strip()[:30]))
+        if re.match(r"\d+[.)]\s+(?:应当|应该|会|将会|需要被|被|系统会|服务会|服务将|用户会|用户将)", text):
+            records.append((number, "候选/步骤非祈使句", lines[number - 1].strip()[:30]))
     flush()
     if len(bold) > 5:
         lines = "、".join(map(str, bold))
@@ -282,7 +282,7 @@ def scan_text(text, rules, skip_format=()):
     if lines and lines[-1] == "" and text.endswith("\n"):
         lines.pop()  # A terminal newline does not create another physical line.
     masked, records = mask_markdown(lines)
-    records.extend(layout_candidates(masked, lines))
+    layout = layout_candidates(masked, lines)
     pending, suppressed = None, 0
     if not text.strip():
         records.append((1, "范围", "空输入，没有可扫描正文"))
@@ -319,6 +319,7 @@ def scan_text(text, rules, skip_format=()):
                 for match in pattern.finditer(visible):
                     start, end = match.span(1) if name == "spacing" else match.span()
                     candidates.append((number, "候选/" + name, raw[start:end]))
+        candidates.extend(r for r in layout if r[0] == number)
         if pending:
             suppressed += len(candidates)
             records.append(

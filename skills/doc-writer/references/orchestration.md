@@ -6,7 +6,7 @@
 | 层 | 数量 | 做什么 | 不做什么 |
 |---|---|---|---|
 | 主 session | 1 | 定义文档集，指定术语表和共享契约的权威文档，派 lead，派核查，汇总，交付 | 读代码，写正文 |
-| lead | 每篇文档 1 个 | 本文的 orchestrator：派探索 subagent，用总结写 brief 和术语表，自己写作或派写作 subagent，合稿 | 读代码 |
+| lead | 每篇文档 1 个 | 本文的 orchestrator：派探索 subagent，用总结写 brief 和术语表，派新上下文的写作 subagent，合稿 | 读代码 |
 | subagent | 按需 | 只做一件事，结果写进文件 | 再决定文档结构 |
 
 规则：
@@ -59,8 +59,8 @@
 - 业务动作各写清触发者、前置状态和结果状态，同一动作不换近义词。
 - 术语表放进文档的「术语」节。多篇文档只放一处。
 
-### 4. 写作（lead 或写作 subagent）
-新上下文只读 `brief.md`、术语表、梳理文件和以下参考：对应的 `references/writing/` 指南、`references/formatting.md`、`references/review.md`、`references/constraints-writing.md`、`references/unslop.md`。
+### 4. 写作（写作 subagent）
+lead 派新上下文的写作 subagent，长文按章节派多个，由 lead 合稿。写作 subagent 只读 `brief.md`、术语表、梳理文件和以下参考：对应的 `references/writing/` 指南、`references/formatting.md`、`references/review.md`、`references/constraints-writing.md`、`references/unslop.md`。
 缺事实时派补研 subagent。
 
 ### 5. 核查（主 session 并行派 5 个 agent）

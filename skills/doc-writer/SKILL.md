@@ -4,7 +4,7 @@ description: >-
   编写、补全和审查中文文档：PRD 与需求评审稿、技术设计、ADR、API 与参考文档、
   Runbook 与部署手册、测试计划与报告、产品介绍、README、发布说明。
   用户明确要求写、改或检查这类文档时使用；改代码、写提交说明、日常问答不用。
-  主 agent 分阶段编排，派子 agent 研究代码与资料、写作、审查和对齐。
+  主 agent 分阶段编排，派子 agent 研究代码与资料、写作和核查。
 license: MIT
 compatibility: 适用于能读写文件的 agent；能派子 agent 或用命令行调用其他模型时效果最好。doc-lint 需要 Python 3.9+。
 metadata:
