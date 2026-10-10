@@ -251,6 +251,30 @@ class ScanTests(unittest.TestCase):
         )
         self.assertEqual([hit[2] for hit in candidates("中A文")], ["中A", "A文"])
 
+    def test_layout_candidates(self):
+        body = (
+            "长" * 201 + "\n\n"
+            "**甲**和**乙**和**丙**和**丁**和**戊**和**己**。\n\n"
+            "做法有(1)读取(2)写入。\n\n"
+            "首先读取，其次写入。\n\n"
+            "1. 系统会写入。\n"
+        )
+        names = {c for _, c, _ in candidates(body)}
+        self.assertEqual(
+            names,
+            {
+                "候选/超长段落",
+                "候选/正文加粗",
+                "候选/句内罗列",
+                "候选/首先其次串连",
+                "候选/步骤非祈使句",
+            },
+        )
+        rows = "".join(f"| {line} |\n" for line in body.split("\n") if line)
+        fenced = "```\n" + body + "```\n"
+        self.assertEqual(candidates(rows), [])
+        self.assertEqual(candidates(fenced), [])
+
     def test_reported_context_is_original_text(self):
         text = "方案(说明 `code` 可省略)"
         self.assertEqual(candidates(text)[0][2], "(说明 `code` 可省略)")
