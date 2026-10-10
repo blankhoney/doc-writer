@@ -10,7 +10,7 @@
 
 按项目证据编写和检查中文技术文档的 Agent Skill，覆盖 PRD、技术设计、API、ADR、README 等 12 类文档。
 
-你给出材料和目标，助手选择文档类型和变体，读取对应规则，从代码、配置和运行记录核对事实，写出正文后逐项检查结构、证据和用词。本技能遵循 [Agent Skills](https://agentskills.io) 规范，能读取文件的 agent 都可以使用。只有你明确要求写或检查技术文档时它才会启用，改代码、日常问答不会触发；保存文件、执行文档里描述的操作、提交代码都需要你另外授权。
+你给出材料和目标，主 agent 分六个阶段编排（定义、研究、梳理、写作、审查、对齐），把读代码、写正文、审查和核对交给子 agent。每个阶段的产出写成文件，下一阶段只读文件。本技能遵循 [Agent Skills](https://agentskills.io) 规范，能读取文件的 agent 都可以使用。只有你明确要求写或检查技术文档时它才会启用，改代码、日常问答不会触发；保存文件、执行文档里描述的操作、提交代码都需要你另外授权。
 
 ## 安装
 
@@ -23,7 +23,7 @@ npx skills add blankhoney/doc-writer -g     # 装到个人目录，所有项目�
 
 不用 Node 时，手动把仓库里的 `skills/doc-writer/` 目录复制到你所用 agent 的技能目录，目录名保持 `doc-writer`（与 `SKILL.md` 中的 `name` 一致）。各 agent 的技能目录位置见其文档。安装后重新打开会话，确认 agent 能列出 `doc-writer`。
 
-候选扫描器需要 Python 3.9 或更高版本，只用标准库。没有 Python 时，助手照常写作和检查，并在交付说明里注明扫描未执行。
+doc-lint 需要 Python 3.9 或更高版本，只用标准库。没有 Python 时，助手照常写作和检查，并在交付说明里注明扫描未执行。
 
 ## 用法
 
@@ -62,22 +62,21 @@ npx skills add blankhoney/doc-writer -g     # 装到个人目录，所有项目�
 | 查询契约或理解机制 | Reference、Explanation |
 | 写仓库首页 | README |
 
-用自然语言描述任务即可，也可以在请求里直接写类型名。每种类型的变体和文风要求见[模板索引](skills/doc-writer/assets/templates/_index.md)。
+用自然语言描述任务即可，也可以在请求里直接写类型名。一篇文档常含多种片段（README 开头是产品介绍，安装节是操作步骤），写作 agent 只读自己负责的片段对应的指南：`skills/doc-writer/references/writing/` 下的 `product`、`tech`、`reference`、`ops`、`test`、`marketing`。
 
 ## 它怎样保证质量
 
-- **先读规则再动笔**：准备、取材、编写、验证各阶段读取对应的规则原文，选中的模板完整读取。
+- **阶段产出成文件**：研究笔记每条附 `文件:行号`，术语表把多义词定义一次，新上下文的写作 agent 依据这些文件写作，而不是翻原始研究。
 - **事实来自项目**：代码、配置、已有决策和运行记录分别支撑对应描述；缺的信息写成缺口，不编造。
-- **结论先行**：决策类文档开头给出结论，章节之间按金字塔结构组织。
-- **模型判断，脚本定位**：模型逐项检查范围、证据、术语和可操作性；扫描器只标出套话、空泛修饰词和中文格式的候选位置。
-- **示例有出处**：模板附带的 8 段外部示例都固定了原始提交和许可证，只示范写法。
+- **范围与比例审查**：不继承写作上下文的审核 agent 检查哪些决定下得太早、哪些内容写得太重，以及文字、表格和图是否平衡。
+- **模型判断，脚本定位**：doc-lint 按 G1 表标出套话、空泛修饰词和中文格式的候选位置，由模型判断哪些属实；词表抓不到的毛病另有 unslop 清单。
 
-完整机制见[架构与优化方法](docs/guide/architecture.md)。
+完整机制见[架构与写作方法](docs/guide/architecture.md)，写作规则的来源见 [SOURCES.md](SOURCES.md)。
 
 ## 什么时候不适合用
 
 - 你要写英文文档。规则、禁用词表和扫描器都针对中文。
-- 你的 agent 不能读取本地文件。规则和模板都要按需读取原文。
+- 你的 agent 不能读取本地文件。规则和写作指南都要按需读取原文。
 - 你希望它写完后自动提交或发布。提交和发布需要你自己决定。
 
 ## 文档
@@ -85,13 +84,12 @@ npx skills add blankhoney/doc-writer -g     # 装到个人目录，所有项目�
 | 文档 | 内容 |
 |---|---|
 | [使用文档入口](docs/guide/README.md) | 安装结构、首次使用和导航 |
-| [使用指南](docs/guide/usage.md) | 提供材料、保存、修改原文、只检查不改写、单独运行扫描器 |
-| [架构与优化方法](docs/guide/architecture.md) | 规则、模板、模型和扫描器的分工 |
-| [模板扩展](docs/guide/templates.md) | 添加类型、变体或模块 |
+| [使用指南](docs/guide/usage.md) | 提供材料、保存、修改原文、只检查不改写、单独运行 doc-lint |
+| [架构与写作方法](docs/guide/architecture.md) | 六个阶段、写作指南、审查，以及模型与 doc-lint 的分工 |
 
 ## 贡献
 
-欢迎提 issue 和 pull request。修改规则、模板或扫描器前请先读[贡献指南](CONTRIBUTING.md)，其中包括测试命令和示例登记要求。
+欢迎提 issue 和 pull request。修改规则、写作指南或扫描器前请先读[贡献指南](CONTRIBUTING.md)，其中包括测试命令和 doc-lint 用法。
 
 ## Star 趋势
 
@@ -105,4 +103,4 @@ npx skills add blankhoney/doc-writer -g     # 装到个人目录，所有项目�
 
 ## 许可证
 
-本项目的代码、规则和文档采用 [MIT License](LICENSE)。Requests、Backstage、Django、Kubernetes enhancements、ripgrep 和 uv 的示例片段保留各自的许可证和署名；PEP 380 片段保留作者 Gregory Ewing 的公共领域声明。详见[来源记录](skills/doc-writer/assets/examples/SOURCES.md)和 [assets/examples/licenses/](skills/doc-writer/assets/examples/licenses/)。
+本项目的代码、规则和文档采用 [MIT License](LICENSE)。unslop 清单改写自 unslop（Lauren Tan，MIT），详见 [SOURCES.md](SOURCES.md)。

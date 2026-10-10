@@ -73,4 +73,4 @@
 - unslop（Lauren Tan，backnotprop/pstack，MIT 许可），本地副本 research/ext/unslop-SKILL.md。中文条目为改写，未复制原文。
 
 ## references/constraints-writing.md、scripts/doc-lint.py
-- 原样沿用现版 skill（/home/developer/projects/doc-writer）。G4 改编自阮一峰《中文技术文档的写作规范》（公共领域）。
+- 原样沿用 v2 版 skill。G4 改编自阮一峰《中文技术文档的写作规范》（公共领域）。

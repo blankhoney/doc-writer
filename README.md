@@ -10,7 +10,7 @@
 
 An Agent Skill that writes and checks Chinese technical documents from project evidence, covering 12 types including PRDs, designs, APIs, ADRs, and READMEs.
 
-You provide material and a goal. The assistant picks a document type and variant, reads the matching rules, checks facts against code, configuration, and execution logs, drafts the text, and then reviews structure, evidence, and wording item by item. The skill follows the [Agent Skills](https://agentskills.io) specification, so any agent that can read files can use it. It activates only when you explicitly ask to write or review a technical document, not for code changes or everyday questions. Saving files, running operations described in a document, and committing code each need your separate permission. The skill's rules, templates, and guides are written in Chinese.
+You provide material and a goal. The main agent orchestrates six stages (define, research, outline, write, review, align) and hands code reading, drafting, review, and cross-checking to sub-agents. Each stage writes its output to a file, and the next stage reads only files. The skill follows the [Agent Skills](https://agentskills.io) specification, so any agent that can read files can use it. It activates only when you explicitly ask to write or review a technical document, not for code changes or everyday questions. Saving files, running operations described in a document, and committing code each need your separate permission. The skill's rules, writing guides, and documentation are written in Chinese.
 
 <a id="安装"></a>
 
@@ -25,7 +25,7 @@ npx skills add blankhoney/doc-writer -g     # personal directory, all projects
 
 Without Node, copy the repository's `skills/doc-writer/` directory into your agent's skills directory and keep the directory name `doc-writer` (it must match `name` in `SKILL.md`). See your agent's documentation for that location. Reopen the session and check that the agent lists `doc-writer`.
 
-The candidate scanner needs Python 3.9 or later and uses only the standard library. Without Python, the assistant still writes and checks the document, and notes in its delivery summary that the scan did not run.
+The doc-lint scanner needs Python 3.9 or later and uses only the standard library. Without Python, the assistant still writes and checks the document, and notes in its delivery summary that the scan did not run.
 
 ## Usage
 
@@ -64,22 +64,21 @@ Use doc-writer: review docs/architecture.md for structure, terminology, and accu
 | Look up a contract or understand a mechanism | Reference, Explanation |
 | Write a repository front page | README |
 
-Describe the task in plain language, or name the type in your request. See the [template index](skills/doc-writer/assets/templates/_index.md) (Chinese) for each type's variants and style requirements.
+Describe the task in plain language, or name the type in your request. A document often mixes fragment types (a README opens with a product introduction and continues with setup steps), so the writing agent reads only the guide for each fragment it writes: `product`, `tech`, `reference`, `ops`, `test`, or `marketing` under `skills/doc-writer/references/writing/`.
 
 ## How it keeps quality up
 
-- **Rules before writing.** Each stage (preparation, research, writing, verification) reads its rules in full, and the selected template is read completely.
+- **Stages with files.** Research notes carry `file:line` references, a glossary defines each ambiguous term once, and a fresh writing agent works from those files instead of raw research.
 - **Facts from the project.** Code, configuration, recorded decisions, and execution logs back their respective claims; missing information is reported as a gap, not invented.
-- **Conclusion first.** Decision documents open with the conclusion, and sections follow a pyramid structure.
-- **The model judges, the script locates.** The model checks scope, evidence, terminology, and usability; the scanner only marks candidate boilerplate, vague modifiers, and Chinese formatting issues.
-- **Examples with provenance.** The 8 external examples bundled with the templates are pinned to source commits with their licenses, and serve only as writing models.
+- **Scope and proportion review.** A reviewer without the writing context checks what is decided too early, what is written too heavily, and the balance of text, tables, and diagrams.
+- **The model judges, the script locates.** doc-lint marks candidate boilerplate, vague modifiers, and Chinese formatting issues from the G1 table; the model decides which candidates are real. A separate unslop checklist covers the habits a word list cannot catch.
 
-See [architecture and writing methods](docs/guide/architecture.md) (Chinese) for the full mechanism.
+See [architecture and writing methods](docs/guide/architecture.md) (Chinese) for the full mechanism. Sources for the writing rules are listed in [SOURCES.md](SOURCES.md).
 
 ## When not to use it
 
 - You are writing English documents. The rules, word lists, and scanner target Chinese.
-- Your agent cannot read local files. Rules and templates are read from disk on demand.
+- Your agent cannot read local files. Rules and writing guides are read from disk on demand.
 - You want it to commit or publish on its own. Committing and publishing stay your decision.
 
 ## Documentation
@@ -89,13 +88,12 @@ The guides below are in Chinese.
 | Document | Contents |
 |---|---|
 | [Documentation entry point](docs/guide/README.md) | Installation layout, first use, and navigation |
-| [Usage guide](docs/guide/usage.md) | Supplying material, saving, revising, reviewing only, running the scanner standalone |
-| [Architecture and writing methods](docs/guide/architecture.md) | How rules, templates, the model, and the scanner divide the work |
-| [Extending templates](docs/guide/templates.md) | Adding types, variants, or modules |
+| [Usage guide](docs/guide/usage.md) | Supplying material, saving, revising, reviewing only, running doc-lint standalone |
+| [Architecture and writing methods](docs/guide/architecture.md) | The six stages, writing guides, review, and how the model and doc-lint divide the work |
 
 ## Contributing
 
-Issues and pull requests are welcome. Before changing rules, templates, or the scanner, read the [contributing guide](CONTRIBUTING.md) (Chinese), which covers the test command and example registration.
+Issues and pull requests are welcome. Before changing rules, writing guides, or the scanner, read the [contributing guide](CONTRIBUTING.md) (Chinese), which covers the test command and doc-lint.
 
 ## Star history
 
@@ -109,4 +107,4 @@ Issues and pull requests are welcome. Before changing rules, templates, or the s
 
 ## License
 
-The project's code, rules, and documentation are licensed under the [MIT License](LICENSE). Example excerpts from Requests, Backstage, Django, Kubernetes enhancements, ripgrep, and uv keep their respective licenses and attribution; the PEP 380 excerpt keeps Gregory Ewing's public-domain dedication. See the [source registry](skills/doc-writer/assets/examples/SOURCES.md) and [assets/examples/licenses/](skills/doc-writer/assets/examples/licenses/).
+The project's code, rules, and documentation are licensed under the [MIT License](LICENSE). The unslop checklist is adapted from unslop (Lauren Tan, MIT); see [SOURCES.md](SOURCES.md).

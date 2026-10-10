@@ -7,21 +7,7 @@ from urllib.parse import unquote, urlsplit
 
 REPO = Path(__file__).resolve().parent.parent
 ROOT = REPO / "skills" / "doc-writer"
-RUNTIME = sorted((ROOT / "references").glob("*.md"))
-TYPES = {
-    "prd",
-    "tech-design",
-    "api-doc",
-    "changelog",
-    "test-report",
-    "deploy-runbook",
-    "adr",
-    "tutorial",
-    "how-to",
-    "reference",
-    "explanation",
-    "readme",
-}
+RUNTIME = sorted((ROOT / "references").rglob("*.md"))
 
 
 def outside_fences(text):
@@ -79,9 +65,8 @@ class PackageTests(unittest.TestCase):
         # 入口必须分发全部运行时文件，references 下不能有入口没提到的孤儿文件。
         self.assertEqual(
             {r for r in resources if r.startswith("references/")},
-            {"references/" + p.name for p in RUNTIME},
+            {p.relative_to(ROOT).as_posix() for p in RUNTIME},
         )
-        self.assertIn("assets/templates/_index.md", resources)
         self.assertIn("/scripts/doc-lint.py'", text)
         self.assertTrue((ROOT / "scripts" / "doc-lint.py").is_file())
         for resource in resources:
@@ -100,7 +85,6 @@ class PackageTests(unittest.TestCase):
         paths = [
             ROOT / "SKILL.md",
             *RUNTIME,
-            *sorted((ROOT / "assets" / "templates").rglob("*.md")),
         ]
         for path in paths:
             with self.subTest(path=path.name):
@@ -109,74 +93,13 @@ class PackageTests(unittest.TestCase):
                 self.assertNotRegex(body, r"锚定节|锚问|可插模块|有效性检验")
                 self.assertNotRegex(body, r"Phase 4|收尾检查（3\.5）|§3\.4")
 
-    def test_index_default_variant_exists_in_template(self):
-        index = (ROOT / "assets" / "templates" / "_index.md").read_text(
-            encoding="utf-8"
-        )
-        rows = re.findall(
-            r"^\|[^|]+\| \[([a-z-]+)\.md\]\([^)]+\) \| ([^|]+?) \|", index, re.MULTILINE
-        )
-        self.assertEqual({name for name, _ in rows}, TYPES)
-        slugs = {
-            "prd": "lean",
-            "tech-design": "lean",
-            "api-doc": "endpoint-reference",
-            "changelog": "keep-a-changelog",
-            "test-report": "ci-report",
-            "deploy-runbook": "deploy-guide",
-            "adr": "nygard",
-            "tutorial": "shortest-path",
-            "how-to": "task-recipe",
-            "reference": "key-card",
-            "explanation": "concept-explanation",
-            "readme": "tool-library",
-        }
-        for name, default in rows:
-            with self.subTest(template=name):
-                text = (ROOT / "assets" / "templates" / (name + ".md")).read_text(
-                    encoding="utf-8"
-                )
-                # frontmatter 的 default_variant 须与索引所列默认变体一致。
-                self.assertIn(
-                    "default_variant: " + slugs[name] + "\n", text.split("---", 2)[1]
-                )
-                self.assertRegex(
-                    text,
-                    r"(?m)^## 变体 [A-Z]: " + re.escape(default),
-                )
-
-    def test_template_index_and_metadata(self):
-        index = (ROOT / "assets" / "templates" / "_index.md").read_text(
-            encoding="utf-8"
-        )
-        links = set(re.findall(r"\]\(([a-z-]+)\.md\)", index))
-        self.assertEqual(links, TYPES)
-        for name in TYPES:
-            with self.subTest(template=name):
-                text = (ROOT / "assets" / "templates" / (name + ".md")).read_text(
-                    encoding="utf-8"
-                )
-                self.assertTrue(text.startswith("---\n"))
-                self.assertIn("type: " + name + "\n", text.split("---", 2)[1])
-                self.assertIn("default_variant:", text.split("---", 2)[1])
-                self.assertIn("## 变体选择", text)
-                self.assertIn("## 类型验证标准", text)
-                self.assertIn("**示例使用范围**", text)
-                self.assertNotIn("示例来源待核验", text)
-                self.assertNotIn("未核验草稿", text)
-                self.assertIn("../examples/SOURCES.md", text)
-
     def test_local_markdown_links_resolve_inside_package(self):
         paths = [REPO / "README.md", REPO / "README.zh-CN.md", REPO / "CONTRIBUTING.md"]
         paths.extend((REPO / "docs").rglob("*.md"))
+        paths.append(REPO / "SOURCES.md")
         paths.extend(ROOT.rglob("*.md"))
         for path in paths:
             body = path.read_text(encoding="utf-8")
-            for term in {
-                "implementation": ("| 代码规范 |", "重点注释已交接且可核验"),
-                "code-conventions": ("## 主动注释", "主动补足上述适用重点注释"),
-            }.get(path.stem, ()):
-                self.assertIn(term, body)
             for line in outside_fences(body):
                 for link in re.findall(r"\]\(([^\s)]+)\)", line):
                     parts = urlsplit(link)
@@ -194,8 +117,6 @@ class PackageTests(unittest.TestCase):
     def test_active_execution_docs_have_no_stale_script_contract(self):
         paths = [
             ROOT / "SKILL.md",
-            REPO / "docs" / "design" / "design-spec.md",
-            REPO / "docs" / "design" / "5.1-progressive-disclosure.md",
             *RUNTIME,
         ]
         for path in paths:

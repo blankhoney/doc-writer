@@ -1,67 +1,40 @@
 # doc-writer 使用文档
 
-doc-writer 面向支持 Agent Skills 标准的模型与框架，用于技术文档和审核文档的编写、补全与检查。提供材料和写作目标后，助手会选择模板、核对事实、编写并检查正文。当前规则与模板主要使用中文。
+doc-writer 是遵循 Agent Skills 规范的写作技能，按项目的真实实现编写、补全和审查中文文档。它由主 agent 分六个阶段编排，派子 agent 读代码、写作、审查和对齐。
 
-本技能遵循 Agent Skills 规范，能读取文件的 agent 都可以使用。其他任务、工作原理与模板扩展分别见文末导航。
+## 快速上手
 
-## 1. 快速上手
-
-**前置条件**：你已在项目会话中安装 `doc-writer`，并确认 agent 能列出它。尚未安装时，先按[安装步骤](#2-安装)放置完整包。
-
-1. **输入写作请求。** 下面是可直接使用的调用示意，材料已包含在请求中：
+1. 把仓库里的 `skills/doc-writer/` 整个复制到 agent 的技能目录，目录名保持 `doc-writer`；或运行 `npx skills add blankhoney/doc-writer`。
+2. 重新打开会话，确认 agent 能列出 `doc-writer`。
+3. 在项目会话中提出写作请求，例如：
 
    ```text
-   用 doc-writer 根据以下材料，写一份给团队成员的报销申请指南，只在对话中输出：申请人在每月 25 日前提交当月发票和费用说明；直属负责人审核；财务复核后安排付款。
+   用 doc-writer 根据当前项目的代码，为评审者写一份调度器的技术设计，保存到 docs/scheduler-design.md。
    ```
 
-2. **查看生成的指南。** 你应得到围绕提交、审核和付款安排组织的操作说明，其中保留申请期限和所需材料。将请求中的示例材料换成实际项目内容，就可以编写自己的指南。
+你会得到一篇文档，以及三五行交付说明：写了什么、依据哪些代码、删减了什么、还有哪些没核对。
 
-需要保存时，在请求中直接说明“保存到 `docs/expense-guide.md`”，并允许助手写入该位置。写作、模板选型和检查由助手完成，你无需先指定内部变体或逐条复述规则。文档中的付款、部署等操作仅作为待描述内容，执行这些操作或提交、发布文档需要单独授权。
+## 安装结构
 
-## 2. 安装
+```text
+doc-writer/
+├── SKILL.md
+├── LICENSE
+├── scripts/doc-lint.py
+└── references/
+    ├── orchestration.md
+    ├── review.md
+    ├── constraints-writing.md
+    ├── unslop.md
+    └── writing/{product,tech,reference,ops,test,marketing}.md
+```
 
-### 2.1 选择安装位置
+仓库根目录的 `tests/`、`evals/`、`docs/` 供维护使用，不需要安装。
 
-推荐用 `npx skills add blankhoney/doc-writer` 安装（见 [README](../../README.zh-CN.md#安装)），它会自动放到下表位置。手动安装时，把源码中的 `skills/doc-writer/` 放入一种安装目录，包目录名使用 `doc-writer`：
+## 继续阅读
 
-| 使用范围 | 入口位置 |
+| 你要做什么 | 阅读入口 |
 |---|---|
-| 当前项目 | `<项目>/<agent 技能目录>/doc-writer/SKILL.md` |
-| 个人所有项目 | `<agent 个人技能目录>/doc-writer/SKILL.md` |
-
-如果目标目录已经存在，先比较已有内容，再决定更新哪些文件。安装需要目标目录的写入权限；首次写作只在对话中输出时，不需要授予项目文档写入权限。
-
-### 2.2 放置完整包
-
-1. **复制技能目录。** 把仓库中的 `skills/doc-writer/` 整个复制到安装位置，结构如下：
-
-   ```text
-   doc-writer/
-   ├── SKILL.md
-   ├── LICENSE
-   ├── scripts/doc-lint.py
-   ├── references/
-   └── assets/
-       ├── templates/
-       └── examples/
-           ├── SOURCES.md
-           └── licenses/
-   ```
-
-   `SKILL.md` 是入口；`references/` 保存写作规则、产品与技术文档要点、委派、图表、文档集和核对指引；`assets/templates/` 是文档模板；`assets/examples/` 是已核验示例及其许可证；`scripts/doc-lint.py` 是候选扫描器。不要只复制入口文件，`LICENSE` 和 `assets/examples/licenses/` 必须保留。仓库根目录的 `tests/`、`evals/` 和 `docs/` 是维护用文件，不需要安装。
-
-2. **在目标项目会话中确认发现状态。** 确认 agent 的技能列表中出现 `doc-writer`。入口未出现时，检查包目录名，以及 `SKILL.md` 是否位于上表对应层级；更新目录后重新打开会话再确认。
-
-3. **完成第一次调用。** 返回[快速上手](#1-快速上手)，输入材料与写作目标，确认收到所需文档。
-
-只有你明确要求写或检查技术文档时，本技能才会启用；支持斜杠命令的客户端也可以输入 `/doc-writer` 直接启动。候选扫描功能使用 Python 3.9 或更高版本，无需额外 Python 依赖；Python 不可用时，助手仍可编写并完成模型检查，另行说明文件扫描未执行。
-
-## 3. 按任务继续
-
-| 你接下来要做什么 | 阅读入口 |
-|---|---|
-| 根据文件写文档、保存结果、修改已有内容或单独检查正文 | [使用指南](usage.md) |
-| 理解规则、模板、项目证据与扫描器的分工，以及文档优化流程 | [架构与优化方法](architecture.md) |
-| 选择扩展层级，添加变体、模块或新类型，并验证扩展结果 | [模板扩展](templates.md) |
-
-支持的文档包括需求、技术方案、API、变更说明、测试报告、部署与值班手册、决策记录，教程、操作指南、参考文档、概念说明，以及仓库首页 README。只需用自然语言说明读者要完成的任务；要查具体结构时，再打开[模板索引](../../skills/doc-writer/assets/templates/_index.md)。
+| 提供材料、保存、修改已有文档、只审查不改写、单独运行 doc-lint | [使用指南](usage.md) |
+| 了解六个阶段、写作指南、审查和 doc-lint 的分工 | [架构与写作方法](architecture.md) |
+| 修改 skill 本身 | [贡献指南](../../CONTRIBUTING.md) |
