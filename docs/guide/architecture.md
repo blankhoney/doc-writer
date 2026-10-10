@@ -4,12 +4,13 @@
 
 主 session 定义文档、派 lead、读一行摘要、做取舍。每篇文档一个 lead，读代码、写正文、核查由 lead 派给 subagent，因为细节塞满主上下文后成稿质量会下降。每个阶段的产出写成文件，下一阶段只读文件。
 
-## 五个阶段
+## 六个阶段
 
 | 阶段 | 产出 | 执行者 |
 |---|---|---|
 | 定义 | `definition.md` | 主 session |
-| 研究 | `notes/<主题>.md`，每条附 `文件:行号` | lead 派 4–6 个并发 subagent |
+| 研究 | `notes/<主题>.md`，每条附 `文件:行号`；`edges.md` 记发现的边界、竞争、风险和疑问 | lead 派 4–6 个并发 subagent |
+| 解决 | `resolutions.md`：每条边界查清成事实或决定、删除，或汇总成一轮提问 | lead 派一个分诊 subagent |
 | 梳理 | `brief.md`、`glossary.md`、产品梳理或架构与数据模型 | lead |
 | 写作 | 文档正文 | 新上下文的写作 subagent，长文可按章节派多个，由 lead 合稿 |
 | 核查 | `evidence/事实与一致.md`、`evidence/需求与范围.md`、`evidence/文风与排版.md` | 3 个并行的核查 agent，只写证据表不改文档；lead 按表统一修改 |
@@ -33,7 +34,7 @@
 
 ## 范围与比例核查
 
-`references/review.md` 规定写作和核查共用的标准：重点审核项，每条风险和建议是否该现在决定，写多重（保留、降为已知限制、删除），以及图的选用。段落、句长和图文比例见 `references/formatting.md`。
+`references/review.md` 规定解决、写作和核查共用的标准：重点审核项，每条边界和风险是否该现在决定，写多重（写成结论或删除），以及图的选用。段落、句长和图文比例见 `references/formatting.md`。
 
 ## G1 与 doc-lint
 

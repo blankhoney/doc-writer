@@ -9,7 +9,7 @@ license: MIT
 compatibility: 适用于能读写文件的 agent；能派子 agent 或用命令行调用其他模型时效果最好。doc-lint 需要 Python 3.9+。
 metadata:
   author: blankhoney
-  version: "3.1"
+  version: "3.2"
 ---
 
 # 文档写作
@@ -19,22 +19,24 @@ metadata:
 
 技能包根目录是本文件所在目录，下文路径都相对这个目录。
 
-## 四条硬性要求
-1. 按五个阶段编排，每个阶段的产出写成文件，下一阶段只读文件。派出的 agent 没有全部返回，不进入下一阶段。
+## 五条硬性要求
+1. 按六个阶段编排，每个阶段的产出写成文件，下一阶段只读文件。派出的 agent 没有全部返回，不进入下一阶段。
 2. 术语一致：每个多义词在术语表里定义一次，全文只用一个名字。
 3. 正文遵守 `references/constraints-writing.md` 的 G1 表和 `references/formatting.md` 的排版硬线，交付前运行 doc-lint。
 4. 交付前派 3 个独立核查 agent，只写证据表不改文档；lead 按证据表统一修改，主 session 读完证据表才交付。
+5. 讨论在写作之前完成，文档只记录结论。未解决的问题不进文档；风险、已知限制和非目标只在用户要求时写，因为交付审核时才出现的讨论会被评审者驳回。
 
 其余内容都是建议。项目有更好的写法时，按项目来。
 
-## 五个阶段
+## 六个阶段
 各阶段交接的文件、提示和核查证据表见 `references/orchestration.md`。
 
-1. **定义**：主 session 写清文档做什么、给谁看、回答哪些问题、范围多大。简单请求默认写一篇，因为多篇文档容易互相矛盾。
-2. **研究**：lead 并发派 4–6 个探索 subagent 读代码和资料，笔记每条附 `文件:行号`。lead 不自己读代码。
-3. **梳理**：lead 写 brief 和术语表。产品类再出产品梳理，技术类再出架构与数据模型。
-4. **写作**：lead 派新上下文的写作 subagent，只读梳理材料和对应的写作指南。长文按章节派多个，lead 合稿。
-5. **核查**：并行派事实与一致、需求与范围、文风与排版 3 个核查 agent，只写证据表；lead 统一修改。
+1. **定义**：主 session 写清文档做什么、给谁看、回答哪些问题、范围多大，以及前提。简单请求默认写一篇，因为多篇文档容易互相矛盾。
+2. **研究**：lead 并发派 4–6 个探索 subagent 读代码和资料，笔记每条附 `文件:行号`，发现的边界、竞争、风险和疑问另记到 `edges.md`。lead 不自己读代码。
+3. **解决**：lead 派一个分诊 subagent 处理 `edges.md` 的每一条，产出 `resolutions.md`。提问前先查是否已有取舍；必须由人决定的汇总成一轮提问，每问附推荐答案，主 session 问完等回答再写。
+4. **梳理**：lead 写 brief 和术语表。产品类再出产品梳理，技术类再出架构与数据模型。
+5. **写作**：lead 派新上下文的写作 subagent，只读梳理材料和对应的写作指南，只写结论。长文按章节派多个，lead 合稿。
+6. **核查**：并行派事实与一致、需求与范围、文风与排版 3 个核查 agent，只写证据表；lead 统一修改。
 
 ## 读哪个文件
 | 文件 | 谁读、何时读 |
@@ -47,7 +49,7 @@ metadata:
 | `references/writing/test.md` | 写测试计划、用例、测试报告的片段 |
 | `references/writing/marketing.md` | 写产品介绍、README 开头、发布说明、对比表的片段 |
 | `references/formatting.md` | 写作 agent 动笔前读，文风核查 agent 逐条对照 |
-| `references/review.md` | 写作 agent 动笔前读，范围与比例核查 agent 审查时读 |
+| `references/review.md` | 解决阶段的分诊 subagent 判断条目时读，写作 agent 动笔前读，需求与范围核查 agent 审查时读 |
 | `references/constraints-writing.md` | 写作 agent 动笔前读 |
 | `references/unslop.md` | 写作 agent 动笔前读，文风核查 agent 逐条核对 |
 
