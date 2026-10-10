@@ -43,6 +43,15 @@ To save the result, name a path in the request:
 Use doc-writer: based on this project's README.md, write a Chinese quick-start guide for engineers joining the project. Save it to docs/quickstart.md.
 ```
 
+### Two modes
+
+| Mode | When | What runs |
+|---|---|---|
+| Lightweight (default) | The agent picks up the skill on its own, or you say "lightweight" | All writing rules and writing guides; research when needed; doc-lint and a self-check. Open questions are asked in chat. No orchestration, evidence tables, or check agents |
+| Full | You name doc-writer and ask it to write or finalize, or say "full process", "final", or "定稿" | The five-stage orchestration with three independent checks |
+
+The mode stays for the session until you switch. Use lightweight while designing; switch to full when the design is done. Notes and drafts from lightweight mode are reused.
+
 To review without rewriting:
 
 ```text

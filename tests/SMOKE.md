@@ -16,7 +16,8 @@
 
 | 阶段 | 方法 | 判定依据 |
 |---|---|---|
-| 定义 | 请求一份涉及源码的技术文档 | 按 `references/orchestration.md`「定义」核对轨迹 |
+| 选档 | 不点名请求「写一段说明」；再点名 doc-writer 要求定稿 | 前者没有 `definition.md` 和证据表，后者有，按 `SKILL.md`「选档」核对 |
+| 定义 | 点名请求一份涉及源码的技术文档 | 按 `references/orchestration.md`「定义」核对轨迹 |
 | 研究 | 同上 | 按 `references/orchestration.md`「研究」与「事实池」核对轨迹 |
 | 梳理 | 同上 | 按 `references/orchestration.md`「梳理」核对轨迹 |
 | 写作 | 请求既有产品介绍又有操作步骤的 README | 按 `references/orchestration.md`「写作」和 `SKILL.md` 文件表核对读取轨迹 |
