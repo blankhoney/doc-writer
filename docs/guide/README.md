@@ -25,6 +25,7 @@ doc-writer/
     ├── orchestration.md
     ├── formatting.md
     ├── review.md
+    ├── notes.md
     ├── constraints-writing.md
     ├── unslop.md
     └── writing/{product,tech,reference,ops,test,marketing}.md

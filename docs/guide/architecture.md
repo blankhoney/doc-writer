@@ -10,10 +10,10 @@
 | 阶段 | 产出 | 执行者 |
 |---|---|---|
 | 定义 | `definition.md` | 主 session |
-| 研究 | `notes/<主题>.md`，一条一行、附 `文件:行号`，疑问和边界写成「？」行；lead 拼成事实池 `facts.md` | lead 派 4–6 个并发探索 subagent |
-| 梳理 | 处理「？」行（查清、删除或记进 `questions.md`，交付时一次提问）；写 `brief.md`、`glossary.md`，核实 brief 引用的冲突和推断行 | lead |
-| 写作 | 文档正文，事实只取自 `facts.md` | 新上下文的写作 subagent，长文可按章节派多个，由 lead 合稿 |
-| 核查 | `evidence/事实与一致.md`、`evidence/需求与范围.md`、`evidence/文风与排版.md` | 3 个并行的核查 agent，只写证据表不改文档；事实核查对照事实池，对外契约、默认值、数值回原文核对；lead 按表统一修改 |
+| 研究 | `notes/index.md` 每个主题一行；`notes/<主题>.md` 写调用链、存储、默认值、失败分支、例子和疑问，附 `文件:行号` | lead 派 4–6 个并发探索 subagent |
+| 梳理 | 处理笔记的疑问（查清、删除或记进 `questions.md`，交付时一次提问）；写 `brief.md`、`glossary.md`，核实 brief 引用的冲突和推断 | lead |
+| 写作 | 文档正文，事实取自笔记，写每个机制前回源码核对 | 新上下文的写作 subagent，长文可按章节派多个，由 lead 合稿 |
+| 核查 | `evidence/事实与一致.md`、`evidence/需求与范围.md`、`evidence/文风与排版.md` | 3 个并行的核查 agent，只写证据表不改文档；事实核查把断言对到笔记，存储位置、契约、默认值、公式和失败行为回源码核对；lead 按表统一修改 |
 
 各阶段的提示模板见 `skills/doc-writer/references/orchestration.md`。
 
