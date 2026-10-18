@@ -35,7 +35,7 @@ In a session opened in your target project, type (clients with slash commands al
 Use doc-writer in lightweight mode: using the following material, write a Chinese code contribution guide for project contributors. Return the text in chat only: developers create a feature branch and submit a pull request; each pull request must explain the purpose of the changes; a maintainer merges it after automated tests pass and one maintainer approves.
 ```
 
-You get an operational guide organized around branching, submitting a pull request, testing, and review, ending with a line stating that no file was saved and the scanner did not run.
+You get an operational guide organized around branching, submitting a pull request, testing, and review.
 
 To save the result, name a path in the request:
 
