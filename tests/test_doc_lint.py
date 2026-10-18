@@ -42,7 +42,7 @@ class RuleTests(unittest.TestCase):
         self.assertEqual(len(RULES), len(set(RULES)))
 
     def test_direct_statement_pattern_is_model_checked(self):
-        row = '| 转折否定铺垫 | "……但……不等于……" | 直接说明可用范围、限制、条件或待验证项；真实引文与契约原文保留 |'
+        row = '| 转折否定铺垫 | "……但……不等于……" | 直接写适用范围和条件；真实引文与契约原文保留 |'
         self.assertIn(row, SOURCE)
         self.assertEqual(RULES, parse_rules(SOURCE.replace(row + "\n", "")))
         terms = {term for _, term in RULES}

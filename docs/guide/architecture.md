@@ -3,17 +3,17 @@
 
 ## 主 agent 只编排
 
-主 session 定义文档、派 lead、读一行摘要、做取舍。每篇文档一个 lead，读代码、写正文、核查由 lead 派给 subagent，因为细节塞满主上下文后成稿质量会下降。每个阶段的产出写成文件，下一阶段只读文件。
+主 session 定义文档、读一行摘要、做取舍，兼任每篇文档的 lead；读代码、写正文、核查派给 subagent，因为细节塞满主上下文后成稿质量会下降。子 agent 能再派子 agent 且有多篇文档时，可每篇派一个 lead。每个阶段的产出写成文件，下一阶段只读文件。
 
 ## 五个阶段
 
 | 阶段 | 产出 | 执行者 |
 |---|---|---|
 | 定义 | `definition.md` | 主 session |
-| 研究 | `notes/index.md` 每个主题一行；`notes/<主题>.md` 写调用链、存储、默认值、失败分支、例子和疑问，附 `文件:行号` | lead 派 4–6 个并发探索 subagent |
-| 梳理 | 处理笔记的疑问（查清、删除或记进 `questions.md`，交付时一次提问）；写 `brief.md`、`glossary.md`，核实 brief 引用的冲突和推断 | lead |
-| 写作 | 文档正文，事实取自笔记，写每个机制前回源码核对 | 新上下文的写作 subagent，长文可按章节派多个，由 lead 合稿 |
-| 核查 | `evidence/事实与一致.md`、`evidence/需求与范围.md`、`evidence/文风与排版.md` | 3 个并行的核查 agent，只写证据表不改文档；事实核查把断言对到笔记，存储位置、契约、默认值、公式和失败行为回源码核对；lead 按表统一修改 |
+| 研究 | `notes/index.md` 每个主题一行；`notes/<主题>.md` 写调用链、存储、默认值、失败分支、例子和疑问，附 `文件:行号` | 主 session 派 4–6 个并发探索 subagent |
+| 梳理 | 处理笔记的疑问（查清、删除或记进 `questions.md`，交付时一次提问）；写 `brief.md`、`glossary.md`，核实 brief 引用的冲突和推断 | 主 session |
+| 写作 | 文档正文，事实取自笔记，写每个机制前回源码核对 | 新上下文的写作 subagent，长文可按章节派多个，由主 session 合稿 |
+| 核查 | `evidence/事实与一致.md`、`evidence/需求与范围.md`、`evidence/文风与排版.md` | 3 个并行的核查 agent，只写证据表不改文档；事实核查把断言对到笔记，存储位置、契约、默认值、公式和失败行为回源码核对；主 session 按表统一修改 |
 
 各阶段的提示模板见 `skills/doc-writer/references/orchestration.md`。
 
