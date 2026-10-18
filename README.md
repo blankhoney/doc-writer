@@ -48,7 +48,7 @@ Use doc-writer in lightweight mode: based on this project's README.md, write a C
 | Mode | When | What runs |
 |---|---|---|
 | Lightweight (default) | The agent picks up the skill on its own, or you say "lightweight" | All writing rules and writing guides; research when needed; doc-lint and a self-check. Open questions are asked in chat. No orchestration, evidence tables, or check agents |
-| Full | You name doc-writer (or type `/doc-writer`) and ask it to write, review, or finalize, or say "full process", "final", or "定稿" | The five-stage orchestration with three independent checks |
+| Full | You name doc-writer (or type `/doc-writer`) and ask it to write, review, or finalize, or say "full process", "final", or "定稿"; naming it only to write a short document such as a README or release notes stays lightweight | The five-stage orchestration with three independent checks |
 
 The mode stays for the session until you switch. Use lightweight while designing; switch to full when the design is done. Notes and drafts from lightweight mode are reused.
 
@@ -79,7 +79,7 @@ Describe the task in plain language, or name the type in your request. A documen
 
 - **Stages with files.** Research notes come in two layers: an index (`notes/index.md`) with one line per topic, and topic notes that record the call chain, storage, defaults, failure branches and a worked example, with `file:line` references. While outlining, the main session verifies the conflicts and inferences the outline cites and settles open questions. A glossary defines each ambiguous term once, and a fresh writing agent reads the notes the outline cites and checks the source before writing each mechanism.
 - **Facts from the project.** Code, configuration, recorded decisions, and execution logs back their respective claims; missing information is reported as a gap, not invented.
-- **Three parallel checks.** Three agents without the writing context check facts and consistency, scope and requirements (what is decided too early, what is written too heavily), and style and layout (the balance of text, tables, and diagrams). They write evidence tables only, and the lead makes the changes.
+- **Three parallel checks.** Three agents without the writing context check facts and consistency, scope and requirements (what is decided too early, what is written too heavily), and style and layout (the balance of text, tables, and diagrams). They write evidence tables only, and the main session makes the changes.
 - **The model judges, the script locates.** doc-lint marks candidate boilerplate, vague modifiers, Chinese formatting issues from the G1 table, and layout candidates such as overlong paragraphs and bold body text; the model decides which candidates are real. A separate unslop checklist covers the habits a word list cannot catch.
 
 See [architecture and writing methods](docs/guide/architecture.md) (Chinese) for the full mechanism. Sources for the writing rules are listed in [SOURCES.md](SOURCES.md).
