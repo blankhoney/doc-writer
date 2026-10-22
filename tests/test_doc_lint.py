@@ -206,6 +206,21 @@ class ScanTests(unittest.TestCase):
         text = "说明。<!-- 显著 -->\n显著。"
         self.assertEqual(scan(text), ([(2, "候选/修饰词", "显著")], 0))
 
+    def test_html_comments_do_not_reach_layout(self):
+        for text in (
+            "<!-- **甲** **乙** **丙** **丁** **戊** **己** -->",
+            "<!-- 首先读取，其次写入 -->",
+            "<!-- " + "长" * 210 + " -->",
+        ):
+            with self.subTest(text=text[:20]):
+                self.assertEqual(candidates(text), [])
+        records, count = scan("丙丁\n<!-- doc-lint: ignore-next-line 引用原文 -->\n首先首先")
+        self.assertEqual(count, 1)
+        self.assertEqual(
+            records,
+            [(3, "抑制应用", "来自第 2 行；原因：引用原文；抑制 1 个候选")],
+        )
+
     def test_backtick_and_tilde_fence_lengths(self):
         for fence in ("````", "~~~~", "`````"):
             text = f"{fence}\n显著。\n{fence[:3]}\n显著。\n{fence[0] * 5}\n显著。"
@@ -288,6 +303,13 @@ class ScanTests(unittest.TestCase):
 
         start = time.perf_counter()
         scan("中" * 20000)
+        self.assertLess(time.perf_counter() - start, 1.0)
+
+    def test_many_unclosed_comment_openers_stay_fast(self):
+        import time
+
+        start = time.perf_counter()
+        scan("<!--" * 4000)
         self.assertLess(time.perf_counter() - start, 1.0)
 
     def test_complex_exclusion_limits_warn(self):

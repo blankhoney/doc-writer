@@ -128,6 +128,34 @@ def blank(text):
     return re.sub(r"[^\n]", " ", text)
 
 
+def html_comments(line):
+    """Spans of closed HTML comments on one physical line, left to right.
+
+    Scanned forward once: `<!--.*?-->` retries the rest of the line for every
+    unclosed opener, which is quadratic on a line full of `<!--`.
+    """
+    spans, pos = [], 0
+    while True:
+        start = line.find("<!--", pos)
+        if start == -1:
+            return spans
+        end = line.find("-->", start + 4)
+        if end == -1:
+            return spans  # Unclosed or cross-line: left for the scope warning.
+        spans.append((start, end + 3))
+        pos = end + 3
+
+
+def blank_spans(line, spans):
+    """Mask the given (start, end) spans, preserving length and line breaks."""
+    pieces, pos = [], 0
+    for start, end in spans:
+        pieces.extend((line[pos:start], blank(line[start:end])))
+        pos = end
+    pieces.append(line[pos:])
+    return "".join(pieces)
+
+
 def mask_markdown(lines):
     masked, notices = list(lines), []
     metadata = (
@@ -234,17 +262,18 @@ def mask_markdown(lines):
     return masked, notices
 
 
-def layout_candidates(masked, lines):
+def layout_candidates(masked, lines, prose):
     """Layout candidates on masked prose; code, tables and headings are skipped.
 
     Paragraph length counts raw text (inline code included, link targets not),
-    because the reader still reads identifiers.
+    because the reader still reads identifiers. `prose` is `lines` with HTML
+    comments masked; `lines` stays the original text for reported context.
     """
     records, bold, para = [], [], []
 
     def flush():
         if para:
-            raw = "".join(re.sub(r"\]\([^)]*\)", "]", lines[n - 1]) for n, _ in para)
+            raw = "".join(re.sub(r"\]\([^)]*\)", "]", prose[n - 1]) for n, _ in para)
             plain = re.sub(r"\s+|\*\*|__|`", "", raw)
             chars, sentences = len(plain), len(re.findall("[。！？]", plain))
             if chars > 200 or sentences > 5:
@@ -282,14 +311,21 @@ def scan_text(text, rules, skip_format=()):
     if lines and lines[-1] == "" and text.endswith("\n"):
         lines.pop()  # A terminal newline does not create another physical line.
     masked, records = mask_markdown(lines)
-    layout = layout_candidates(masked, lines)
+    # Comments are not prose. Mask the ones each line shows before layout, or
+    # their text counts toward paragraph length, bold and connectors and moves
+    # the record to the paragraph's first line.
+    spans = [html_comments(line) for line in masked]
+    prose = [blank_spans(line, found) for line, found in zip(masked, spans)]
+    layout = layout_candidates(
+        prose, lines, [blank_spans(line, found) for line, found in zip(lines, spans)]
+    )
     pending, suppressed = None, 0
     if not text.strip():
         records.append((1, "范围", "空输入，没有可扫描正文"))
     for index, (raw, visible) in enumerate(zip(lines, masked)):
         number, reasons = index + 1, []
-        for comment in re.finditer(r"<!--.*?-->", visible):
-            original = raw[comment.start() : comment.end()]
+        for start, end in spans[index]:
+            original = raw[start:end]
             if "doc-lint:" in original:
                 directive = re.fullmatch(
                     r"<!--[ \t]*doc-lint: ignore-next-line[ \t]+(.+?)[ \t]*-->",
@@ -305,7 +341,7 @@ def scan_text(text, rules, skip_format=()):
                             "无效抑制注释：仅支持 ignore-next-line 且必须有原因",
                         )
                     )
-        visible = re.sub(r"<!--.*?-->", lambda m: blank(m[0]), visible)
+        visible = prose[index]
         if "<!--" in visible:
             records.append((number, "范围", "跨行或未闭合 HTML 注释不解析，按正文扫描"))
         candidates = []
