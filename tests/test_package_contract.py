@@ -81,7 +81,7 @@ class PackageTests(unittest.TestCase):
     def test_runtime_files_use_plain_terms(self):
         # 运行时文件不用自造术语和失效编号，单独安装的技能包才能读懂。
         lint = (ROOT / "scripts" / "doc-lint.py").read_text(encoding="utf-8")
-        self.assertRegex(lint, r"""["']constraints-writing\.md["']""")
+        self.assertIn('"constraints-writing.md"', lint)
         paths = [
             ROOT / "SKILL.md",
             *RUNTIME,

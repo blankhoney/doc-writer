@@ -85,7 +85,7 @@ class StructureTests(unittest.TestCase):
         for _ in range(40):
             body = "".join(rng.choice(SAFE_TOKENS) for _ in range(rng.randint(0, 8)))
             alone = candidates(body)
-            records, suppressed = scan_text(DIRECTIVE + "\n" + body + "\n显著。", RULES)
+            records, suppressed = scan_text(DIRECTIVE + "\n" + body + "\n\n显著。", RULES)
             self.assertEqual(suppressed, len(alone), body)
             self.assertFalse(
                 [row for row in records if row[1].startswith("候选/") and row[0] == 2]
@@ -98,8 +98,6 @@ class StructureTests(unittest.TestCase):
         rng = random.Random(20261022)
         for _ in range(40):
             text = "".join(rng.choice(TOKENS) for _ in range(rng.randint(0, 6)))
-            if "\n" in text:
-                continue
             full = candidates(text)
             kept = candidates(text, MODULE["FORMATS"])
             formats = [
